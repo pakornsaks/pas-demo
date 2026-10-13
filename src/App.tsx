@@ -42,7 +42,7 @@ import CampaignPromoCodesPage from "./features/products/pages/CampaignPromoCodes
 import DynamicSchemaBuilderPage from "./features/products/pages/DynamicSchemaBuilder";
 import PlanTierConfigurationPage from "./features/products/pages/PlanTierConfigurationPage";
 import PricingUWRulesCanvasPage from "./features/products/pages/PricingUWRulesCanvasPage";
-import ProductPlanConfigPage from "./features/products/pages/ProductConfigPage";
+import ProductPlanConfigPage from "./features/products/pages/ProductCategoryPage";
 import VersioningPublishingPage from "./features/products/pages/VersioningPublishingPage";
 import AnalyticsPerformancePage from "./features/reports/pages/AnalyticsPerformancePage";
 import OICRegulatoryReportsPage from "./features/reports/pages/OICRegulatoryReportsPage";
