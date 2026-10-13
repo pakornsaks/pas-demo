@@ -1,33 +1,40 @@
-import React, { useState, useMemo } from 'react';
 import {
-  Calendar,
-  Lock,
-  Unlock,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-  ShieldCheck,
-  FileCheck2,
   AlertCircle,
+  AlertTriangle,
+  CheckCircle2,
   ChevronRight,
+  Clock,
+  FileCheck2,
+  FileSpreadsheet,
   Filter,
-  Search,
-  ArrowUpRight,
   History,
+  Lock,
+  Search,
+  ShieldCheck,
+  Unlock,
   X,
-  FileSpreadsheet
-} from 'lucide-react';
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // --- TypeScript Interfaces & Models ---
 
-export type PeriodStatus = 'OPEN' | 'PENDING_APPROVAL' | 'CLOSED' | 'LOCKED_AUDIT';
+export type PeriodStatus =
+  | "OPEN"
+  | "PENDING_APPROVAL"
+  | "CLOSED"
+  | "LOCKED_AUDIT";
 
 export interface PreCloseCheckItem {
   id: string;
-  category: 'BORDEREAU' | 'AGENT_WALLET' | 'SUSPENSE' | 'TAX_INVOICE' | 'INSTALLMENTS';
+  category:
+    | "BORDEREAU"
+    | "AGENT_WALLET"
+    | "SUSPENSE"
+    | "TAX_INVOICE"
+    | "INSTALLMENTS";
   name: string;
   description: string;
-  status: 'PASSED' | 'WARNING' | 'FAILED';
+  status: "PASSED" | "WARNING" | "FAILED";
   unresolvedCount: number;
   unresolvedAmount?: number;
 }
@@ -59,7 +66,7 @@ export interface ApprovalRequestPayload {
   periodCode: string;
   makerId: string;
   makerName: string;
-  proposedAction: 'CLOSE_PERIOD' | 'REOPEN_FOR_AUDIT';
+  proposedAction: "CLOSE_PERIOD" | "REOPEN_FOR_AUDIT";
   stagedAt: string;
   justificationNotes: string;
   preCloseSnapshots: {
@@ -79,191 +86,198 @@ interface CurrentUserContext {
 }
 
 const CURRENT_USER: CurrentUserContext = {
-  userId: 'usr-fin-mgr-002',
-  name: 'Kanya Somchai (Finance Manager)',
-  email: 'kanya.s@broker.co.th',
-  roles: ['FINANCE_MANAGER', 'CHECKER'],
-  scopes: ['finance:read', 'finance:approve', 'finance:auditor']
+  userId: "usr-fin-mgr-002",
+  name: "Kanya Somchai (Finance Manager)",
+  email: "kanya.s@broker.co.th",
+  roles: ["FINANCE_MANAGER", "CHECKER"],
+  scopes: ["finance:read", "finance:approve", "finance:auditor"],
 };
 
 // --- Mock Initial Master Data (sys_financial_periods) ---
 
 const INITIAL_PERIODS: FinancialPeriod[] = [
   {
-    periodId: 'FP-2026-10',
-    periodCode: '2026-10',
+    periodId: "FP-2026-10",
+    periodCode: "2026-10",
     fiscalYear: 2026,
     fiscalMonth: 10,
-    startDate: '2026-10-01',
-    endDate: '2026-10-31',
-    status: 'OPEN',
+    startDate: "2026-10-01",
+    endDate: "2026-10-31",
+    status: "OPEN",
     totalGrossPremium: 42850000.0,
     totalBrokerCommission: 7713000.0,
     totalInsurerRemittance: 35137000.0,
     reconciliationScore: 82,
     checks: [
       {
-        id: 'chk-01',
-        category: 'BORDEREAU',
-        name: 'Insurer Payable Settlement',
-        description: 'Verify all PREMIUM_IN items mapped to insurer_settlement_id',
-        status: 'WARNING',
+        id: "chk-01",
+        category: "BORDEREAU",
+        name: "Insurer Payable Settlement",
+        description:
+          "Verify all PREMIUM_IN items mapped to insurer_settlement_id",
+        status: "WARNING",
         unresolvedCount: 3,
-        unresolvedAmount: 145000.0
+        unresolvedAmount: 145000.0,
       },
       {
-        id: 'chk-02',
-        category: 'AGENT_WALLET',
-        name: 'Clawbacks & Negative Wallets',
-        description: 'Ensure clawback deductions are invoiced as Debit Notes',
-        status: 'PASSED',
+        id: "chk-02",
+        category: "AGENT_WALLET",
+        name: "Clawbacks & Negative Wallets",
+        description: "Ensure clawback deductions are invoiced as Debit Notes",
+        status: "PASSED",
         unresolvedCount: 0,
-        unresolvedAmount: 0.0
+        unresolvedAmount: 0.0,
       },
       {
-        id: 'chk-03',
-        category: 'SUSPENSE',
-        name: 'Suspense Accounts Balance',
-        description: 'Zero satang tolerance for unallocated incoming wires',
-        status: 'WARNING',
+        id: "chk-03",
+        category: "SUSPENSE",
+        name: "Suspense Accounts Balance",
+        description: "Zero satang tolerance for unallocated incoming wires",
+        status: "WARNING",
         unresolvedCount: 2,
-        unresolvedAmount: 12400.0
+        unresolvedAmount: 12400.0,
       },
       {
-        id: 'chk-04',
-        category: 'TAX_INVOICE',
-        name: 'TRD Continuous Sequence Check',
-        description: 'Check for gaps in nextval(tax_invoice_seq)',
-        status: 'PASSED',
-        unresolvedCount: 0
+        id: "chk-04",
+        category: "TAX_INVOICE",
+        name: "TRD Continuous Sequence Check",
+        description: "Check for gaps in nextval(tax_invoice_seq)",
+        status: "PASSED",
+        unresolvedCount: 0,
       },
       {
-        id: 'chk-05',
-        category: 'INSTALLMENTS',
-        name: 'Installment Warning Queue',
-        description: 'Confirm overdue cycles flagged without hanging locks',
-        status: 'PASSED',
-        unresolvedCount: 0
-      }
-    ]
+        id: "chk-05",
+        category: "INSTALLMENTS",
+        name: "Installment Warning Queue",
+        description: "Confirm overdue cycles flagged without hanging locks",
+        status: "PASSED",
+        unresolvedCount: 0,
+      },
+    ],
   },
   {
-    periodId: 'FP-2026-09',
-    periodCode: '2026-09',
+    periodId: "FP-2026-09",
+    periodCode: "2026-09",
     fiscalYear: 2026,
     fiscalMonth: 9,
-    startDate: '2026-09-01',
-    endDate: '2026-09-30',
-    status: 'PENDING_APPROVAL',
+    startDate: "2026-09-01",
+    endDate: "2026-09-30",
+    status: "PENDING_APPROVAL",
     totalGrossPremium: 68120000.0,
     totalBrokerCommission: 12261600.0,
     totalInsurerRemittance: 55858400.0,
-    makerId: 'usr-fin-adm-001',
-    makerName: 'Wichai Thana (Finance Admin - Maker)',
-    makerStagedAt: '2026-10-10 18:24:10',
-    approvalRequestId: 'req-appr-77291',
+    makerId: "usr-fin-adm-001",
+    makerName: "Wichai Thana (Finance Admin - Maker)",
+    makerStagedAt: "2026-10-10 18:24:10",
+    approvalRequestId: "req-appr-77291",
     reconciliationScore: 100,
     checks: [
       {
-        id: 'chk-01',
-        category: 'BORDEREAU',
-        name: 'Insurer Payable Settlement',
-        description: 'All 4 Carrier Bordereaux reconciled and draft settled',
-        status: 'PASSED',
+        id: "chk-01",
+        category: "BORDEREAU",
+        name: "Insurer Payable Settlement",
+        description: "All 4 Carrier Bordereaux reconciled and draft settled",
+        status: "PASSED",
         unresolvedCount: 0,
-        unresolvedAmount: 0.0
+        unresolvedAmount: 0.0,
       },
       {
-        id: 'chk-02',
-        category: 'AGENT_WALLET',
-        name: 'Clawbacks & Negative Wallets',
-        description: 'End-of-month negative payouts fully balanced to zero',
-        status: 'PASSED',
+        id: "chk-02",
+        category: "AGENT_WALLET",
+        name: "Clawbacks & Negative Wallets",
+        description: "End-of-month negative payouts fully balanced to zero",
+        status: "PASSED",
         unresolvedCount: 0,
-        unresolvedAmount: 0.0
+        unresolvedAmount: 0.0,
       },
       {
-        id: 'chk-03',
-        category: 'SUSPENSE',
-        name: 'Suspense Accounts Balance',
-        description: 'Suspense cleared and mapped to application IDs',
-        status: 'PASSED',
+        id: "chk-03",
+        category: "SUSPENSE",
+        name: "Suspense Accounts Balance",
+        description: "Suspense cleared and mapped to application IDs",
+        status: "PASSED",
         unresolvedCount: 0,
-        unresolvedAmount: 0.0
+        unresolvedAmount: 0.0,
       },
       {
-        id: 'chk-04',
-        category: 'TAX_INVOICE',
-        name: 'TRD Continuous Sequence Check',
-        description: 'Verified 12,410 tax documents without sequence disruption',
-        status: 'PASSED',
-        unresolvedCount: 0
+        id: "chk-04",
+        category: "TAX_INVOICE",
+        name: "TRD Continuous Sequence Check",
+        description:
+          "Verified 12,410 tax documents without sequence disruption",
+        status: "PASSED",
+        unresolvedCount: 0,
       },
       {
-        id: 'chk-05',
-        category: 'INSTALLMENTS',
-        name: 'Installment Warning Queue',
-        description: 'Overdue notices dispatched; exhausted contracts terminated',
-        status: 'PASSED',
-        unresolvedCount: 0
-      }
-    ]
+        id: "chk-05",
+        category: "INSTALLMENTS",
+        name: "Installment Warning Queue",
+        description:
+          "Overdue notices dispatched; exhausted contracts terminated",
+        status: "PASSED",
+        unresolvedCount: 0,
+      },
+    ],
   },
   {
-    periodId: 'FP-2026-08',
-    periodCode: '2026-08',
+    periodId: "FP-2026-08",
+    periodCode: "2026-08",
     fiscalYear: 2026,
     fiscalMonth: 8,
-    startDate: '2026-08-01',
-    endDate: '2026-08-31',
-    status: 'CLOSED',
+    startDate: "2026-08-01",
+    endDate: "2026-08-31",
+    status: "CLOSED",
     totalGrossPremium: 59340000.0,
     totalBrokerCommission: 10681200.0,
     totalInsurerRemittance: 48658800.0,
-    makerId: 'usr-fin-adm-001',
-    makerName: 'Wichai Thana',
-    checkerId: 'usr-fin-mgr-002',
-    checkerName: 'Kanya Somchai',
-    closedAt: '2026-09-08 14:10:00',
+    makerId: "usr-fin-adm-001",
+    makerName: "Wichai Thana",
+    checkerId: "usr-fin-mgr-002",
+    checkerName: "Kanya Somchai",
+    closedAt: "2026-09-08 14:10:00",
     reconciliationScore: 100,
-    checks: []
+    checks: [],
   },
   {
-    periodId: 'FP-2026-07',
-    periodCode: '2026-07',
+    periodId: "FP-2026-07",
+    periodCode: "2026-07",
     fiscalYear: 2026,
     fiscalMonth: 7,
-    startDate: '2026-07-01',
-    endDate: '2026-07-31',
-    status: 'CLOSED',
+    startDate: "2026-07-01",
+    endDate: "2026-07-31",
+    status: "CLOSED",
     totalGrossPremium: 54100000.0,
     totalBrokerCommission: 9738000.0,
     totalInsurerRemittance: 44362000.0,
-    makerId: 'usr-fin-adm-001',
-    makerName: 'Wichai Thana',
-    checkerId: 'usr-fin-mgr-002',
-    checkerName: 'Kanya Somchai',
-    closedAt: '2026-08-06 17:45:12',
+    makerId: "usr-fin-adm-001",
+    makerName: "Wichai Thana",
+    checkerId: "usr-fin-mgr-002",
+    checkerName: "Kanya Somchai",
+    closedAt: "2026-08-06 17:45:12",
     reconciliationScore: 100,
-    checks: []
-  }
+    checks: [],
+  },
 ];
 
 export const LedgerPeriodManagementPage: React.FC = () => {
   const [periods, setPeriods] = useState<FinancialPeriod[]>(INITIAL_PERIODS);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+
   // Modals & Panels
-  const [selectedPeriodForChecks, setSelectedPeriodForChecks] = useState<FinancialPeriod | null>(null);
-  const [stageCloseModalPeriod, setStageCloseModalPeriod] = useState<FinancialPeriod | null>(null);
-  const [checkerReviewPeriod, setCheckerReviewPeriod] = useState<FinancialPeriod | null>(null);
-  const [reopenModalPeriod, setReopenModalPeriod] = useState<FinancialPeriod | null>(null);
-  
+  const [selectedPeriodForChecks, setSelectedPeriodForChecks] =
+    useState<FinancialPeriod | null>(null);
+  const [stageCloseModalPeriod, setStageCloseModalPeriod] =
+    useState<FinancialPeriod | null>(null);
+  const [checkerReviewPeriod, setCheckerReviewPeriod] =
+    useState<FinancialPeriod | null>(null);
+  const [reopenModalPeriod, setReopenModalPeriod] =
+    useState<FinancialPeriod | null>(null);
+
   // Form States
-  const [makerNotes, setMakerNotes] = useState('');
-  const [checkerComments, setCheckerComments] = useState('');
-  const [auditReopenReason, setAuditReopenReason] = useState('');
+  const [makerNotes, setMakerNotes] = useState("");
+  const [checkerComments, setCheckerComments] = useState("");
+  const [auditReopenReason, setAuditReopenReason] = useState("");
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 
@@ -273,14 +287,16 @@ export const LedgerPeriodManagementPage: React.FC = () => {
       const matchesSearch =
         p.periodCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.periodId.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === 'ALL' || p.status === statusFilter;
+      const matchesStatus = statusFilter === "ALL" || p.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [periods, searchQuery, statusFilter]);
 
   // Active / Current Open Period
-  const activePeriod = periods.find((p) => p.status === 'OPEN');
-  const pendingClosePeriod = periods.find((p) => p.status === 'PENDING_APPROVAL');
+  const activePeriod = periods.find((p) => p.status === "OPEN");
+  const pendingClosePeriod = periods.find(
+    (p) => p.status === "PENDING_APPROVAL",
+  );
 
   // --- Handlers ---
 
@@ -290,14 +306,20 @@ export const LedgerPeriodManagementPage: React.FC = () => {
     setActionError(null);
 
     // Validation: All pre-close checks must pass or have manager acknowledgment
-    const hasFailures = stageCloseModalPeriod.checks.some((c) => c.status === 'FAILED');
+    const hasFailures = stageCloseModalPeriod.checks.some(
+      (c) => c.status === "FAILED",
+    );
     if (hasFailures) {
-      setActionError('Cannot stage close request with FAILED checks. Please resolve critical discrepancies.');
+      setActionError(
+        "Cannot stage close request with FAILED checks. Please resolve critical discrepancies.",
+      );
       return;
     }
 
     if (!makerNotes.trim()) {
-      setActionError('Mandatory justification notes required for EOM close initiation.');
+      setActionError(
+        "Mandatory justification notes required for EOM close initiation.",
+      );
       return;
     }
 
@@ -306,11 +328,14 @@ export const LedgerPeriodManagementPage: React.FC = () => {
       if (p.periodId === stageCloseModalPeriod.periodId) {
         return {
           ...p,
-          status: 'PENDING_APPROVAL' as PeriodStatus,
+          status: "PENDING_APPROVAL" as PeriodStatus,
           makerId: CURRENT_USER.userId,
           makerName: CURRENT_USER.name,
-          makerStagedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
-          approvalRequestId: `req-appr-${Math.floor(10000 + Math.random() * 90000)}`
+          makerStagedAt: new Date()
+            .toISOString()
+            .replace("T", " ")
+            .substring(0, 19),
+          approvalRequestId: `req-appr-${Math.floor(10000 + Math.random() * 90000)}`,
         };
       }
       return p;
@@ -318,44 +343,53 @@ export const LedgerPeriodManagementPage: React.FC = () => {
 
     setPeriods(updated);
     setStageCloseModalPeriod(null);
-    setMakerNotes('');
-    setActionSuccess(`Period ${stageCloseModalPeriod.periodCode} staged for Checker approval.`);
+    setMakerNotes("");
+    setActionSuccess(
+      `Period ${stageCloseModalPeriod.periodCode} staged for Checker approval.`,
+    );
   };
 
   // Checker Action: Execute Approval
-  const handleCheckerDecision = (decision: 'APPROVED' | 'REJECTED') => {
+  const handleCheckerDecision = (decision: "APPROVED" | "REJECTED") => {
     if (!checkerReviewPeriod) return;
     setActionError(null);
 
     // Segregation of Duties Check: maker_id != checker_id
     if (checkerReviewPeriod.makerId === CURRENT_USER.userId) {
-      setActionError('403 Forbidden: Segregation of Duties breach. You cannot approve a period close that you staged.');
+      setActionError(
+        "403 Forbidden: Segregation of Duties breach. You cannot approve a period close that you staged.",
+      );
       return;
     }
 
-    if (decision === 'REJECTED' && !checkerComments.trim()) {
-      setActionError('Checker comments are mandatory when rejecting a ledger period close ticket.');
+    if (decision === "REJECTED" && !checkerComments.trim()) {
+      setActionError(
+        "Checker comments are mandatory when rejecting a ledger period close ticket.",
+      );
       return;
     }
 
     const updated = periods.map((p) => {
       if (p.periodId === checkerReviewPeriod.periodId) {
-        if (decision === 'APPROVED') {
+        if (decision === "APPROVED") {
           return {
             ...p,
-            status: 'CLOSED' as PeriodStatus,
+            status: "CLOSED" as PeriodStatus,
             checkerId: CURRENT_USER.userId,
             checkerName: CURRENT_USER.name,
-            closedAt: new Date().toISOString().replace('T', ' ').substring(0, 19)
+            closedAt: new Date()
+              .toISOString()
+              .replace("T", " ")
+              .substring(0, 19),
           };
         } else {
           return {
             ...p,
-            status: 'OPEN' as PeriodStatus,
+            status: "OPEN" as PeriodStatus,
             makerId: undefined,
             makerName: undefined,
             makerStagedAt: undefined,
-            approvalRequestId: undefined
+            approvalRequestId: undefined,
           };
         }
       }
@@ -364,11 +398,11 @@ export const LedgerPeriodManagementPage: React.FC = () => {
 
     setPeriods(updated);
     setCheckerReviewPeriod(null);
-    setCheckerComments('');
+    setCheckerComments("");
     setActionSuccess(
-      decision === 'APPROVED'
+      decision === "APPROVED"
         ? `Period ${checkerReviewPeriod.periodCode} permanently LOCKED and CLOSED. Double-entry balance immutable.`
-        : `Close ticket for ${checkerReviewPeriod.periodCode} rejected and reverted to OPEN.`
+        : `Close ticket for ${checkerReviewPeriod.periodCode} rejected and reverted to OPEN.`,
     );
   };
 
@@ -378,13 +412,17 @@ export const LedgerPeriodManagementPage: React.FC = () => {
     setActionError(null);
 
     // Scope check: finance:auditor
-    if (!CURRENT_USER.scopes.includes('finance:auditor')) {
-      setActionError('403 Forbidden: Requires finance:auditor scope to modify historical closed periods.');
+    if (!CURRENT_USER.scopes.includes("finance:auditor")) {
+      setActionError(
+        "403 Forbidden: Requires finance:auditor scope to modify historical closed periods.",
+      );
       return;
     }
 
     if (!auditReopenReason.trim()) {
-      setActionError('Mandatory auditor ticket code and OIC rationale required.');
+      setActionError(
+        "Mandatory auditor ticket code and OIC rationale required.",
+      );
       return;
     }
 
@@ -392,7 +430,7 @@ export const LedgerPeriodManagementPage: React.FC = () => {
       if (p.periodId === reopenModalPeriod.periodId) {
         return {
           ...p,
-          status: 'LOCKED_AUDIT' as PeriodStatus
+          status: "LOCKED_AUDIT" as PeriodStatus,
         };
       }
       return p;
@@ -400,8 +438,10 @@ export const LedgerPeriodManagementPage: React.FC = () => {
 
     setPeriods(updated);
     setReopenModalPeriod(null);
-    setAuditReopenReason('');
-    setActionSuccess(`Period ${reopenModalPeriod.periodCode} unlocked in restricted AUDIT mode.`);
+    setAuditReopenReason("");
+    setActionSuccess(
+      `Period ${reopenModalPeriod.periodCode} unlocked in restricted AUDIT mode.`,
+    );
   };
 
   return (
@@ -449,7 +489,8 @@ export const LedgerPeriodManagementPage: React.FC = () => {
             </span>
           </div>
           <p className="mt-1 text-sm text-zinc-500">
-            Enforce chronological immutability, Maker-Checker segregation, and month-end ledger close (OIC/TRD Compliance).
+            Enforce chronological immutability, Maker-Checker segregation, and
+            month-end ledger close (OIC/TRD Compliance).
           </p>
         </div>
 
@@ -457,9 +498,11 @@ export const LedgerPeriodManagementPage: React.FC = () => {
         <div className="flex items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3.5 py-2">
           <ShieldCheck className="h-4 w-4 text-blue-600" />
           <div className="text-right">
-            <p className="text-xs font-semibold text-zinc-800 leading-none">{CURRENT_USER.name}</p>
+            <p className="text-xs font-semibold text-zinc-800 leading-none">
+              {CURRENT_USER.name}
+            </p>
             <p className="text-[10px] text-zinc-500 mt-0.5 font-mono">
-              Scopes: {CURRENT_USER.scopes.join(', ')}
+              Scopes: {CURRENT_USER.scopes.join(", ")}
             </p>
           </div>
         </div>
@@ -479,13 +522,15 @@ export const LedgerPeriodManagementPage: React.FC = () => {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 font-mono">
-              {activePeriod ? activePeriod.periodCode : 'None Open'}
+              {activePeriod ? activePeriod.periodCode : "None Open"}
             </div>
             <div className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500">
               <span>Ending in:</span>
               <span className="font-medium text-zinc-700">18 Days</span>
               <span className="text-zinc-300">|</span>
-              <span className="text-emerald-700 font-medium">Accepting mutations</span>
+              <span className="text-emerald-700 font-medium">
+                Accepting mutations
+              </span>
             </div>
           </div>
         </div>
@@ -502,11 +547,13 @@ export const LedgerPeriodManagementPage: React.FC = () => {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 font-mono">
-              {pendingClosePeriod ? pendingClosePeriod.periodCode : '0 Pending'}
+              {pendingClosePeriod ? pendingClosePeriod.periodCode : "0 Pending"}
             </div>
             <div className="mt-1 text-xs text-zinc-500">
               {pendingClosePeriod ? (
-                <span className="text-amber-700 font-medium">Awaiting Manager Sign-off</span>
+                <span className="text-amber-700 font-medium">
+                  Awaiting Manager Sign-off
+                </span>
               ) : (
                 <span>All staged requests cleared</span>
               )}
@@ -526,10 +573,17 @@ export const LedgerPeriodManagementPage: React.FC = () => {
           </div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 font-mono">
-              ฿{(activePeriod?.totalGrossPremium ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              ฿
+              {(activePeriod?.totalGrossPremium ?? 0).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}
             </div>
             <div className="mt-1 text-xs text-zinc-500">
-              Net Commission: ฿{(activePeriod?.totalBrokerCommission ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              Net Commission: ฿
+              {(activePeriod?.totalBrokerCommission ?? 0).toLocaleString(
+                "en-US",
+                { minimumFractionDigits: 2 },
+              )}
             </div>
           </div>
         </div>
@@ -547,10 +601,14 @@ export const LedgerPeriodManagementPage: React.FC = () => {
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-zinc-900 font-mono">
-                {activePeriod ? `${activePeriod.reconciliationScore}%` : 'N/A'}
+                {activePeriod ? `${activePeriod.reconciliationScore}%` : "N/A"}
               </span>
               <span className="text-xs font-medium text-amber-600">
-                {activePeriod?.checks.filter((c) => c.status !== 'PASSED').length} warnings
+                {
+                  activePeriod?.checks.filter((c) => c.status !== "PASSED")
+                    .length
+                }{" "}
+                warnings
               </span>
             </div>
             <div className="mt-2 h-1.5 w-full rounded-full bg-zinc-100 overflow-hidden">
@@ -588,7 +646,9 @@ export const LedgerPeriodManagementPage: React.FC = () => {
               >
                 <option value="ALL">All Statuses</option>
                 <option value="OPEN">Open (Accepting Writes)</option>
-                <option value="PENDING_APPROVAL">Pending Checker Approval</option>
+                <option value="PENDING_APPROVAL">
+                  Pending Checker Approval
+                </option>
                 <option value="CLOSED">Closed & Locked</option>
                 <option value="LOCKED_AUDIT">Restricted Audit</option>
               </select>
@@ -624,16 +684,21 @@ export const LedgerPeriodManagementPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-zinc-200">
               {filteredPeriods.map((period) => {
-                const isPending = period.status === 'PENDING_APPROVAL';
-                const isOpen = period.status === 'OPEN';
-                const isClosed = period.status === 'CLOSED';
-                const isAudit = period.status === 'LOCKED_AUDIT';
+                const isPending = period.status === "PENDING_APPROVAL";
+                const isOpen = period.status === "OPEN";
+                const isClosed = period.status === "CLOSED";
+                const isAudit = period.status === "LOCKED_AUDIT";
 
                 return (
-                  <tr key={period.periodId} className="hover:bg-zinc-50/75 transition-colors">
+                  <tr
+                    key={period.periodId}
+                    className="hover:bg-zinc-50/75 transition-colors"
+                  >
                     {/* Period Identifier */}
                     <td className="px-4 py-3.5">
-                      <div className="font-mono font-semibold text-zinc-900">{period.periodCode}</div>
+                      <div className="font-mono font-semibold text-zinc-900">
+                        {period.periodCode}
+                      </div>
                       <div className="text-[11px] text-zinc-400 mt-0.5">
                         {period.startDate} to {period.endDate}
                       </div>
@@ -669,12 +734,18 @@ export const LedgerPeriodManagementPage: React.FC = () => {
 
                     {/* Gross Premium */}
                     <td className="px-4 py-3.5 text-right font-mono text-zinc-900 font-medium">
-                      ฿{period.totalGrossPremium.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ฿
+                      {period.totalGrossPremium.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                      })}
                     </td>
 
                     {/* Remittance */}
                     <td className="px-4 py-3.5 text-right font-mono text-zinc-700">
-                      ฿{period.totalInsurerRemittance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ฿
+                      {period.totalInsurerRemittance.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                      })}
                     </td>
 
                     {/* Pre-close Reconciliation Score */}
@@ -688,7 +759,9 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                           <ChevronRight className="h-3 w-3 text-zinc-500" />
                         </button>
                       ) : (
-                        <span className="text-zinc-400 text-[11px]">Validated & Archived</span>
+                        <span className="text-zinc-400 text-[11px]">
+                          Validated & Archived
+                        </span>
                       )}
                     </td>
 
@@ -696,21 +769,33 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                     <td className="px-4 py-3.5 text-[11px]">
                       {isPending && (
                         <div>
-                          <div className="font-medium text-zinc-800">Maker: {period.makerName}</div>
-                          <div className="text-zinc-400 font-mono mt-0.5">{period.makerStagedAt}</div>
+                          <div className="font-medium text-zinc-800">
+                            Maker: {period.makerName}
+                          </div>
+                          <div className="text-zinc-400 font-mono mt-0.5">
+                            {period.makerStagedAt}
+                          </div>
                         </div>
                       )}
                       {isClosed && (
                         <div>
-                          <div className="text-zinc-700">Checker: {period.checkerName}</div>
-                          <div className="text-zinc-400 font-mono mt-0.5">{period.closedAt}</div>
+                          <div className="text-zinc-700">
+                            Checker: {period.checkerName}
+                          </div>
+                          <div className="text-zinc-400 font-mono mt-0.5">
+                            {period.closedAt}
+                          </div>
                         </div>
                       )}
                       {isOpen && (
-                        <span className="text-zinc-400 italic">No staged closure ticket</span>
+                        <span className="text-zinc-400 italic">
+                          No staged closure ticket
+                        </span>
                       )}
                       {isAudit && (
-                        <span className="text-purple-700 font-medium">Auditor scope authorized</span>
+                        <span className="text-purple-700 font-medium">
+                          Auditor scope authorized
+                        </span>
                       )}
                     </td>
 
@@ -756,7 +841,9 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                       )}
 
                       {isAudit && (
-                        <span className="text-purple-600 text-[11px] font-mono">EDITING_AUDIT</span>
+                        <span className="text-purple-600 text-[11px] font-mono">
+                          EDITING_AUDIT
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -777,7 +864,9 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Pre-Close Health Check & Audit Gates
                 </h3>
                 <p className="text-xs text-zinc-500 font-mono mt-0.5">
-                  Period: {selectedPeriodForChecks.periodCode} ({selectedPeriodForChecks.startDate} to {selectedPeriodForChecks.endDate})
+                  Period: {selectedPeriodForChecks.periodCode} (
+                  {selectedPeriodForChecks.startDate} to{" "}
+                  {selectedPeriodForChecks.endDate})
                 </p>
               </div>
               <button
@@ -795,33 +884,40 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   className="flex items-start justify-between rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 text-xs"
                 >
                   <div className="flex items-start gap-3">
-                    {chk.status === 'PASSED' && (
+                    {chk.status === "PASSED" && (
                       <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                     )}
-                    {chk.status === 'WARNING' && (
+                    {chk.status === "WARNING" && (
                       <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                     )}
-                    {chk.status === 'FAILED' && (
+                    {chk.status === "FAILED" && (
                       <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
                     )}
                     <div>
-                      <div className="font-semibold text-zinc-900">{chk.name}</div>
-                      <p className="text-zinc-500 text-[11px] mt-0.5">{chk.description}</p>
-                      {chk.unresolvedAmount !== undefined && chk.unresolvedAmount > 0 && (
-                        <p className="text-amber-700 font-mono font-medium text-[11px] mt-1">
-                          Outstanding Variance: ฿{chk.unresolvedAmount.toLocaleString()} ({chk.unresolvedCount} items)
-                        </p>
-                      )}
+                      <div className="font-semibold text-zinc-900">
+                        {chk.name}
+                      </div>
+                      <p className="text-zinc-500 text-[11px] mt-0.5">
+                        {chk.description}
+                      </p>
+                      {chk.unresolvedAmount !== undefined &&
+                        chk.unresolvedAmount > 0 && (
+                          <p className="text-amber-700 font-mono font-medium text-[11px] mt-1">
+                            Outstanding Variance: ฿
+                            {chk.unresolvedAmount.toLocaleString()} (
+                            {chk.unresolvedCount} items)
+                          </p>
+                        )}
                     </div>
                   </div>
 
                   <span
                     className={`rounded px-2 py-0.5 font-mono text-[10px] font-semibold ${
-                      chk.status === 'PASSED'
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : chk.status === 'WARNING'
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-rose-100 text-rose-800'
+                      chk.status === "PASSED"
+                        ? "bg-emerald-100 text-emerald-800"
+                        : chk.status === "WARNING"
+                          ? "bg-amber-100 text-amber-800"
+                          : "bg-rose-100 text-rose-800"
                     }`}
                   >
                     {chk.status}
@@ -852,7 +948,8 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Stage Month-End Close (Maker Submission)
                 </h3>
                 <p className="text-xs text-zinc-500 font-mono mt-0.5">
-                  Target: {stageCloseModalPeriod.periodCode} (sys_financial_periods)
+                  Target: {stageCloseModalPeriod.periodCode}{" "}
+                  (sys_financial_periods)
                 </p>
               </div>
               <button
@@ -870,15 +967,24 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Maker-Checker Protocol Interception (BRD 7.9)
                 </div>
                 <p className="mt-1 text-[11px] leading-relaxed">
-                  Submitting this form does not immediately lock the ledger. It stages a request into{' '}
-                  <code className="font-mono font-bold text-amber-950">approval_requests</code>. A separate Finance Checker
-                  with <code className="font-mono font-bold text-amber-950">approval:execute</code> scopes must verify the Bordereau reconciliations before the database prevents subsequent mutations.
+                  Submitting this form does not immediately lock the ledger. It
+                  stages a request into{" "}
+                  <code className="font-mono font-bold text-amber-950">
+                    approval_requests
+                  </code>
+                  . A separate Finance Checker with{" "}
+                  <code className="font-mono font-bold text-amber-950">
+                    approval:execute
+                  </code>{" "}
+                  scopes must verify the Bordereau reconciliations before the
+                  database prevents subsequent mutations.
                 </p>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Reconciliation Summary & Justification Notes <span className="text-rose-500">*</span>
+                  Reconciliation Summary & Justification Notes{" "}
+                  <span className="text-rose-500">*</span>
                 </label>
                 <textarea
                   rows={4}
@@ -918,7 +1024,8 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Execute Ledger Close (Checker Sign-off)
                 </h3>
                 <p className="text-xs text-zinc-500 font-mono mt-0.5">
-                  Approval Request: {checkerReviewPeriod.approvalRequestId} | Period: {checkerReviewPeriod.periodCode}
+                  Approval Request: {checkerReviewPeriod.approvalRequestId} |
+                  Period: {checkerReviewPeriod.periodCode}
                 </p>
               </div>
               <button
@@ -933,16 +1040,25 @@ export const LedgerPeriodManagementPage: React.FC = () => {
               {/* Segregation Gate Visual Warning */}
               <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-xs">
                 <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-zinc-500">Maker Identity (Submitter):</span>
-                  <span className="font-mono font-medium text-zinc-800">{checkerReviewPeriod.makerName}</span>
+                  <span className="text-zinc-500">
+                    Maker Identity (Submitter):
+                  </span>
+                  <span className="font-mono font-medium text-zinc-800">
+                    {checkerReviewPeriod.makerName}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-[11px] mt-1.5">
                   <span className="text-zinc-500">Checker Identity (You):</span>
-                  <span className="font-mono font-semibold text-blue-700">{CURRENT_USER.name}</span>
+                  <span className="font-mono font-semibold text-blue-700">
+                    {CURRENT_USER.name}
+                  </span>
                 </div>
                 <div className="mt-2 border-t border-zinc-200 pt-2 flex items-center gap-1.5 text-[10px] text-emerald-700">
                   <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-                  <span>Segregation Rule Verified: Maker and Checker UUIDs are distinct.</span>
+                  <span>
+                    Segregation Rule Verified: Maker and Checker UUIDs are
+                    distinct.
+                  </span>
                 </div>
               </div>
 
@@ -952,28 +1068,39 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Double-Entry Close Summary
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-500">Gross Premium Collected:</span>
+                  <span className="text-zinc-500">
+                    Gross Premium Collected:
+                  </span>
                   <span className="font-mono font-medium text-zinc-900">
                     ฿{checkerReviewPeriod.totalGrossPremium.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-500">Insurer Trust Remittance (Outbound):</span>
+                  <span className="text-zinc-500">
+                    Insurer Trust Remittance (Outbound):
+                  </span>
                   <span className="font-mono font-medium text-zinc-900">
-                    ฿{checkerReviewPeriod.totalInsurerRemittance.toLocaleString()}
+                    ฿
+                    {checkerReviewPeriod.totalInsurerRemittance.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-500">Retained Broker Commission:</span>
+                  <span className="text-zinc-500">
+                    Retained Broker Commission:
+                  </span>
                   <span className="font-mono font-medium text-emerald-600">
-                    ฿{checkerReviewPeriod.totalBrokerCommission.toLocaleString()}
+                    ฿
+                    {checkerReviewPeriod.totalBrokerCommission.toLocaleString()}
                   </span>
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Checker Execution Comments <span className="text-zinc-400 font-normal">(Mandatory on rejection)</span>
+                  Checker Execution Comments{" "}
+                  <span className="text-zinc-400 font-normal">
+                    (Mandatory on rejection)
+                  </span>
                 </label>
                 <input
                   type="text"
@@ -987,7 +1114,7 @@ export const LedgerPeriodManagementPage: React.FC = () => {
 
             <div className="mt-6 flex justify-between border-t border-zinc-200 pt-4">
               <button
-                onClick={() => handleCheckerDecision('REJECTED')}
+                onClick={() => handleCheckerDecision("REJECTED")}
                 className="rounded-lg border border-rose-200 bg-rose-50 px-3.5 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100"
               >
                 Reject to Maker
@@ -1001,7 +1128,7 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => handleCheckerDecision('APPROVED')}
+                  onClick={() => handleCheckerDecision("APPROVED")}
                   className="rounded-lg bg-emerald-600 hover:bg-emerald-700 px-4 py-2 text-xs font-semibold text-white shadow-sm"
                 >
                   Confirm & Execute Close
@@ -1022,7 +1149,8 @@ export const LedgerPeriodManagementPage: React.FC = () => {
                   Auditor Post-Close Reopen Request
                 </h3>
                 <p className="text-xs text-purple-700 font-mono mt-0.5">
-                  Target Period: {reopenModalPeriod.periodCode} (finance:auditor scope)
+                  Target Period: {reopenModalPeriod.periodCode} (finance:auditor
+                  scope)
                 </p>
               </div>
               <button
@@ -1035,12 +1163,16 @@ export const LedgerPeriodManagementPage: React.FC = () => {
 
             <div className="mt-4 space-y-3">
               <p className="text-xs text-zinc-600 leading-relaxed">
-                Modifying a historically locked financial calendar month is strictly governed by Thai Revenue Department (TRD) and OIC compliance. All subsequent entries will be tagged as retroactive audit journal rows.
+                Modifying a historically locked financial calendar month is
+                strictly governed by Thai Revenue Department (TRD) and OIC
+                compliance. All subsequent entries will be tagged as retroactive
+                audit journal rows.
               </p>
 
               <div>
                 <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Audit Order Number / Regulatory Authority Reference <span className="text-rose-500">*</span>
+                  Audit Order Number / Regulatory Authority Reference{" "}
+                  <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"

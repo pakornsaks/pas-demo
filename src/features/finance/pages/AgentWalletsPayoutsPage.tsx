@@ -1,37 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import {
-  Wallet,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Search,
-  Filter,
-  Download,
-  FileText,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  PlusCircle,
-  ShieldAlert,
-  HelpCircle,
-  X,
-  CreditCard,
-  Building,
-  RotateCcw
-} from 'lucide-react';
+import { AlertTriangle, ArrowDownLeft, ArrowUpRight, Building, CheckCircle2, Clock, CreditCard, Download, FileText, Filter, PlusCircle, RotateCcw, Search, ShieldAlert, Wallet, X } from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // ==========================================
 // TypeScript Interfaces (PAS SDD 3.6.5 & 4.7)
 // ==========================================
 
-export type TransactionType = 'COMMISSION_IN' | 'CLAWBACK' | 'PAYOUT';
-export type CommissionStatus = 'AVAILABLE' | 'PENDING' | 'SETTLED';
-export type SettlementMode = 'NET' | 'GROSS';
+export type TransactionType = "COMMISSION_IN" | "CLAWBACK" | "PAYOUT";
+export type CommissionStatus = "AVAILABLE" | "PENDING" | "SETTLED";
+export type SettlementMode = "NET" | "GROSS";
 
 export interface AgentSummary {
   agent_id: string;
   agent_code: string;
   agent_name: string;
-  commission_tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
+  commission_tier: "Bronze" | "Silver" | "Gold" | "Platinum";
   oic_license_no: string;
   tax_id: string;
   settlement_bank: string;
@@ -72,35 +54,35 @@ export interface PayoutRequestForm {
 
 const MOCK_AGENTS: AgentSummary[] = [
   {
-    agent_id: 'AGT-9918',
-    agent_code: 'SUB-BKK-001',
-    agent_name: 'Somchai Prasert (Siam Brokerage Network)',
-    commission_tier: 'Gold',
-    oic_license_no: 'OIC-6601-9921',
-    tax_id: '1-1004-XXXXX-88-1',
-    settlement_bank: 'Kasikornbank (KBANK)',
-    account_number_masked: '042-X-XXXXX-9',
+    agent_id: "AGT-9918",
+    agent_code: "SUB-BKK-001",
+    agent_name: "Somchai Prasert (Siam Brokerage Network)",
+    commission_tier: "Gold",
+    oic_license_no: "OIC-6601-9921",
+    tax_id: "1-1004-XXXXX-88-1",
+    settlement_bank: "Kasikornbank (KBANK)",
+    account_number_masked: "042-X-XXXXX-9",
   },
   {
-    agent_id: 'AGT-8820',
-    agent_code: 'SUB-CNX-042',
-    agent_name: 'Apinya Wongsuwan (Lanna Insurance Care)',
-    commission_tier: 'Silver',
-    oic_license_no: 'OIC-6503-4412',
-    tax_id: '3-5099-XXXXX-12-0',
-    settlement_bank: 'Siam Commercial Bank (SCB)',
-    account_number_masked: '118-X-XXXXX-4',
+    agent_id: "AGT-8820",
+    agent_code: "SUB-CNX-042",
+    agent_name: "Apinya Wongsuwan (Lanna Insurance Care)",
+    commission_tier: "Silver",
+    oic_license_no: "OIC-6503-4412",
+    tax_id: "3-5099-XXXXX-12-0",
+    settlement_bank: "Siam Commercial Bank (SCB)",
+    account_number_masked: "118-X-XXXXX-4",
   },
 ];
 
 const INITIAL_BALANCES: Record<string, WalletBalances> = {
-  'AGT-9918': {
+  "AGT-9918": {
     pending_balance: 15450.0,
     available_balance: 48500.0,
     settled_balance_ytd: 242000.0,
     negative_debt_balance: 0.0,
   },
-  'AGT-8820': {
+  "AGT-8820": {
     pending_balance: 2400.0,
     available_balance: 0.0,
     settled_balance_ytd: 98000.0,
@@ -110,87 +92,87 @@ const INITIAL_BALANCES: Record<string, WalletBalances> = {
 
 const INITIAL_LEDGER: CommissionLedgerLine[] = [
   {
-    transaction_id: 'tx-uuid-9901',
-    policy_id: 'pol-vir-001',
-    policy_number: 'VIR-2026-99182',
-    transaction_type: 'COMMISSION_IN',
+    transaction_id: "tx-uuid-9901",
+    policy_id: "pol-vir-001",
+    policy_number: "VIR-2026-99182",
+    transaction_type: "COMMISSION_IN",
     frozen_commission_rate: 18.0,
     gross_commission_amount: 3600.0,
     wht_tax_amount: -108.0,
     net_commission_amount: 3492.0,
-    settlement_mode: 'NET',
-    status: 'AVAILABLE',
-    timestamp: '2026-10-12 14:32:00',
-    notes: 'Motor Type 1 Clearance (Cycle 1 Paid)',
+    settlement_mode: "NET",
+    status: "AVAILABLE",
+    timestamp: "2026-10-12 14:32:00",
+    notes: "Motor Type 1 Clearance (Cycle 1 Paid)",
   },
   {
-    transaction_id: 'tx-uuid-9902',
-    policy_id: 'pol-msig-044',
-    policy_number: 'MSIG-2026-00441',
-    transaction_type: 'COMMISSION_IN',
+    transaction_id: "tx-uuid-9902",
+    policy_id: "pol-msig-044",
+    policy_number: "MSIG-2026-00441",
+    transaction_type: "COMMISSION_IN",
     frozen_commission_rate: 15.0,
     gross_commission_amount: 1500.0,
     wht_tax_amount: -45.0,
     net_commission_amount: 1455.0,
-    settlement_mode: 'GROSS',
-    status: 'PENDING',
-    timestamp: '2026-10-11 11:20:15',
-    notes: '30-Day Free-Look Grace Period Active',
+    settlement_mode: "GROSS",
+    status: "PENDING",
+    timestamp: "2026-10-11 11:20:15",
+    notes: "30-Day Free-Look Grace Period Active",
   },
   {
-    transaction_id: 'tx-uuid-9903',
-    policy_id: 'pol-aia-109',
-    policy_number: 'AIA-2026-10029',
-    transaction_type: 'CLAWBACK',
+    transaction_id: "tx-uuid-9903",
+    policy_id: "pol-aia-109",
+    policy_number: "AIA-2026-10029",
+    transaction_type: "CLAWBACK",
     frozen_commission_rate: 18.0,
     gross_commission_amount: -1200.0,
     wht_tax_amount: 36.0,
     net_commission_amount: -1164.0,
-    settlement_mode: 'NET',
-    status: 'AVAILABLE',
-    timestamp: '2026-10-10 09:15:00',
-    notes: 'Customer Mid-Term Cancellation (Pro-rata Refund)',
+    settlement_mode: "NET",
+    status: "AVAILABLE",
+    timestamp: "2026-10-10 09:15:00",
+    notes: "Customer Mid-Term Cancellation (Pro-rata Refund)",
   },
   {
-    transaction_id: 'tx-uuid-9904',
-    policy_id: 'pol-vir-881',
-    policy_number: 'VIR-2026-88129',
-    transaction_type: 'COMMISSION_IN',
+    transaction_id: "tx-uuid-9904",
+    policy_id: "pol-vir-881",
+    policy_number: "VIR-2026-88129",
+    transaction_type: "COMMISSION_IN",
     frozen_commission_rate: 18.0,
     gross_commission_amount: 4500.0,
     wht_tax_amount: -135.0,
     net_commission_amount: 4365.0,
-    settlement_mode: 'NET',
-    status: 'AVAILABLE',
-    timestamp: '2026-10-08 16:40:00',
-    notes: 'Commercial Fleet Policy Conversion',
+    settlement_mode: "NET",
+    status: "AVAILABLE",
+    timestamp: "2026-10-08 16:40:00",
+    notes: "Commercial Fleet Policy Conversion",
   },
   {
-    transaction_id: 'tx-uuid-9800',
-    policy_id: 'pol-payout-sep',
-    policy_number: 'BATCH-SEP-2026',
-    transaction_type: 'PAYOUT',
+    transaction_id: "tx-uuid-9800",
+    policy_id: "pol-payout-sep",
+    policy_number: "BATCH-SEP-2026",
+    transaction_type: "PAYOUT",
     frozen_commission_rate: 0.0,
     gross_commission_amount: 0.0,
     wht_tax_amount: 0.0,
     net_commission_amount: -45000.0,
-    settlement_mode: 'NET',
-    status: 'SETTLED',
-    timestamp: '2026-09-30 18:00:00',
-    notes: 'September EOM Commission Bank Wire (KBANK-9982)',
+    settlement_mode: "NET",
+    status: "SETTLED",
+    timestamp: "2026-09-30 18:00:00",
+    notes: "September EOM Commission Bank Wire (KBANK-9982)",
   },
 ];
 
 export const AgentWalletsPayoutsPage: React.FC = () => {
   // State Management
-  const [selectedAgentId, setSelectedAgentId] = useState<string>('AGT-9918');
-  const [ledgerLines, setLedgerLines] = useState<CommissionLedgerLine[]>(INITIAL_LEDGER);
+  const [selectedAgentId, setSelectedAgentId] = useState<string>("AGT-9918");
+  const [ledgerLines, _setLedgerLines] = useState<CommissionLedgerLine[]>(INITIAL_LEDGER);
   const [balances, setBalances] = useState<Record<string, WalletBalances>>(INITIAL_BALANCES);
 
   // Filters
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
-  const [typeFilter, setTypeFilter] = useState<string>('ALL');
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [typeFilter, setTypeFilter] = useState<string>("ALL");
 
   // Modals
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState<boolean>(false);
@@ -199,18 +181,15 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
 
   // Form States
   const [payoutForm, setPayoutForm] = useState<PayoutRequestForm>({
-    payout_amount: '',
-    finance_notes: '',
-    agent_tax_invoice_number: '',
+    payout_amount: "",
+    finance_notes: "",
+    agent_tax_invoice_number: "",
   });
 
-  const [recoveryAmount, setRecoveryAmount] = useState<string>('');
-  const [recoveryBankRef, setRecoveryBankRef] = useState<string>('');
+  const [recoveryAmount, setRecoveryAmount] = useState<string>("");
+  const [recoveryBankRef, setRecoveryBankRef] = useState<string>("");
 
-  const currentAgent = useMemo(
-    () => MOCK_AGENTS.find((a) => a.agent_id === selectedAgentId) || MOCK_AGENTS[0],
-    [selectedAgentId]
-  );
+  const currentAgent = useMemo(() => MOCK_AGENTS.find((a) => a.agent_id === selectedAgentId) || MOCK_AGENTS[0], [selectedAgentId]);
 
   const currentBalance = balances[currentAgent.agent_id] || {
     pending_balance: 0,
@@ -227,8 +206,8 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
         item.transaction_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (item.notes && item.notes.toLowerCase().includes(searchTerm.toLowerCase()));
 
-      const matchesStatus = statusFilter === 'ALL' || item.status === statusFilter;
-      const matchesType = typeFilter === 'ALL' || item.transaction_type === typeFilter;
+      const matchesStatus = statusFilter === "ALL" || item.status === statusFilter;
+      const matchesType = typeFilter === "ALL" || item.transaction_type === typeFilter;
 
       return matchesSearch && matchesStatus && matchesType;
     });
@@ -240,24 +219,24 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
     const amount = parseFloat(payoutForm.payout_amount);
 
     if (isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid payout amount.');
+      alert("Please enter a valid payout amount.");
       return;
     }
 
     if (amount > currentBalance.available_balance) {
-      alert('Payout amount cannot exceed current Available Balance.');
+      alert("Payout amount cannot exceed current Available Balance.");
       return;
     }
 
     // PAS Core Specification: Stages request into approval_requests table (status: PENDING_APPROVAL)
     setActionSuccessMessage(
-      `Maker Request staged successfully for ฿${amount.toLocaleString('en-US', {
+      `Maker Request staged successfully for ฿${amount.toLocaleString("en-US", {
         minimumFractionDigits: 2,
-      })}. Payout routed to Maker-Checker Inbox for Finance Manager authorization.`
+      })}. Payout routed to Maker-Checker Inbox for Finance Manager authorization.`,
     );
 
     setIsPayoutModalOpen(false);
-    setPayoutForm({ payout_amount: '', finance_notes: '', agent_tax_invoice_number: '' });
+    setPayoutForm({ payout_amount: "", finance_notes: "", agent_tax_invoice_number: "" });
 
     setTimeout(() => setActionSuccessMessage(null), 6000);
   };
@@ -272,21 +251,14 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
       ...prev,
       [currentAgent.agent_id]: {
         ...prev[currentAgent.agent_id],
-        negative_debt_balance: Math.max(
-          0,
-          prev[currentAgent.agent_id].negative_debt_balance - amount
-        ),
+        negative_debt_balance: Math.max(0, prev[currentAgent.agent_id].negative_debt_balance - amount),
       },
     }));
 
-    setActionSuccessMessage(
-      `Debt recovery payment of ฿${amount.toLocaleString(
-        'en-US'
-      )} booked against Debit Note. General ledger updated.`
-    );
+    setActionSuccessMessage(`Debt recovery payment of ฿${amount.toLocaleString("en-US")} booked against Debit Note. General ledger updated.`);
     setIsDebitRecoveryOpen(false);
-    setRecoveryAmount('');
-    setRecoveryBankRef('');
+    setRecoveryAmount("");
+    setRecoveryBankRef("");
 
     setTimeout(() => setActionSuccessMessage(null), 6000);
   };
@@ -300,10 +272,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{actionSuccessMessage}</span>
           </div>
-          <button
-            onClick={() => setActionSuccessMessage(null)}
-            className="text-emerald-600 hover:text-emerald-800 text-sm font-semibold"
-          >
+          <button onClick={() => setActionSuccessMessage(null)} className="text-emerald-600 hover:text-emerald-800 text-sm font-semibold">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -315,10 +284,10 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             <ShieldAlert className="w-5 h-5 text-red-600 shrink-0" />
             <div>
               <span className="font-semibold">Negative Wallet Balance Warning (BRD 7.4.4): </span>
-              Agent holds an unrecovered clawback liability of{' '}
+              Agent holds an unrecovered clawback liability of{" "}
               <span className="font-bold">
                 ฿
-                {currentBalance.negative_debt_balance.toLocaleString('en-US', {
+                {currentBalance.negative_debt_balance.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                 })}
               </span>
@@ -326,10 +295,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setIsDebitRecoveryOpen(true)}
-              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-xs font-semibold shadow-sm transition-colors"
-            >
+            <button onClick={() => setIsDebitRecoveryOpen(true)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-xs font-semibold shadow-sm transition-colors">
               Recover Debt
             </button>
           </div>
@@ -346,13 +312,9 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             <div>
               <div className="flex items-center space-x-2">
                 <h1 className="text-xl font-bold text-zinc-900">Agent Commission Ledger & Payouts</h1>
-                <span className="text-xs bg-zinc-100 text-zinc-700 font-medium px-2 py-0.5 rounded border border-zinc-200">
-                  Sub-Broker Ledger
-                </span>
+                <span className="text-xs bg-zinc-100 text-zinc-700 font-medium px-2 py-0.5 rounded border border-zinc-200">Sub-Broker Ledger</span>
               </div>
-              <p className="text-xs text-zinc-500 mt-1">
-                Real-time double-entry commission snapshotting, 3% statutory WHT deductions, and Maker-Checker settlements.
-              </p>
+              <p className="text-xs text-zinc-500 mt-1">Real-time double-entry commission snapshotting, 3% statutory WHT deductions, and Maker-Checker settlements.</p>
             </div>
           </div>
 
@@ -378,9 +340,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
               onClick={() => setIsPayoutModalOpen(true)}
               disabled={currentBalance.available_balance <= 0}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold shadow-sm transition-all ${
-                currentBalance.available_balance > 0
-                  ? 'bg-zinc-900 hover:bg-zinc-800 text-white cursor-pointer'
-                  : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
+                currentBalance.available_balance > 0 ? "bg-zinc-900 hover:bg-zinc-800 text-white cursor-pointer" : "bg-zinc-200 text-zinc-400 cursor-not-allowed"
               }`}
             >
               <PlusCircle className="w-4 h-4" />
@@ -388,7 +348,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             </button>
 
             <button
-              onClick={() => alert('Exporting consolidated TRD 50-Tawi & Ledger CSV...')}
+              onClick={() => alert("Exporting consolidated TRD 50-Tawi & Ledger CSV...")}
               className="flex items-center space-x-1.5 px-3 py-2 bg-white border border-zinc-300 hover:bg-zinc-50 text-zinc-700 rounded-lg text-xs font-medium shadow-sm transition-colors"
             >
               <Download className="w-4 h-4 text-zinc-500" />
@@ -405,9 +365,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
           </div>
           <div>
             <span className="text-zinc-400 block font-medium">Commission Tier</span>
-            <span className="inline-block px-2 py-0.5 mt-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-              {currentAgent.commission_tier} Tier
-            </span>
+            <span className="inline-block px-2 py-0.5 mt-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">{currentAgent.commission_tier} Tier</span>
           </div>
           <div>
             <span className="text-zinc-400 block font-medium">Tax Identification (PDPA Masked)</span>
@@ -435,7 +393,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 tracking-tight">
               ฿
-              {currentBalance.available_balance.toLocaleString('en-US', {
+              {currentBalance.available_balance.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
               })}
             </div>
@@ -456,7 +414,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 tracking-tight">
               ฿
-              {currentBalance.pending_balance.toLocaleString('en-US', {
+              {currentBalance.pending_balance.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
               })}
             </div>
@@ -475,7 +433,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 tracking-tight">
               ฿
-              {currentBalance.settled_balance_ytd.toLocaleString('en-US', {
+              {currentBalance.settled_balance_ytd.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
               })}
             </div>
@@ -492,13 +450,9 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             </span>
           </div>
           <div className="mt-3">
-            <div
-              className={`text-2xl font-bold tracking-tight ${
-                currentBalance.negative_debt_balance > 0 ? 'text-red-600' : 'text-zinc-900'
-              }`}
-            >
+            <div className={`text-2xl font-bold tracking-tight ${currentBalance.negative_debt_balance > 0 ? "text-red-600" : "text-zinc-900"}`}>
               ฿
-              {currentBalance.negative_debt_balance.toLocaleString('en-US', {
+              {currentBalance.negative_debt_balance.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
               })}
             </div>
@@ -559,13 +513,9 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
         <div className="px-5 py-3.5 border-b border-zinc-200 bg-white flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <FileText className="w-4 h-4 text-zinc-500" />
-            <h2 className="text-xs font-bold text-zinc-800 uppercase tracking-wider">
-              Immutable Sub-Agent Double-Entry Ledger
-            </h2>
+            <h2 className="text-xs font-bold text-zinc-800 uppercase tracking-wider">Immutable Sub-Agent Double-Entry Ledger</h2>
           </div>
-          <span className="text-[11px] text-zinc-400">
-            Showing {filteredLedger.length} transaction rows
-          </span>
+          <span className="text-[11px] text-zinc-400">Showing {filteredLedger.length} transaction rows</span>
         </div>
 
         <div className="overflow-x-auto">
@@ -593,43 +543,28 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
               ) : (
                 filteredLedger.map((line) => {
                   const isNegative = line.net_commission_amount < 0;
-                  const isClawback = line.transaction_type === 'CLAWBACK';
-                  const isPayout = line.transaction_type === 'PAYOUT';
+                  const isClawback = line.transaction_type === "CLAWBACK";
+                  const isPayout = line.transaction_type === "PAYOUT";
 
                   return (
-                    <tr
-                      key={line.transaction_id}
-                      className={`hover:bg-zinc-50/60 transition-colors ${
-                        isClawback ? 'bg-red-50/30' : ''
-                      }`}
-                    >
+                    <tr key={line.transaction_id} className={`hover:bg-zinc-50/60 transition-colors ${isClawback ? "bg-red-50/30" : ""}`}>
                       {/* Timestamp & Tx ID */}
                       <td className="py-3 px-4">
                         <div className="font-medium text-zinc-800">{line.timestamp}</div>
-                        <div className="text-[10px] text-zinc-400 font-mono mt-0.5">
-                          {line.transaction_id}
-                        </div>
+                        <div className="text-[10px] text-zinc-400 font-mono mt-0.5">{line.transaction_id}</div>
                       </td>
 
                       {/* Policy Ref */}
                       <td className="py-3 px-4">
                         <div className="font-semibold text-zinc-900">{line.policy_number}</div>
-                        {line.notes && (
-                          <div className="text-[10px] text-zinc-500 truncate max-w-xs mt-0.5">
-                            {line.notes}
-                          </div>
-                        )}
+                        {line.notes && <div className="text-[10px] text-zinc-500 truncate max-w-xs mt-0.5">{line.notes}</div>}
                       </td>
 
                       {/* Transaction Type */}
                       <td className="py-3 px-4">
                         <span
                           className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide border ${
-                            isClawback
-                              ? 'bg-red-50 text-red-700 border-red-200'
-                              : isPayout
-                              ? 'bg-purple-50 text-purple-700 border-purple-200'
-                              : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            isClawback ? "bg-red-50 text-red-700 border-red-200" : isPayout ? "bg-purple-50 text-purple-700 border-purple-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"
                           }`}
                         >
                           {isClawback && <ArrowDownLeft className="w-3 h-3 mr-0.5" />}
@@ -640,58 +575,48 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
                       </td>
 
                       {/* Frozen Commission Rate */}
-                      <td className="py-3 px-4 text-center font-mono text-zinc-700">
-                        {line.frozen_commission_rate > 0
-                          ? `${line.frozen_commission_rate.toFixed(1)}%`
-                          : '-'}
-                      </td>
+                      <td className="py-3 px-4 text-center font-mono text-zinc-700">{line.frozen_commission_rate > 0 ? `${line.frozen_commission_rate.toFixed(1)}%` : "-"}</td>
 
                       {/* Gross Commission Amount */}
                       <td className="py-3 px-4 text-right font-mono text-zinc-800">
                         {line.gross_commission_amount !== 0
-                          ? line.gross_commission_amount.toLocaleString('en-US', {
+                          ? line.gross_commission_amount.toLocaleString("en-US", {
                               minimumFractionDigits: 2,
                             })
-                          : '-'}
+                          : "-"}
                       </td>
 
                       {/* WHT (3% Thai Revenue Code) */}
                       <td className="py-3 px-4 text-right font-mono text-zinc-600">
                         {line.wht_tax_amount !== 0
-                          ? line.wht_tax_amount.toLocaleString('en-US', {
+                          ? line.wht_tax_amount.toLocaleString("en-US", {
                               minimumFractionDigits: 2,
                             })
-                          : '-'}
+                          : "-"}
                       </td>
 
                       {/* Net Commission */}
-                      <td
-                        className={`py-3 px-4 text-right font-mono font-bold ${
-                          isNegative ? 'text-red-600' : 'text-zinc-900'
-                        }`}
-                      >
-                        {isNegative ? '' : '+'}
-                        {line.net_commission_amount.toLocaleString('en-US', {
+                      <td className={`py-3 px-4 text-right font-mono font-bold ${isNegative ? "text-red-600" : "text-zinc-900"}`}>
+                        {isNegative ? "" : "+"}
+                        {line.net_commission_amount.toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                         })}
                       </td>
 
                       {/* Settlement Mode (NET vs GROSS) */}
                       <td className="py-3 px-4 text-center">
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
-                          {line.settlement_mode}
-                        </span>
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">{line.settlement_mode}</span>
                       </td>
 
                       {/* Status */}
                       <td className="py-3 px-4 text-center">
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                            line.status === 'AVAILABLE'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                              : line.status === 'PENDING'
-                              ? 'bg-amber-50 text-amber-700 border-amber-200'
-                              : 'bg-zinc-100 text-zinc-600 border-zinc-200'
+                            line.status === "AVAILABLE"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : line.status === "PENDING"
+                                ? "bg-amber-50 text-amber-700 border-amber-200"
+                                : "bg-zinc-100 text-zinc-600 border-zinc-200"
                           }`}
                         >
                           {line.status}
@@ -724,14 +649,9 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/50">
               <div className="flex items-center space-x-2">
                 <Wallet className="w-5 h-5 text-zinc-800" />
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Stage Agent Payout (Maker Request)
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Stage Agent Payout (Maker Request)</h3>
               </div>
-              <button
-                onClick={() => setIsPayoutModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-700"
-              >
+              <button onClick={() => setIsPayoutModalOpen(false)} className="text-zinc-400 hover:text-zinc-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -741,18 +661,13 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
                 <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold">Maker-Checker Segregation of Duties: </span>
-                  Submitting this form stages an approval request into{' '}
-                  <code className="font-mono bg-amber-100/70 px-1 py-0.5 rounded text-[11px]">
-                    approval_requests
-                  </code>
-                  . It will not disburse fiat until approved by a Finance Checker.
+                  Submitting this form stages an approval request into <code className="font-mono bg-amber-100/70 px-1 py-0.5 rounded text-[11px]">approval_requests</code>. It will not disburse fiat
+                  until approved by a Finance Checker.
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Target Sub-Agent
-                </label>
+                <label className="block text-xs font-semibold text-zinc-700 mb-1">Target Sub-Agent</label>
                 <div className="text-xs bg-zinc-50 border border-zinc-200 rounded-lg p-2.5 text-zinc-800 font-medium">
                   {currentAgent.agent_name} ({currentAgent.agent_code})
                 </div>
@@ -760,11 +675,9 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-semibold text-zinc-700">
-                    Payout Amount (THB)
-                  </label>
+                  <label className="text-xs font-semibold text-zinc-700">Payout Amount (THB)</label>
                   <span className="text-[11px] text-zinc-500">
-                    Max Available:{' '}
+                    Max Available:{" "}
                     <button
                       type="button"
                       onClick={() =>
@@ -776,34 +689,28 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
                       className="text-blue-600 font-semibold hover:underline"
                     >
                       ฿
-                      {currentBalance.available_balance.toLocaleString('en-US', {
+                      {currentBalance.available_balance.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                       })}
                     </button>
                   </span>
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-semibold">
-                    ฿
-                  </span>
+                  <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-semibold">฿</span>
                   <input
                     type="number"
                     step="0.01"
                     required
                     placeholder="0.00"
                     value={payoutForm.payout_amount}
-                    onChange={(e) =>
-                      setPayoutForm({ ...payoutForm, payout_amount: e.target.value })
-                    }
+                    onChange={(e) => setPayoutForm({ ...payoutForm, payout_amount: e.target.value })}
                     className="w-full pl-8 pr-4 py-2 text-xs bg-white border border-zinc-300 rounded-lg text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-800 font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Agent Tax Invoice / Receipt No. (Optional)
-                </label>
+                <label className="block text-xs font-semibold text-zinc-700 mb-1">Agent Tax Invoice / Receipt No. (Optional)</label>
                 <input
                   type="text"
                   placeholder="e.g. TAX-INV-2026-991"
@@ -816,39 +723,26 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
                   }
                   className="w-full px-3 py-2 text-xs bg-white border border-zinc-300 rounded-lg text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-800 font-mono"
                 />
-                <span className="text-[10px] text-zinc-400 mt-0.5 block">
-                  Required for Corporate Entity sub-brokers issuing tax receipts.
-                </span>
+                <span className="text-[10px] text-zinc-400 mt-0.5 block">Required for Corporate Entity sub-brokers issuing tax receipts.</span>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Finance Notes & Audit Justification
-                </label>
+                <label className="block text-xs font-semibold text-zinc-700 mb-1">Finance Notes & Audit Justification</label>
                 <textarea
                   rows={3}
                   required
                   placeholder="e.g., End of Month standard settlement for verified policies."
                   value={payoutForm.finance_notes}
-                  onChange={(e) =>
-                    setPayoutForm({ ...payoutForm, finance_notes: e.target.value })
-                  }
+                  onChange={(e) => setPayoutForm({ ...payoutForm, finance_notes: e.target.value })}
                   className="w-full px-3 py-2 text-xs bg-white border border-zinc-300 rounded-lg text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-800"
                 />
               </div>
 
               <div className="pt-3 border-t border-zinc-200 flex items-center justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setIsPayoutModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
-                >
+                <button type="button" onClick={() => setIsPayoutModalOpen(false)} className="px-4 py-2 text-xs font-semibold text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-xs font-semibold text-white bg-zinc-900 hover:bg-zinc-800 rounded-lg shadow-sm transition-colors"
-                >
+                <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-zinc-900 hover:bg-zinc-800 rounded-lg shadow-sm transition-colors">
                   Submit Maker Payout Request
                 </button>
               </div>
@@ -866,27 +760,18 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/50">
               <div className="flex items-center space-x-2">
                 <RotateCcw className="w-5 h-5 text-red-600" />
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Execute Agent Debt Recovery
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Execute Agent Debt Recovery</h3>
               </div>
-              <button
-                onClick={() => setIsDebitRecoveryOpen(false)}
-                className="text-zinc-400 hover:text-zinc-700"
-              >
+              <button onClick={() => setIsDebitRecoveryOpen(false)} className="text-zinc-400 hover:text-zinc-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleRecordDebtRecovery} className="p-6 space-y-4">
-              <p className="text-xs text-zinc-600">
-                Record inward bank transfer from agent to clear negative clawback balance associated with an issued Debit Note (BRD 7.4.4).
-              </p>
+              <p className="text-xs text-zinc-600">Record inward bank transfer from agent to clear negative clawback balance associated with an issued Debit Note (BRD 7.4.4).</p>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Recovery Amount (THB)
-                </label>
+                <label className="block text-xs font-semibold text-zinc-700 mb-1">Recovery Amount (THB)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -899,9 +784,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Inward Bank Reference ID
-                </label>
+                <label className="block text-xs font-semibold text-zinc-700 mb-1">Inward Bank Reference ID</label>
                 <input
                   type="text"
                   required
@@ -913,17 +796,10 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
               </div>
 
               <div className="pt-3 border-t border-zinc-200 flex items-center justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setIsDebitRecoveryOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-zinc-600 hover:bg-zinc-100 rounded-lg"
-                >
+                <button type="button" onClick={() => setIsDebitRecoveryOpen(false)} className="px-4 py-2 text-xs font-semibold text-zinc-600 hover:bg-zinc-100 rounded-lg">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm"
-                >
+                <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm">
                   Confirm Debt Recovery
                 </button>
               </div>

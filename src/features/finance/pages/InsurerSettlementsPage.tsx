@@ -1,37 +1,32 @@
-import React, { useState, useMemo } from 'react';
 import {
+  AlertCircle,
+  AlertTriangle,
+  ArrowDownLeft,
+  ArrowUpRight,
   Building2,
   Calendar,
+  Check,
   CheckCircle2,
-  AlertTriangle,
-  FileSpreadsheet,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Search,
-  Filter,
-  Download,
-  Send,
-  ShieldCheck,
-  Eye,
-  RefreshCw,
   Clock,
   DollarSign,
-  ChevronRight,
-  X,
+  Download,
   FileCheck2,
-  AlertCircle,
+  FileSpreadsheet,
   HelpCircle,
-  Check,
-  Ban
-} from 'lucide-react';
+  Search,
+  Send,
+  ShieldCheck,
+  X,
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // ============================================================================
 // TYPE DEFINITIONS (Alinged with PAS SDD Section 4.7, 4.8 & 5.13)
 // ============================================================================
 
-export type SettlementMode = 'NET' | 'GROSS';
-export type ReconcileStatus = 'PENDING' | 'RECONCILED' | 'DISPUTED';
-export type BordereauStatus = 'DRAFT' | 'PENDING_APPROVAL' | 'SETTLED' | 'REJECTED';
+export type SettlementMode = "NET" | "GROSS";
+export type ReconcileStatus = "PENDING" | "RECONCILED" | "DISPUTED";
+export type BordereauStatus = "DRAFT" | "PENDING_APPROVAL" | "SETTLED" | "REJECTED";
 
 export interface InsurerPayableLineItem {
   transaction_id: string;
@@ -40,7 +35,7 @@ export interface InsurerPayableLineItem {
   policy_number: string;
   reference_number: string;
   customer_name_masked: string;
-  lob_code: 'MOTOR' | 'HEALTH' | 'FIRE' | 'TRAVEL';
+  lob_code: "MOTOR" | "HEALTH" | "FIRE" | "TRAVEL";
   collection_timestamp: string;
   gross_premium: number;
   base_commission_percent: number;
@@ -107,221 +102,221 @@ export interface InsurerSetting {
 
 const MOCK_INSURERS: InsurerSetting[] = [
   {
-    insurer_id: 'ins-viriyah-01',
-    name_en: 'Viriyah Insurance PCL',
-    name_th: 'บมจ.วิริยะประกันภัย',
-    lob_support: ['MOTOR', 'FIRE', 'TRAVEL'],
+    insurer_id: "ins-viriyah-01",
+    name_en: "Viriyah Insurance PCL",
+    name_th: "บมจ.วิริยะประกันภัย",
+    lob_support: ["MOTOR", "FIRE", "TRAVEL"],
     monthly_pay_date: 15,
-    default_settlement_mode: 'NET',
-    corporate_bank_account: '001-2-99812-4 (Kasikornbank)',
-    bank_name: 'KBANK'
+    default_settlement_mode: "NET",
+    corporate_bank_account: "001-2-99812-4 (Kasikornbank)",
+    bank_name: "KBANK",
   },
   {
-    insurer_id: 'ins-aia-02',
-    name_en: 'AIA Thailand',
-    name_th: 'เอไอเอ ประเทศไทย',
-    lob_support: ['HEALTH', 'LIFE', 'PA'],
+    insurer_id: "ins-aia-02",
+    name_en: "AIA Thailand",
+    name_th: "เอไอเอ ประเทศไทย",
+    lob_support: ["HEALTH", "LIFE", "PA"],
     monthly_pay_date: 20,
-    default_settlement_mode: 'GROSS',
-    corporate_bank_account: '142-3-88219-0 (Bangkok Bank)',
-    bank_name: 'BBL'
+    default_settlement_mode: "GROSS",
+    corporate_bank_account: "142-3-88219-0 (Bangkok Bank)",
+    bank_name: "BBL",
   },
   {
-    insurer_id: 'ins-muangthai-03',
-    name_en: 'Muang Thai Life Assurance',
-    name_th: 'บมจ.เมืองไทยประกันชีวิต',
-    lob_support: ['HEALTH', 'LIFE'],
+    insurer_id: "ins-muangthai-03",
+    name_en: "Muang Thai Life Assurance",
+    name_th: "บมจ.เมืองไทยประกันชีวิต",
+    lob_support: ["HEALTH", "LIFE"],
     monthly_pay_date: 25,
-    default_settlement_mode: 'NET',
-    corporate_bank_account: '045-8-12948-2 (Kasikornbank)',
-    bank_name: 'KBANK'
+    default_settlement_mode: "NET",
+    corporate_bank_account: "045-8-12948-2 (Kasikornbank)",
+    bank_name: "KBANK",
   },
   {
-    insurer_id: 'ins-msig-04',
-    name_en: 'MSIG Insurance (Thailand)',
-    name_th: 'บมจ.เอ็ม เอส ไอ จี ประกันภัย',
-    lob_support: ['MOTOR', 'TRAVEL', 'FIRE'],
+    insurer_id: "ins-msig-04",
+    name_en: "MSIG Insurance (Thailand)",
+    name_th: "บมจ.เอ็ม เอส ไอ จี ประกันภัย",
+    lob_support: ["MOTOR", "TRAVEL", "FIRE"],
     monthly_pay_date: 15,
-    default_settlement_mode: 'NET',
-    corporate_bank_account: '018-9-77162-8 (SCB Bank)',
-    bank_name: 'SCB'
-  }
+    default_settlement_mode: "NET",
+    corporate_bank_account: "018-9-77162-8 (SCB Bank)",
+    bank_name: "SCB",
+  },
 ];
 
 const INITIAL_PAYABLES: InsurerPayableLineItem[] = [
   {
-    transaction_id: 'tx-2026-9011',
-    gateway_ref_id: '2C2P-9918231',
-    policy_id: 'pol-uuid-001',
-    policy_number: 'VIR-26-M-99182',
-    reference_number: 'TMP-2026-0091',
-    customer_name_masked: 'Somchai J***',
-    lob_code: 'MOTOR',
-    collection_timestamp: '2026-10-02 14:22:10',
+    transaction_id: "tx-2026-9011",
+    gateway_ref_id: "2C2P-9918231",
+    policy_id: "pol-uuid-001",
+    policy_number: "VIR-26-M-99182",
+    reference_number: "TMP-2026-0091",
+    customer_name_masked: "Somchai J***",
+    lob_code: "MOTOR",
+    collection_timestamp: "2026-10-02 14:22:10",
     gross_premium: 18500.0,
     base_commission_percent: 18.0,
     broker_commission_amount: 3330.0,
     vat_on_commission: 233.1,
     wht_on_commission: 99.9,
     net_payable_to_insurer: 15403.2,
-    settlement_mode: 'NET',
-    reconciliation_status: 'RECONCILED',
-    is_paid_to_insurer: false
+    settlement_mode: "NET",
+    reconciliation_status: "RECONCILED",
+    is_paid_to_insurer: false,
   },
   {
-    transaction_id: 'tx-2026-9012',
-    gateway_ref_id: 'OMISE-5519283',
-    policy_id: 'pol-uuid-002',
-    policy_number: 'VIR-26-M-99185',
-    reference_number: 'TMP-2026-0092',
-    customer_name_masked: 'Napasorn T***',
-    lob_code: 'MOTOR',
-    collection_timestamp: '2026-10-03 09:12:44',
+    transaction_id: "tx-2026-9012",
+    gateway_ref_id: "OMISE-5519283",
+    policy_id: "pol-uuid-002",
+    policy_number: "VIR-26-M-99185",
+    reference_number: "TMP-2026-0092",
+    customer_name_masked: "Napasorn T***",
+    lob_code: "MOTOR",
+    collection_timestamp: "2026-10-03 09:12:44",
     gross_premium: 22000.0,
     base_commission_percent: 18.0,
     broker_commission_amount: 3960.0,
     vat_on_commission: 277.2,
     wht_on_commission: 118.8,
     net_payable_to_insurer: 18319.2,
-    settlement_mode: 'NET',
-    reconciliation_status: 'RECONCILED',
-    is_paid_to_insurer: false
+    settlement_mode: "NET",
+    reconciliation_status: "RECONCILED",
+    is_paid_to_insurer: false,
   },
   {
-    transaction_id: 'tx-2026-9013',
-    gateway_ref_id: '2C2P-9918455',
-    policy_id: 'pol-uuid-003',
-    policy_number: 'VIR-26-F-11002',
-    reference_number: 'TMP-2026-0095',
-    customer_name_masked: 'Ananda P***',
-    lob_code: 'FIRE',
-    collection_timestamp: '2026-10-04 16:45:00',
+    transaction_id: "tx-2026-9013",
+    gateway_ref_id: "2C2P-9918455",
+    policy_id: "pol-uuid-003",
+    policy_number: "VIR-26-F-11002",
+    reference_number: "TMP-2026-0095",
+    customer_name_masked: "Ananda P***",
+    lob_code: "FIRE",
+    collection_timestamp: "2026-10-04 16:45:00",
     gross_premium: 8500.0,
     base_commission_percent: 22.0,
     broker_commission_amount: 1870.0,
     vat_on_commission: 130.9,
     wht_on_commission: 56.1,
     net_payable_to_insurer: 6764.8,
-    settlement_mode: 'NET',
-    reconciliation_status: 'PENDING',
-    is_paid_to_insurer: false
+    settlement_mode: "NET",
+    reconciliation_status: "PENDING",
+    is_paid_to_insurer: false,
   },
   {
-    transaction_id: 'tx-2026-9014',
-    gateway_ref_id: 'OMISE-5520011',
-    policy_id: 'pol-uuid-004',
-    policy_number: 'VIR-26-M-99201',
-    reference_number: 'TMP-2026-0104',
-    customer_name_masked: 'Kittisak W***',
-    lob_code: 'MOTOR',
-    collection_timestamp: '2026-10-05 11:30:19',
+    transaction_id: "tx-2026-9014",
+    gateway_ref_id: "OMISE-5520011",
+    policy_id: "pol-uuid-004",
+    policy_number: "VIR-26-M-99201",
+    reference_number: "TMP-2026-0104",
+    customer_name_masked: "Kittisak W***",
+    lob_code: "MOTOR",
+    collection_timestamp: "2026-10-05 11:30:19",
     gross_premium: 14200.0,
     base_commission_percent: 18.0,
     broker_commission_amount: 2556.0,
     vat_on_commission: 178.92,
     wht_on_commission: 76.68,
     net_payable_to_insurer: 11821.64,
-    settlement_mode: 'NET',
-    reconciliation_status: 'DISPUTED',
-    dispute_reason: 'PREMIUM_MISMATCH (Carrier claims 15,000 THB Base)',
-    is_paid_to_insurer: false
+    settlement_mode: "NET",
+    reconciliation_status: "DISPUTED",
+    dispute_reason: "PREMIUM_MISMATCH (Carrier claims 15,000 THB Base)",
+    is_paid_to_insurer: false,
   },
   {
-    transaction_id: 'tx-2026-9015',
-    gateway_ref_id: '2C2P-9919011',
-    policy_id: 'pol-uuid-005',
-    policy_number: 'VIR-26-T-88214',
-    reference_number: 'TMP-2026-0112',
-    customer_name_masked: 'Chayut S***',
-    lob_code: 'TRAVEL',
-    collection_timestamp: '2026-10-06 18:20:00',
+    transaction_id: "tx-2026-9015",
+    gateway_ref_id: "2C2P-9919011",
+    policy_id: "pol-uuid-005",
+    policy_number: "VIR-26-T-88214",
+    reference_number: "TMP-2026-0112",
+    customer_name_masked: "Chayut S***",
+    lob_code: "TRAVEL",
+    collection_timestamp: "2026-10-06 18:20:00",
     gross_premium: 3200.0,
     base_commission_percent: 25.0,
     broker_commission_amount: 800.0,
     vat_on_commission: 56.0,
     wht_on_commission: 24.0,
     net_payable_to_insurer: 2456.0,
-    settlement_mode: 'NET',
-    reconciliation_status: 'RECONCILED',
-    is_paid_to_insurer: false
-  }
+    settlement_mode: "NET",
+    reconciliation_status: "RECONCILED",
+    is_paid_to_insurer: false,
+  },
 ];
 
 const INITIAL_RECEIVABLES: CommissionReceivableLineItem[] = [
   {
-    receivable_id: 'rcv-aia-101',
-    policy_id: 'pol-aia-901',
-    policy_number: 'AIA-HLT-2026-0041',
-    customer_name_masked: 'Wichai R***',
-    lob_code: 'HEALTH',
-    effective_date: '2026-10-01',
+    receivable_id: "rcv-aia-101",
+    policy_id: "pol-aia-901",
+    policy_number: "AIA-HLT-2026-0041",
+    customer_name_masked: "Wichai R***",
+    lob_code: "HEALTH",
+    effective_date: "2026-10-01",
     gross_premium_collected_by_insurer: 45000.0,
     commission_percent: 15.0,
     gross_commission_amount: 6750.0,
     statutory_wht_3_percent: 202.5,
     net_receivable_amount: 6547.5,
-    is_commission_received: false
+    is_commission_received: false,
   },
   {
-    receivable_id: 'rcv-aia-102',
-    policy_id: 'pol-aia-902',
-    policy_number: 'AIA-LIF-2026-0089',
-    customer_name_masked: 'Kamonrat M***',
-    lob_code: 'LIFE',
-    effective_date: '2026-10-03',
+    receivable_id: "rcv-aia-102",
+    policy_id: "pol-aia-902",
+    policy_number: "AIA-LIF-2026-0089",
+    customer_name_masked: "Kamonrat M***",
+    lob_code: "LIFE",
+    effective_date: "2026-10-03",
     gross_premium_collected_by_insurer: 80000.0,
     commission_percent: 20.0,
     gross_commission_amount: 16000.0,
     statutory_wht_3_percent: 480.0,
     net_receivable_amount: 15520.0,
     is_commission_received: true,
-    insurer_settlement_ref: 'AIA-EOM-SEP-9918'
-  }
+    insurer_settlement_ref: "AIA-EOM-SEP-9918",
+  },
 ];
 
 const INITIAL_BATCHES: BordereauBatch[] = [
   {
-    settlement_id: 'stl-uuid-8891',
-    insurer_id: 'ins-viriyah-01',
-    insurer_name: 'Viriyah Insurance PCL',
-    cutoff_period: 'September 2026 (Round 2: 16th-30th)',
+    settlement_id: "stl-uuid-8891",
+    insurer_id: "ins-viriyah-01",
+    insurer_name: "Viriyah Insurance PCL",
+    cutoff_period: "September 2026 (Round 2: 16th-30th)",
     policy_count: 142,
     gross_collected_amount: 2840000.0,
     commission_deducted: 511200.0,
     net_payable_amount: 2364580.0,
-    status: 'SETTLED',
-    maker_id: 'usr-fin-001',
-    maker_name: 'Ploy Supaporn (Maker)',
-    checker_id: 'usr-mgr-009',
-    checker_name: 'Thanawat R. (Checker)',
-    bank_reference_code: 'KBANK-TR-88219482',
-    s3_bordereau_csv_url: 'https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/VIRIYAH_BORDEREAU_SEP_2026.csv',
-    created_at: '2026-09-30 17:00:00',
-    settled_at: '2026-10-01 10:15:32'
+    status: "SETTLED",
+    maker_id: "usr-fin-001",
+    maker_name: "Ploy Supaporn (Maker)",
+    checker_id: "usr-mgr-009",
+    checker_name: "Thanawat R. (Checker)",
+    bank_reference_code: "KBANK-TR-88219482",
+    s3_bordereau_csv_url: "https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/VIRIYAH_BORDEREAU_SEP_2026.csv",
+    created_at: "2026-09-30 17:00:00",
+    settled_at: "2026-10-01 10:15:32",
   },
   {
-    settlement_id: 'stl-uuid-8892',
-    insurer_id: 'ins-msig-04',
-    insurer_name: 'MSIG Insurance (Thailand)',
-    cutoff_period: 'September 2026 (Round 2: 16th-30th)',
+    settlement_id: "stl-uuid-8892",
+    insurer_id: "ins-msig-04",
+    insurer_name: "MSIG Insurance (Thailand)",
+    cutoff_period: "September 2026 (Round 2: 16th-30th)",
     policy_count: 58,
     gross_collected_amount: 890000.0,
     commission_deducted: 195800.0,
     net_payable_amount: 706852.0,
-    status: 'PENDING_APPROVAL',
-    maker_id: 'usr-fin-001',
-    maker_name: 'Ploy Supaporn (Maker)',
-    bank_reference_code: 'SCB-PENDING-TRACE-ID',
-    s3_bordereau_csv_url: 'https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/MSIG_BORDEREAU_SEP_2026.csv',
-    created_at: '2026-10-01 09:30:00'
-  }
+    status: "PENDING_APPROVAL",
+    maker_id: "usr-fin-001",
+    maker_name: "Ploy Supaporn (Maker)",
+    bank_reference_code: "SCB-PENDING-TRACE-ID",
+    s3_bordereau_csv_url: "https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/MSIG_BORDEREAU_SEP_2026.csv",
+    created_at: "2026-10-01 09:30:00",
+  },
 ];
 
 // Current logged in user context (Simulation for Segregation of Duties)
 const CURRENT_USER = {
-  id: 'usr-fin-001',
-  name: 'Ploy Supaporn',
-  role: 'FINANCE_MAKER' // Change to 'FINANCE_CHECKER' or 'FINANCE_MANAGER' to test Checker action
+  id: "usr-fin-001",
+  name: "Ploy Supaporn",
+  role: "FINANCE_MAKER", // Change to 'FINANCE_CHECKER' or 'FINANCE_MANAGER' to test Checker action
 };
 
 // ============================================================================
@@ -330,18 +325,18 @@ const CURRENT_USER = {
 
 export const InsurerSettlementsPage: React.FC = () => {
   // Navigation tabs
-  const [activeTab, setActiveTab] = useState<'payables' | 'receivables' | 'batches' | 'rules'>('payables');
+  const [activeTab, setActiveTab] = useState<"payables" | "receivables" | "batches" | "rules">("payables");
 
   // Filters state
-  const [selectedInsurerId, setSelectedInsurerId] = useState<string>('ins-viriyah-01');
-  const [settlementModeFilter, setSettlementModeFilter] = useState<'ALL' | 'NET' | 'GROSS'>('ALL');
-  const [reconcileFilter, setReconcileFilter] = useState<'ALL' | ReconcileStatus>('ALL');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedInsurerId, setSelectedInsurerId] = useState<string>("ins-viriyah-01");
+  const [settlementModeFilter, setSettlementModeFilter] = useState<"ALL" | "NET" | "GROSS">("ALL");
+  const [reconcileFilter, setReconcileFilter] = useState<"ALL" | ReconcileStatus>("ALL");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Payables data & selection state
   const [payables, setPayables] = useState<InsurerPayableLineItem[]>(INITIAL_PAYABLES);
   const [selectedTransactionIds, setSelectedTransactionIds] = useState<string[]>([]);
-  
+
   // Receivables data state
   const [receivables, setReceivables] = useState<CommissionReceivableLineItem[]>(INITIAL_RECEIVABLES);
 
@@ -352,11 +347,11 @@ export const InsurerSettlementsPage: React.FC = () => {
   const [isStageModalOpen, setIsStageModalOpen] = useState(false);
   const [isCheckerModalOpen, setIsCheckerModalOpen] = useState(false);
   const [activeBatchForReview, setActiveBatchForReview] = useState<BordereauBatch | null>(null);
-  const [bankTraceInput, setBankTraceInput] = useState('');
+  const [bankTraceInput, setBankTraceInput] = useState("");
   const [disputeModalOpen, setDisputeModalOpen] = useState(false);
   const [disputeTargetTx, setDisputeTargetTx] = useState<InsurerPayableLineItem | null>(null);
-  const [disputeReasonCode, setDisputeReasonCode] = useState('PREMIUM_MISMATCH');
-  const [disputeCustomNote, setDisputeCustomNote] = useState('');
+  const [disputeReasonCode, setDisputeReasonCode] = useState("PREMIUM_MISMATCH");
+  const [disputeCustomNote, setDisputeCustomNote] = useState("");
 
   // Selected Insurer Object
   const currentInsurer = useMemo(() => {
@@ -371,8 +366,8 @@ export const InsurerSettlementsPage: React.FC = () => {
         item.gateway_ref_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.customer_name_masked.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchMode = settlementModeFilter === 'ALL' || item.settlement_mode === settlementModeFilter;
-      const matchReconcile = reconcileFilter === 'ALL' || item.reconciliation_status === reconcileFilter;
+      const matchMode = settlementModeFilter === "ALL" || item.settlement_mode === settlementModeFilter;
+      const matchReconcile = reconcileFilter === "ALL" || item.reconciliation_status === reconcileFilter;
 
       return matchSearch && matchMode && matchReconcile;
     });
@@ -383,9 +378,9 @@ export const InsurerSettlementsPage: React.FC = () => {
     const gross = filteredPayables.reduce((acc, cur) => acc + cur.gross_premium, 0);
     const comm = filteredPayables.reduce((acc, cur) => acc + cur.broker_commission_amount, 0);
     const netPayable = filteredPayables.reduce((acc, cur) => acc + cur.net_payable_to_insurer, 0);
-    const reconciledCount = filteredPayables.filter((i) => i.reconciliation_status === 'RECONCILED').length;
-    const pendingCount = filteredPayables.filter((i) => i.reconciliation_status === 'PENDING').length;
-    const disputedCount = filteredPayables.filter((i) => i.reconciliation_status === 'DISPUTED').length;
+    const reconciledCount = filteredPayables.filter((i) => i.reconciliation_status === "RECONCILED").length;
+    const pendingCount = filteredPayables.filter((i) => i.reconciliation_status === "PENDING").length;
+    const disputedCount = filteredPayables.filter((i) => i.reconciliation_status === "DISPUTED").length;
 
     return { gross, comm, netPayable, reconciledCount, pendingCount, disputedCount };
   }, [filteredPayables]);
@@ -400,29 +395,21 @@ export const InsurerSettlementsPage: React.FC = () => {
   };
 
   const handleToggleSelect = (txId: string) => {
-    setSelectedTransactionIds((prev) =>
-      prev.includes(txId) ? prev.filter((id) => id !== txId) : [...prev, txId]
-    );
+    setSelectedTransactionIds((prev) => (prev.includes(txId) ? prev.filter((id) => id !== txId) : [...prev, txId]));
   };
 
   // Bulk Reconcile Action (`PATCH /admin/ledger/insurer-payables/{insurer_id}/reconcile`)
   const handleBulkReconcile = (status: ReconcileStatus) => {
     if (selectedTransactionIds.length === 0) return;
-    setPayables((prev) =>
-      prev.map((item) =>
-        selectedTransactionIds.includes(item.transaction_id)
-          ? { ...item, reconciliation_status: status, dispute_reason: undefined }
-          : item
-      )
-    );
+    setPayables((prev) => prev.map((item) => (selectedTransactionIds.includes(item.transaction_id) ? { ...item, reconciliation_status: status, dispute_reason: undefined } : item)));
     setSelectedTransactionIds([]);
   };
 
   // Open Dispute Modal
   const handleOpenDispute = (tx: InsurerPayableLineItem) => {
     setDisputeTargetTx(tx);
-    setDisputeReasonCode('PREMIUM_MISMATCH');
-    setDisputeCustomNote('');
+    setDisputeReasonCode("PREMIUM_MISMATCH");
+    setDisputeCustomNote("");
     setDisputeModalOpen(true);
   };
 
@@ -434,11 +421,11 @@ export const InsurerSettlementsPage: React.FC = () => {
         item.transaction_id === disputeTargetTx.transaction_id
           ? {
               ...item,
-              reconciliation_status: 'DISPUTED',
-              dispute_reason: `${disputeReasonCode}${disputeCustomNote ? `: ${disputeCustomNote}` : ''}`
+              reconciliation_status: "DISPUTED",
+              dispute_reason: `${disputeReasonCode}${disputeCustomNote ? `: ${disputeCustomNote}` : ""}`,
             }
-          : item
-      )
+          : item,
+      ),
     );
     setDisputeModalOpen(false);
     setDisputeTargetTx(null);
@@ -446,9 +433,9 @@ export const InsurerSettlementsPage: React.FC = () => {
 
   // Stage Maker Bordereau Settlement Request (`POST /admin/ledger/insurer-payables/{insurer_id}/settle/request`)
   const handleStageSettlementRequest = () => {
-    const readyItems = payables.filter((p) => p.reconciliation_status === 'RECONCILED');
+    const readyItems = payables.filter((p) => p.reconciliation_status === "RECONCILED");
     if (readyItems.length === 0) {
-      alert('No reconciled line items available to stage settlement.');
+      alert("No reconciled line items available to stage settlement.");
       return;
     }
 
@@ -465,25 +452,25 @@ export const InsurerSettlementsPage: React.FC = () => {
       gross_collected_amount: gross,
       commission_deducted: comm,
       net_payable_amount: net,
-      status: 'PENDING_APPROVAL',
+      status: "PENDING_APPROVAL",
       maker_id: CURRENT_USER.id,
       maker_name: CURRENT_USER.name,
       s3_bordereau_csv_url: `https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/${currentInsurer.name_en.toUpperCase()}_BORDEREAU_OCT_2026.csv`,
-      created_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
+      created_at: new Date().toISOString().replace("T", " ").substring(0, 19),
     };
 
     setBatches([newBatch, ...batches]);
     // Tag the local items as staged/cleared
-    setPayables((prev) => prev.filter((p) => p.reconciliation_status !== 'RECONCILED'));
+    setPayables((prev) => prev.filter((p) => p.reconciliation_status !== "RECONCILED"));
     setIsStageModalOpen(false);
-    setActiveTab('batches');
+    setActiveTab("batches");
   };
 
   // Checker Execute Approval (`POST /admin/approvals/{request_id}/execute`)
   const handleCheckerApprove = () => {
     if (!activeBatchForReview) return;
     if (!bankTraceInput.trim()) {
-      alert('Please enter the corporate Bank Trace ID / BAHTNET Reference Code.');
+      alert("Please enter the corporate Bank Trace ID / BAHTNET Reference Code.");
       return;
     }
 
@@ -493,30 +480,24 @@ export const InsurerSettlementsPage: React.FC = () => {
         b.settlement_id === activeBatchForReview.settlement_id
           ? {
               ...b,
-              status: 'SETTLED',
-              checker_id: 'usr-mgr-777',
-              checker_name: 'Pattara Audit (Checker)',
+              status: "SETTLED",
+              checker_id: "usr-mgr-777",
+              checker_name: "Pattara Audit (Checker)",
               bank_reference_code: bankTraceInput,
-              settled_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
+              settled_at: new Date().toISOString().replace("T", " ").substring(0, 19),
             }
-          : b
-      )
+          : b,
+      ),
     );
 
     setIsCheckerModalOpen(false);
     setActiveBatchForReview(null);
-    setBankTraceInput('');
+    setBankTraceInput("");
   };
 
   // Toggle Policy Finance Flag (`PATCH /admin/ledger/policies/{policy_id}/finance-flags`)
   const handleToggleReceivablePaid = (receivableId: string) => {
-    setReceivables((prev) =>
-      prev.map((r) =>
-        r.receivable_id === receivableId
-          ? { ...r, is_commission_received: !r.is_commission_received }
-          : r
-      )
-    );
+    setReceivables((prev) => prev.map((r) => (r.receivable_id === receivableId ? { ...r, is_commission_received: !r.is_commission_received } : r)));
   };
 
   return (
@@ -527,28 +508,22 @@ export const InsurerSettlementsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-200">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
-              Insurer Settlements & Bordereau
-            </h1>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-              OIC Trust Account
-            </span>
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Insurer Settlements & Bordereau</h1>
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">OIC Trust Account</span>
           </div>
-          <p className="text-sm text-zinc-500 mt-1">
-            End-of-Month (EOM) Broker Remittances, Statement of Account (SOA), Double-Entry Trust Ledger & Commission Receivables
-          </p>
+          <p className="text-sm text-zinc-500 mt-1">End-of-Month (EOM) Broker Remittances, Statement of Account (SOA), Double-Entry Trust Ledger & Commission Receivables</p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
               const csvContent =
-                'data:text/csv;charset=utf-8,Transaction ID,Policy No,Customer,Gross,Commission,Net Payable\n' +
-                payables.map((p) => `${p.transaction_id},${p.policy_number},${p.customer_name_masked},${p.gross_premium},${p.broker_commission_amount},${p.net_payable_to_insurer}`).join('\n');
+                "data:text/csv;charset=utf-8,Transaction ID,Policy No,Customer,Gross,Commission,Net Payable\n" +
+                payables.map((p) => `${p.transaction_id},${p.policy_number},${p.customer_name_masked},${p.gross_premium},${p.broker_commission_amount},${p.net_payable_to_insurer}`).join("\n");
               const encodedUri = encodeURI(csvContent);
-              const link = document.createElement('a');
-              link.setAttribute('href', encodedUri);
-              link.setAttribute('download', `bordereau_${selectedInsurerId}.csv`);
+              const link = document.createElement("a");
+              link.setAttribute("href", encodedUri);
+              link.setAttribute("download", `bordereau_${selectedInsurerId}.csv`);
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
@@ -576,9 +551,7 @@ export const InsurerSettlementsPage: React.FC = () => {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Carrier Switcher */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-          <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider shrink-0 mr-1">
-            Insurer:
-          </span>
+          <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider shrink-0 mr-1">Insurer:</span>
           {MOCK_INSURERS.map((ins) => {
             const isSelected = ins.insurer_id === selectedInsurerId;
             return (
@@ -586,12 +559,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                 key={ins.insurer_id}
                 onClick={() => setSelectedInsurerId(ins.insurer_id)}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all ${
-                  isSelected
-                    ? 'bg-blue-50 border-blue-600 text-blue-700 font-semibold shadow-xs'
-                    : 'bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50'
+                  isSelected ? "bg-blue-50 border-blue-600 text-blue-700 font-semibold shadow-xs" : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50"
                 }`}
               >
-                <Building2 className={`w-3.5 h-3.5 ${isSelected ? 'text-blue-600' : 'text-zinc-400'}`} />
+                <Building2 className={`w-3.5 h-3.5 ${isSelected ? "text-blue-600" : "text-zinc-400"}`} />
                 {ins.name_en}
                 <span className="text-[10px] text-zinc-400">({ins.monthly_pay_date}th)</span>
               </button>
@@ -602,45 +573,27 @@ export const InsurerSettlementsPage: React.FC = () => {
         {/* Navigation Tabs */}
         <div className="flex items-center border border-zinc-200 bg-white p-1 rounded-lg shadow-xs">
           <button
-            onClick={() => setActiveTab('payables')}
-            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeTab === 'payables'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
+            onClick={() => setActiveTab("payables")}
+            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all ${activeTab === "payables" ? "bg-blue-600 text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"}`}
           >
             Insurer Payables (Scenario A)
           </button>
           <button
-            onClick={() => setActiveTab('receivables')}
-            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeTab === 'receivables'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
+            onClick={() => setActiveTab("receivables")}
+            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all ${activeTab === "receivables" ? "bg-blue-600 text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"}`}
           >
             Commission Receivables (Scenario B)
           </button>
           <button
-            onClick={() => setActiveTab('batches')}
-            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all relative ${
-              activeTab === 'batches'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
+            onClick={() => setActiveTab("batches")}
+            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all relative ${activeTab === "batches" ? "bg-blue-600 text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"}`}
           >
             Bordereau Batches & Checker
-            {batches.some((b) => b.status === 'PENDING_APPROVAL') && (
-              <span className="ml-1.5 inline-block w-2 h-2 rounded-full bg-amber-400"></span>
-            )}
+            {batches.some((b) => b.status === "PENDING_APPROVAL") && <span className="ml-1.5 inline-block w-2 h-2 rounded-full bg-amber-400"></span>}
           </button>
           <button
-            onClick={() => setActiveTab('rules')}
-            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeTab === 'rules'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
+            onClick={() => setActiveTab("rules")}
+            className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all ${activeTab === "rules" ? "bg-blue-600 text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"}`}
           >
             Settlement Rules
           </button>
@@ -654,7 +607,7 @@ export const InsurerSettlementsPage: React.FC = () => {
       {/* ==================================================================== */}
       {/* TAB 1: INSURER PAYABLES (Bordereau Aggregate & Reconciliation) */}
       {/* ==================================================================== */}
-      {activeTab === 'payables' && (
+      {activeTab === "payables" && (
         <div className="space-y-6">
           {/* KPI Widget Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -665,9 +618,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <DollarSign className="w-4 h-4" />
                 </span>
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
-                ฿{payableMetrics.gross.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </div>
+              <div className="mt-2 text-2xl font-bold tracking-tight text-zinc-900">฿{payableMetrics.gross.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
               <p className="mt-1 text-xs text-zinc-500 flex items-center gap-1">
                 <span>Trust Account Inbound (`PREMIUM_IN`)</span>
               </p>
@@ -680,12 +631,8 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <ArrowDownLeft className="w-4 h-4" />
                 </span>
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-tight text-emerald-600">
-                ฿{payableMetrics.comm.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </div>
-              <p className="mt-1 text-xs text-zinc-500">
-                Net deduction before remittance
-              </p>
+              <div className="mt-2 text-2xl font-bold tracking-tight text-emerald-600">฿{payableMetrics.comm.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+              <p className="mt-1 text-xs text-zinc-500">Net deduction before remittance</p>
             </div>
 
             <div className="p-4 bg-white border border-zinc-200 rounded-xl shadow-xs">
@@ -695,12 +642,8 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <ArrowUpRight className="w-4 h-4" />
                 </span>
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-tight text-indigo-600">
-                ฿{payableMetrics.netPayable.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </div>
-              <p className="mt-1 text-xs text-zinc-500">
-                Due: Every {currentInsurer.monthly_pay_date}th of month
-              </p>
+              <div className="mt-2 text-2xl font-bold tracking-tight text-indigo-600">฿{payableMetrics.netPayable.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+              <p className="mt-1 text-xs text-zinc-500">Due: Every {currentInsurer.monthly_pay_date}th of month</p>
             </div>
 
             <div className="p-4 bg-white border border-zinc-200 rounded-xl shadow-xs">
@@ -724,19 +667,19 @@ export const InsurerSettlementsPage: React.FC = () => {
                 <div
                   className="bg-emerald-500 h-full"
                   style={{
-                    width: `${filteredPayables.length ? (payableMetrics.reconciledCount / filteredPayables.length) * 100 : 0}%`
+                    width: `${filteredPayables.length ? (payableMetrics.reconciledCount / filteredPayables.length) * 100 : 0}%`,
                   }}
                 />
                 <div
                   className="bg-amber-400 h-full"
                   style={{
-                    width: `${filteredPayables.length ? (payableMetrics.pendingCount / filteredPayables.length) * 100 : 0}%`
+                    width: `${filteredPayables.length ? (payableMetrics.pendingCount / filteredPayables.length) * 100 : 0}%`,
                   }}
                 />
                 <div
                   className="bg-rose-500 h-full"
                   style={{
-                    width: `${filteredPayables.length ? (payableMetrics.disputedCount / filteredPayables.length) * 100 : 0}%`
+                    width: `${filteredPayables.length ? (payableMetrics.disputedCount / filteredPayables.length) * 100 : 0}%`,
                   }}
                 />
               </div>
@@ -784,25 +727,14 @@ export const InsurerSettlementsPage: React.FC = () => {
             {/* Bulk Action Controls */}
             {selectedTransactionIds.length > 0 && (
               <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-lg">
-                <span className="text-xs font-semibold text-blue-700">
-                  {selectedTransactionIds.length} selected
-                </span>
-                <button
-                  onClick={() => handleBulkReconcile('RECONCILED')}
-                  className="px-2 py-1 text-[11px] font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded transition-colors"
-                >
+                <span className="text-xs font-semibold text-blue-700">{selectedTransactionIds.length} selected</span>
+                <button onClick={() => handleBulkReconcile("RECONCILED")} className="px-2 py-1 text-[11px] font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded transition-colors">
                   Mark Reconciled
                 </button>
-                <button
-                  onClick={() => handleBulkReconcile('DISPUTED')}
-                  className="px-2 py-1 text-[11px] font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded transition-colors"
-                >
+                <button onClick={() => handleBulkReconcile("DISPUTED")} className="px-2 py-1 text-[11px] font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded transition-colors">
                   Mark Disputed
                 </button>
-                <button
-                  onClick={() => setSelectedTransactionIds([])}
-                  className="text-xs text-zinc-500 hover:text-zinc-700 px-1"
-                >
+                <button onClick={() => setSelectedTransactionIds([])} className="text-xs text-zinc-500 hover:text-zinc-700 px-1">
                   Cancel
                 </button>
               </div>
@@ -819,10 +751,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                       <input
                         type="checkbox"
                         onChange={handleSelectAll}
-                        checked={
-                          filteredPayables.length > 0 &&
-                          selectedTransactionIds.length === filteredPayables.length
-                        }
+                        checked={filteredPayables.length > 0 && selectedTransactionIds.length === filteredPayables.length}
                         className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
                       />
                     </th>
@@ -849,12 +778,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                     filteredPayables.map((item) => {
                       const isSelected = selectedTransactionIds.includes(item.transaction_id);
                       return (
-                        <tr
-                          key={item.transaction_id}
-                          className={`hover:bg-zinc-50/80 transition-colors ${
-                            isSelected ? 'bg-blue-50/30' : ''
-                          }`}
-                        >
+                        <tr key={item.transaction_id} className={`hover:bg-zinc-50/80 transition-colors ${isSelected ? "bg-blue-50/30" : ""}`}>
                           <td className="p-3 text-center">
                             <input
                               type="checkbox"
@@ -866,62 +790,48 @@ export const InsurerSettlementsPage: React.FC = () => {
 
                           <td className="p-3">
                             <div className="font-semibold text-zinc-900">{item.policy_number}</div>
-                            <div className="text-[11px] text-zinc-400 font-mono">
-                              {item.gateway_ref_id}
-                            </div>
-                            <div className="text-[10px] text-zinc-400">
-                              {item.collection_timestamp}
-                            </div>
+                            <div className="text-[11px] text-zinc-400 font-mono">{item.gateway_ref_id}</div>
+                            <div className="text-[10px] text-zinc-400">{item.collection_timestamp}</div>
                           </td>
 
-                          <td className="p-3 font-medium text-zinc-700">
-                            {item.customer_name_masked}
-                          </td>
+                          <td className="p-3 font-medium text-zinc-700">{item.customer_name_masked}</td>
 
                           <td className="p-3">
                             <span
                               className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${
-                                item.lob_code === 'MOTOR'
-                                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                  : item.lob_code === 'FIRE'
-                                  ? 'bg-red-50 text-red-700 border border-red-200'
-                                  : item.lob_code === 'HEALTH'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                  : 'bg-blue-50 text-blue-700 border border-blue-200'
+                                item.lob_code === "MOTOR"
+                                  ? "bg-amber-50 text-amber-700 border border-amber-200"
+                                  : item.lob_code === "FIRE"
+                                    ? "bg-red-50 text-red-700 border border-red-200"
+                                    : item.lob_code === "HEALTH"
+                                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                      : "bg-blue-50 text-blue-700 border border-blue-200"
                               }`}
                             >
                               {item.lob_code}
                             </span>
                           </td>
 
-                          <td className="p-3 text-right font-medium text-zinc-900">
-                            ฿{item.gross_premium.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                          </td>
+                          <td className="p-3 text-right font-medium text-zinc-900">฿{item.gross_premium.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
-                          <td className="p-3 text-right text-zinc-600">
-                            {item.base_commission_percent.toFixed(1)}%
-                          </td>
+                          <td className="p-3 text-right text-zinc-600">{item.base_commission_percent.toFixed(1)}%</td>
 
-                          <td className="p-3 text-right text-emerald-600 font-medium">
-                            ฿{item.broker_commission_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                          </td>
+                          <td className="p-3 text-right text-emerald-600 font-medium">฿{item.broker_commission_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
-                          <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">
-                            ฿{item.net_payable_to_insurer.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                          </td>
+                          <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">฿{item.net_payable_to_insurer.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
                           <td className="p-3 text-center">
-                            {item.reconciliation_status === 'RECONCILED' && (
+                            {item.reconciliation_status === "RECONCILED" && (
                               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                                 <Check className="w-3 h-3" /> Reconciled
                               </span>
                             )}
-                            {item.reconciliation_status === 'PENDING' && (
+                            {item.reconciliation_status === "PENDING" && (
                               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
                                 <Clock className="w-3 h-3" /> Pending
                               </span>
                             )}
-                            {item.reconciliation_status === 'DISPUTED' && (
+                            {item.reconciliation_status === "DISPUTED" && (
                               <span
                                 title={item.dispute_reason}
                                 className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200 cursor-help"
@@ -933,16 +843,10 @@ export const InsurerSettlementsPage: React.FC = () => {
 
                           <td className="p-3 text-right">
                             <div className="flex items-center justify-end gap-1">
-                              {item.reconciliation_status !== 'RECONCILED' && (
+                              {item.reconciliation_status !== "RECONCILED" && (
                                 <button
                                   onClick={() => {
-                                    setPayables((prev) =>
-                                      prev.map((p) =>
-                                        p.transaction_id === item.transaction_id
-                                          ? { ...p, reconciliation_status: 'RECONCILED', dispute_reason: undefined }
-                                          : p
-                                      )
-                                    );
+                                    setPayables((prev) => prev.map((p) => (p.transaction_id === item.transaction_id ? { ...p, reconciliation_status: "RECONCILED", dispute_reason: undefined } : p)));
                                   }}
                                   className="p-1 text-emerald-600 hover:bg-emerald-50 rounded"
                                   title="Mark as Reconciled"
@@ -950,12 +854,8 @@ export const InsurerSettlementsPage: React.FC = () => {
                                   <Check className="w-4 h-4" />
                                 </button>
                               )}
-                              {item.reconciliation_status !== 'DISPUTED' && (
-                                <button
-                                  onClick={() => handleOpenDispute(item)}
-                                  className="p-1 text-rose-600 hover:bg-rose-50 rounded"
-                                  title="Mark as Disputed"
-                                >
+                              {item.reconciliation_status !== "DISPUTED" && (
+                                <button onClick={() => handleOpenDispute(item)} className="p-1 text-rose-600 hover:bg-rose-50 rounded" title="Mark as Disputed">
                                   <AlertCircle className="w-4 h-4" />
                                 </button>
                               )}
@@ -976,13 +876,13 @@ export const InsurerSettlementsPage: React.FC = () => {
               </div>
               <div className="flex items-center gap-4">
                 <span>
-                  Reconciled Ready Total:{' '}
+                  Reconciled Ready Total:{" "}
                   <strong className="text-emerald-700 font-semibold">
                     ฿
                     {payables
-                      .filter((p) => p.reconciliation_status === 'RECONCILED')
+                      .filter((p) => p.reconciliation_status === "RECONCILED")
                       .reduce((sum, cur) => sum + cur.net_payable_to_insurer, 0)
-                      .toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      .toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </strong>
                 </span>
               </div>
@@ -994,7 +894,7 @@ export const InsurerSettlementsPage: React.FC = () => {
       {/* ==================================================================== */}
       {/* TAB 2: COMMISSION RECEIVABLES (Insurer Collects – Scenario B) */}
       {/* ==================================================================== */}
-      {activeTab === 'receivables' && (
+      {activeTab === "receivables" && (
         <div className="space-y-6">
           {/* Informational Banner */}
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
@@ -1002,7 +902,8 @@ export const InsurerSettlementsPage: React.FC = () => {
             <div className="text-xs text-blue-900 space-y-1">
               <p className="font-semibold">Scenario B: Direct Carrier Collection (`payee_type = INSURER`)</p>
               <p>
-                When a customer pays the insurance company directly, the Insurer is legally required to remit the Broker’s commission. Under Thai Revenue Department (TRD) statutory mandates, the Insurer auto-deducts <strong>3% Withholding Tax (WHT)</strong>, which must balance against the <strong>Prepaid WHT Asset GL</strong>.
+                When a customer pays the insurance company directly, the Insurer is legally required to remit the Broker’s commission. Under Thai Revenue Department (TRD) statutory mandates, the
+                Insurer auto-deducts <strong>3% Withholding Tax (WHT)</strong>, which must balance against the <strong>Prepaid WHT Asset GL</strong>.
               </p>
             </div>
           </div>
@@ -1015,13 +916,13 @@ export const InsurerSettlementsPage: React.FC = () => {
                 <p className="text-xs text-zinc-500">Track and settle inward broker commission payments owed by carriers</p>
               </div>
               <span className="text-xs font-semibold text-zinc-500">
-                Total Unsettled:{' '}
+                Total Unsettled:{" "}
                 <span className="text-blue-600 font-bold">
                   ฿
                   {receivables
                     .filter((r) => !r.is_commission_received)
                     .reduce((sum, cur) => sum + cur.net_receivable_amount, 0)
-                    .toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    .toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </span>
               </span>
             </div>
@@ -1051,19 +952,11 @@ export const InsurerSettlementsPage: React.FC = () => {
                       </td>
                       <td className="p-3 text-zinc-700">{r.customer_name_masked}</td>
                       <td className="p-3 text-zinc-500">{r.effective_date}</td>
-                      <td className="p-3 text-right font-medium text-zinc-900">
-                        ฿{r.gross_premium_collected_by_insurer.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </td>
+                      <td className="p-3 text-right font-medium text-zinc-900">฿{r.gross_premium_collected_by_insurer.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
                       <td className="p-3 text-right text-zinc-600">{r.commission_percent.toFixed(1)}%</td>
-                      <td className="p-3 text-right font-semibold text-emerald-600">
-                        ฿{r.gross_commission_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </td>
-                      <td className="p-3 text-right font-mono text-rose-600">
-                        -฿{r.statutory_wht_3_percent.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </td>
-                      <td className="p-3 text-right font-bold text-blue-700 bg-zinc-50/50">
-                        ฿{r.net_receivable_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </td>
+                      <td className="p-3 text-right font-semibold text-emerald-600">฿{r.gross_commission_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                      <td className="p-3 text-right font-mono text-rose-600">-฿{r.statutory_wht_3_percent.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                      <td className="p-3 text-right font-bold text-blue-700 bg-zinc-50/50">฿{r.net_receivable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
                       <td className="p-3 text-center">
                         {r.is_commission_received ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -1079,12 +972,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                         <button
                           onClick={() => handleToggleReceivablePaid(r.receivable_id)}
                           className={`px-3 py-1 text-[11px] font-semibold rounded-md border transition-all ${
-                            r.is_commission_received
-                              ? 'bg-zinc-100 text-zinc-700 border-zinc-300 hover:bg-zinc-200'
-                              : 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
+                            r.is_commission_received ? "bg-zinc-100 text-zinc-700 border-zinc-300 hover:bg-zinc-200" : "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
                           }`}
                         >
-                          {r.is_commission_received ? 'Unmark Received' : 'Record Inward Receipt'}
+                          {r.is_commission_received ? "Unmark Received" : "Record Inward Receipt"}
                         </button>
                       </td>
                     </tr>
@@ -1099,7 +990,7 @@ export const InsurerSettlementsPage: React.FC = () => {
       {/* ==================================================================== */}
       {/* TAB 3: BORDEREAU BATCHES & MAKER-CHECKER WORKFLOW */}
       {/* ==================================================================== */}
-      {activeTab === 'batches' && (
+      {activeTab === "batches" && (
         <div className="space-y-6">
           {/* Segregation of Duties Banner */}
           <div className="p-4 bg-zinc-50 border border-zinc-200 rounded-xl flex items-center justify-between">
@@ -1112,9 +1003,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                 </p>
               </div>
             </div>
-            <span className="text-xs px-2.5 py-1 bg-white border border-zinc-200 rounded font-mono text-zinc-600">
-              User ID: {CURRENT_USER.id}
-            </span>
+            <span className="text-xs px-2.5 py-1 bg-white border border-zinc-200 rounded font-mono text-zinc-600">User ID: {CURRENT_USER.id}</span>
           </div>
 
           {/* Batches Table */}
@@ -1144,47 +1033,35 @@ export const InsurerSettlementsPage: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-zinc-200">
                   {batches.map((batch) => {
-                    const isMakerCurrentUser = batch.maker_id === CURRENT_USER.id;
+                    // const isMakerCurrentUser = batch.maker_id === CURRENT_USER.id;
                     return (
                       <tr key={batch.settlement_id} className="hover:bg-zinc-50/80">
-                        <td className="p-3 font-mono font-semibold text-zinc-900">
-                          {batch.settlement_id}
-                        </td>
+                        <td className="p-3 font-mono font-semibold text-zinc-900">{batch.settlement_id}</td>
 
                         <td className="p-3">
                           <div className="font-semibold text-zinc-900">{batch.insurer_name}</div>
                           <div className="text-[11px] text-zinc-400">{batch.cutoff_period}</div>
                         </td>
 
-                        <td className="p-3 text-center font-medium text-zinc-700">
-                          {batch.policy_count}
-                        </td>
+                        <td className="p-3 text-center font-medium text-zinc-700">{batch.policy_count}</td>
 
-                        <td className="p-3 text-right font-medium text-zinc-900">
-                          ฿{batch.gross_collected_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </td>
+                        <td className="p-3 text-right font-medium text-zinc-900">฿{batch.gross_collected_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
-                        <td className="p-3 text-right text-emerald-600 font-medium">
-                          ฿{batch.commission_deducted.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </td>
+                        <td className="p-3 text-right text-emerald-600 font-medium">฿{batch.commission_deducted.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
-                        <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">
-                          ฿{batch.net_payable_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </td>
+                        <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">฿{batch.net_payable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
                         <td className="p-3 text-center">
-                          {batch.status === 'SETTLED' ? (
+                          {batch.status === "SETTLED" ? (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                               <CheckCircle2 className="w-3 h-3" /> SETTLED
                             </span>
-                          ) : batch.status === 'PENDING_APPROVAL' ? (
+                          ) : batch.status === "PENDING_APPROVAL" ? (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                               <Clock className="w-3 h-3" /> PENDING CHECKER
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-zinc-100 text-zinc-600 border border-zinc-200">
-                              {batch.status}
-                            </span>
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-zinc-100 text-zinc-600 border border-zinc-200">{batch.status}</span>
                           )}
                         </td>
 
@@ -1201,9 +1078,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                           )}
                         </td>
 
-                        <td className="p-3 font-mono text-[11px] text-zinc-600">
-                          {batch.bank_reference_code || '-'}
-                        </td>
+                        <td className="p-3 font-mono text-[11px] text-zinc-600">{batch.bank_reference_code || "-"}</td>
 
                         <td className="p-3 text-right">
                           <div className="flex items-center justify-end gap-2">
@@ -1217,7 +1092,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                               <FileSpreadsheet className="w-4 h-4" />
                             </a>
 
-                            {batch.status === 'PENDING_APPROVAL' && (
+                            {batch.status === "PENDING_APPROVAL" && (
                               <button
                                 onClick={() => {
                                   setActiveBatchForReview(batch);
@@ -1243,14 +1118,12 @@ export const InsurerSettlementsPage: React.FC = () => {
       {/* ==================================================================== */}
       {/* TAB 4: SETTLEMENT RULES & PAY DATES (broker_insurer_settings) */}
       {/* ==================================================================== */}
-      {activeTab === 'rules' && (
+      {activeTab === "rules" && (
         <div className="space-y-6">
           <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-xs">
             <div className="p-4 border-b border-zinc-200">
               <h3 className="text-sm font-bold text-zinc-900">Broker-to-Insurer Settlement Settings</h3>
-              <p className="text-xs text-zinc-500">
-                Configured credit terms, remittance modes (Net vs. Gross), and legal cutoff dates (`broker_insurer_settings`)
-              </p>
+              <p className="text-xs text-zinc-500">Configured credit terms, remittance modes (Net vs. Gross), and legal cutoff dates (`broker_insurer_settings`)</p>
             </div>
 
             <div className="overflow-x-auto">
@@ -1276,10 +1149,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                       <td className="p-3">
                         <div className="flex gap-1 flex-wrap">
                           {ins.lob_support.map((lob) => (
-                            <span
-                              key={lob}
-                              className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-zinc-100 text-zinc-700"
-                            >
+                            <span key={lob} className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-zinc-100 text-zinc-700">
                               {lob}
                             </span>
                           ))}
@@ -1289,12 +1159,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                       <td className="p-3">
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
-                            ins.default_settlement_mode === 'NET'
-                              ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                              : 'bg-purple-50 text-purple-700 border border-purple-200'
+                            ins.default_settlement_mode === "NET" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-purple-50 text-purple-700 border border-purple-200"
                           }`}
                         >
-                          {ins.default_settlement_mode === 'NET' ? 'NET (Deduct Before)' : 'GROSS (Deduct After)'}
+                          {ins.default_settlement_mode === "NET" ? "NET (Deduct Before)" : "GROSS (Deduct After)"}
                         </span>
                       </td>
 
@@ -1304,9 +1172,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                         </span>
                       </td>
 
-                      <td className="p-3 font-mono text-zinc-700">
-                        {ins.corporate_bank_account}
-                      </td>
+                      <td className="p-3 font-mono text-zinc-700">{ins.corporate_bank_account}</td>
 
                       <td className="p-3 text-right">
                         <button
@@ -1338,10 +1204,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                   {currentInsurer.name_en} • Cutoff Date: {currentInsurer.monthly_pay_date}th of Month
                 </p>
               </div>
-              <button
-                onClick={() => setIsStageModalOpen(false)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100"
-              >
+              <button onClick={() => setIsStageModalOpen(false)} className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1358,9 +1221,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <span className="font-semibold">
                     ฿
                     {payables
-                      .filter((p) => p.reconciliation_status === 'RECONCILED')
+                      .filter((p) => p.reconciliation_status === "RECONCILED")
                       .reduce((sum, cur) => sum + cur.gross_premium, 0)
-                      .toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      .toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="flex justify-between text-zinc-700">
@@ -1368,9 +1231,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <span className="font-semibold text-emerald-700">
                     -฿
                     {payables
-                      .filter((p) => p.reconciliation_status === 'RECONCILED')
+                      .filter((p) => p.reconciliation_status === "RECONCILED")
                       .reduce((sum, cur) => sum + cur.broker_commission_amount, 0)
-                      .toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      .toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="border-t border-blue-200 pt-2 flex justify-between font-bold text-sm text-blue-950">
@@ -1378,29 +1241,20 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <span>
                     ฿
                     {payables
-                      .filter((p) => p.reconciliation_status === 'RECONCILED')
+                      .filter((p) => p.reconciliation_status === "RECONCILED")
                       .reduce((sum, cur) => sum + cur.net_payable_to_insurer, 0)
-                      .toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      .toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-zinc-700 mb-1">
-                  Insurer Target Wire Account:
-                </label>
-                <input
-                  type="text"
-                  readOnly
-                  value={currentInsurer.corporate_bank_account}
-                  className="w-full p-2 bg-zinc-100 border border-zinc-200 rounded-lg font-mono text-zinc-700"
-                />
+                <label className="block font-semibold text-zinc-700 mb-1">Insurer Target Wire Account:</label>
+                <input type="text" readOnly value={currentInsurer.corporate_bank_account} className="w-full p-2 bg-zinc-100 border border-zinc-200 rounded-lg font-mono text-zinc-700" />
               </div>
 
               <div>
-                <label className="block font-semibold text-zinc-700 mb-1">
-                  Maker Initiation Note:
-                </label>
+                <label className="block font-semibold text-zinc-700 mb-1">Maker Initiation Note:</label>
                 <textarea
                   rows={2}
                   defaultValue="Bordereau generated for EOM schedule. All line items verified against 2C2P / Omise gateway logs."
@@ -1409,21 +1263,16 @@ export const InsurerSettlementsPage: React.FC = () => {
               </div>
 
               <p className="text-[11px] text-zinc-500">
-                Clicking <strong>Stage Settlement</strong> will serialize this payload into <code>approval_requests</code> with status <code>PENDING_APPROVAL</code> and lock these line items from future sweeps.
+                Clicking <strong>Stage Settlement</strong> will serialize this payload into <code>approval_requests</code> with status <code>PENDING_APPROVAL</code> and lock these line items from
+                future sweeps.
               </p>
             </div>
 
             <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex items-center justify-end gap-2">
-              <button
-                onClick={() => setIsStageModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900"
-              >
+              <button onClick={() => setIsStageModalOpen(false)} className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900">
                 Cancel
               </button>
-              <button
-                onClick={handleStageSettlementRequest}
-                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
-              >
+              <button onClick={handleStageSettlementRequest} className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm">
                 Confirm & Stage Request (Maker)
               </button>
             </div>
@@ -1463,7 +1312,8 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <div>
                     <span className="font-bold">Segregation of Duties Violation Guard:</span>
                     <p className="mt-0.5">
-                      You are the original Maker (<code>{activeBatchForReview.maker_name}</code>) of this request. In production, another Finance Manager with <code>finance:approve</code> role must sign off.
+                      You are the original Maker (<code>{activeBatchForReview.maker_name}</code>) of this request. In production, another Finance Manager with <code>finance:approve</code> role must
+                      sign off.
                     </p>
                   </div>
                 </div>
@@ -1472,9 +1322,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold">Authorized Checker Verification:</span>
-                    <p className="mt-0.5">
-                      You are authorized to verify the external bank wire trace code and execute ACID general ledger balance.
-                    </p>
+                    <p className="mt-0.5">You are authorized to verify the external bank wire trace code and execute ACID general ledger balance.</p>
                   </div>
                 </div>
               )}
@@ -1490,9 +1338,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Net Remittance Amount:</span>
-                  <span className="font-bold text-zinc-900 text-sm">
-                    ฿{activeBatchForReview.net_payable_amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
+                  <span className="font-bold text-zinc-900 text-sm">฿{activeBatchForReview.net_payable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                 </div>
               </div>
 
@@ -1507,9 +1353,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                   onChange={(e) => setBankTraceInput(e.target.value)}
                   className="w-full p-2.5 bg-white border border-zinc-300 rounded-lg font-mono focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs"
                 />
-                <span className="text-[11px] text-zinc-400 mt-1 block">
-                  Mandatory proof of wire from Corporate Banking portal before ledger closure.
-                </span>
+                <span className="text-[11px] text-zinc-400 mt-1 block">Mandatory proof of wire from Corporate Banking portal before ledger closure.</span>
               </div>
             </div>
 
@@ -1523,10 +1367,7 @@ export const InsurerSettlementsPage: React.FC = () => {
               >
                 Close
               </button>
-              <button
-                onClick={handleCheckerApprove}
-                className="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm"
-              >
+              <button onClick={handleCheckerApprove} className="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm">
                 Approve & Execute ACID Swap
               </button>
             </div>
@@ -1545,10 +1386,7 @@ export const InsurerSettlementsPage: React.FC = () => {
                 <h3 className="text-base font-bold text-zinc-900">Flag Transaction Dispute</h3>
                 <p className="text-xs text-zinc-500">{disputeTargetTx.policy_number}</p>
               </div>
-              <button
-                onClick={() => setDisputeModalOpen(false)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100"
-              >
+              <button onClick={() => setDisputeModalOpen(false)} className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1556,11 +1394,7 @@ export const InsurerSettlementsPage: React.FC = () => {
             <div className="p-5 space-y-4 text-xs">
               <div>
                 <label className="block font-semibold text-zinc-700 mb-1">Dispute Reason Code</label>
-                <select
-                  value={disputeReasonCode}
-                  onChange={(e) => setDisputeReasonCode(e.target.value)}
-                  className="w-full p-2 border border-zinc-200 rounded-lg text-xs"
-                >
+                <select value={disputeReasonCode} onChange={(e) => setDisputeReasonCode(e.target.value)} className="w-full p-2 border border-zinc-200 rounded-lg text-xs">
                   <option value="PREMIUM_MISMATCH">PREMIUM_MISMATCH (Gross amount differs from carrier schedule)</option>
                   <option value="COMMISSION_DISCREPANCY">COMMISSION_DISCREPANCY (Disputed rate tier)</option>
                   <option value="CANCELLATION_IN_FLIGHT">CANCELLATION_IN_FLIGHT (Pending Endorsement / Refund)</option>
@@ -1581,16 +1415,10 @@ export const InsurerSettlementsPage: React.FC = () => {
             </div>
 
             <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex items-center justify-end gap-2">
-              <button
-                onClick={() => setDisputeModalOpen(false)}
-                className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900"
-              >
+              <button onClick={() => setDisputeModalOpen(false)} className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900">
                 Cancel
               </button>
-              <button
-                onClick={handleConfirmDispute}
-                className="px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm"
-              >
+              <button onClick={handleConfirmDispute} className="px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm">
                 Mark as Disputed
               </button>
             </div>

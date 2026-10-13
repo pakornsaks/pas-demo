@@ -1,32 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import {
-  Search,
-  Filter,
-  Download,
-  CheckCircle2,
-  Clock,
-  Building2,
-  AlertCircle,
-  FileCheck2,
-  ArrowUpRight,
-  RefreshCw,
-  SlidersHorizontal,
-  ChevronRight,
-  ShieldAlert,
-  Wallet,
-  Check,
-  X,
-  Calendar,
-  FileSpreadsheet
-} from 'lucide-react';
+import { AlertCircle, Building2, CheckCircle2, ChevronRight, Clock, Download, FileCheck2, Search, Wallet, X } from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // ==========================================
 // 1. Data Contracts & Interfaces
 // ==========================================
 
-export type ReceivableStatus = 'PENDING' | 'RECEIVED' | 'DISPUTED';
-export type SettlementMode = 'GROSS' | 'DIRECT_INSURER';
-export type PayeeType = 'INSURER' | 'BROKER';
+export type ReceivableStatus = "PENDING" | "RECEIVED" | "DISPUTED";
+export type SettlementMode = "GROSS" | "DIRECT_INSURER";
+export type PayeeType = "INSURER" | "BROKER";
 
 export interface CommissionReceivable {
   policy_id: string;
@@ -42,7 +23,7 @@ export interface CommissionReceivable {
   commission_rate: number;
   gross_commission: number;
   wht_tax_deducted: number; // 3% WHT deducted by Insurer per Thai Revenue Department
-  net_receivable: number;   // Gross - 3% WHT
+  net_receivable: number; // Gross - 3% WHT
   payee_type: PayeeType;
   settlement_mode: SettlementMode;
   is_commission_received: boolean;
@@ -59,130 +40,130 @@ export interface CommissionReceivable {
 
 const INITIAL_RECEIVABLES: CommissionReceivable[] = [
   {
-    policy_id: 'pol-001',
-    policy_number: 'V-2026-90412',
-    quotation_id: 'QT-2026-0019',
-    channel_name: 'Website (Direct STP)',
-    customer_name: 'Somchai Jaidee',
-    insurer_id: 'ins-viriyah',
-    insurer_name: 'Viriyah Insurance (วิริยะประกันภัย)',
-    product_name: 'Motor Type 1 Comprehensive',
-    plan_name: 'Gold Package (EV Coverage)',
+    policy_id: "pol-001",
+    policy_number: "V-2026-90412",
+    quotation_id: "QT-2026-0019",
+    channel_name: "Website (Direct STP)",
+    customer_name: "Somchai Jaidee",
+    insurer_id: "ins-viriyah",
+    insurer_name: "Viriyah Insurance (วิริยะประกันภัย)",
+    product_name: "Motor Type 1 Comprehensive",
+    plan_name: "Gold Package (EV Coverage)",
     gross_premium: 22000.0,
     commission_rate: 18.0,
     gross_commission: 3960.0,
     wht_tax_deducted: 118.8,
     net_receivable: 3841.2,
-    payee_type: 'INSURER',
-    settlement_mode: 'DIRECT_INSURER',
+    payee_type: "INSURER",
+    settlement_mode: "DIRECT_INSURER",
     is_commission_received: false,
     received_at: null,
-    effective_date: '2026-05-15',
-    due_date: '2026-06-15',
-    status: 'PENDING',
+    effective_date: "2026-05-15",
+    due_date: "2026-06-15",
+    status: "PENDING",
   },
   {
-    policy_id: 'pol-002',
-    policy_number: 'MSIG-2026-44120',
-    quotation_id: 'QT-2026-0045',
-    channel_name: 'Telesales',
-    customer_name: 'Kanya Phonchai',
-    insurer_id: 'ins-msig',
-    insurer_name: 'MSIG Insurance Thailand',
-    product_name: 'Travel Easy Worldwide',
-    plan_name: 'Premier Global Tier 1',
+    policy_id: "pol-002",
+    policy_number: "MSIG-2026-44120",
+    quotation_id: "QT-2026-0045",
+    channel_name: "Telesales",
+    customer_name: "Kanya Phonchai",
+    insurer_id: "ins-msig",
+    insurer_name: "MSIG Insurance Thailand",
+    product_name: "Travel Easy Worldwide",
+    plan_name: "Premier Global Tier 1",
     gross_premium: 4500.0,
     commission_rate: 22.0,
     gross_commission: 990.0,
     wht_tax_deducted: 29.7,
     net_receivable: 960.3,
-    payee_type: 'BROKER',
-    settlement_mode: 'GROSS',
+    payee_type: "BROKER",
+    settlement_mode: "GROSS",
     is_commission_received: false,
     received_at: null,
-    effective_date: '2026-05-18',
-    due_date: '2026-06-15',
-    status: 'PENDING',
+    effective_date: "2026-05-18",
+    due_date: "2026-06-15",
+    status: "PENDING",
   },
   {
-    policy_id: 'pol-003',
-    policy_number: 'TIP-2026-11983',
-    quotation_id: 'QT-2026-0082',
-    channel_name: 'Sub-agent Network',
-    customer_name: 'Apinya Srisawat',
-    insurer_id: 'ins-dhipaya',
-    insurer_name: 'Dhipaya Insurance (ทิพยประกันภัย)',
-    product_name: 'Fire & Home Shield',
-    plan_name: 'Executive Residence',
+    policy_id: "pol-003",
+    policy_number: "TIP-2026-11983",
+    quotation_id: "QT-2026-0082",
+    channel_name: "Sub-agent Network",
+    customer_name: "Apinya Srisawat",
+    insurer_id: "ins-dhipaya",
+    insurer_name: "Dhipaya Insurance (ทิพยประกันภัย)",
+    product_name: "Fire & Home Shield",
+    plan_name: "Executive Residence",
     gross_premium: 14000.0,
     commission_rate: 20.0,
     gross_commission: 2800.0,
     wht_tax_deducted: 84.0,
     net_receivable: 2716.0,
-    payee_type: 'INSURER',
-    settlement_mode: 'DIRECT_INSURER',
+    payee_type: "INSURER",
+    settlement_mode: "DIRECT_INSURER",
     is_commission_received: true,
-    received_at: '2026-06-02T10:14:00Z',
-    bank_reference: 'KBANK-INWARD-99120',
-    effective_date: '2026-04-20',
-    due_date: '2026-05-20',
-    status: 'RECEIVED',
+    received_at: "2026-06-02T10:14:00Z",
+    bank_reference: "KBANK-INWARD-99120",
+    effective_date: "2026-04-20",
+    due_date: "2026-05-20",
+    status: "RECEIVED",
   },
   {
-    policy_id: 'pol-004',
-    policy_number: 'BKI-2026-88301',
-    quotation_id: 'QT-2026-0104',
-    channel_name: 'Direct Walk-in',
-    customer_name: 'Chatchai Charoen',
-    insurer_id: 'ins-bangkok',
-    insurer_name: 'Bangkok Insurance (กรุงเทพประกันภัย)',
-    product_name: 'Personal Accident Ultra',
-    plan_name: 'Silver Family Shield',
+    policy_id: "pol-004",
+    policy_number: "BKI-2026-88301",
+    quotation_id: "QT-2026-0104",
+    channel_name: "Direct Walk-in",
+    customer_name: "Chatchai Charoen",
+    insurer_id: "ins-bangkok",
+    insurer_name: "Bangkok Insurance (กรุงเทพประกันภัย)",
+    product_name: "Personal Accident Ultra",
+    plan_name: "Silver Family Shield",
     gross_premium: 8500.0,
     commission_rate: 15.0,
     gross_commission: 1275.0,
     wht_tax_deducted: 38.25,
     net_receivable: 1236.75,
-    payee_type: 'INSURER',
-    settlement_mode: 'DIRECT_INSURER',
+    payee_type: "INSURER",
+    settlement_mode: "DIRECT_INSURER",
     is_commission_received: false,
     received_at: null,
-    effective_date: '2026-05-22',
-    due_date: '2026-06-22',
-    status: 'PENDING',
+    effective_date: "2026-05-22",
+    due_date: "2026-06-22",
+    status: "PENDING",
   },
   {
-    policy_id: 'pol-005',
-    policy_number: 'V-2026-90881',
-    quotation_id: 'QT-2026-0155',
-    channel_name: 'Telesales',
-    customer_name: 'Nattapong Wattana',
-    insurer_id: 'ins-viriyah',
-    insurer_name: 'Viriyah Insurance (วิริยะประกันภัย)',
-    product_name: 'Motor Voluntary Type 2+',
-    plan_name: 'Standard Sedan',
+    policy_id: "pol-005",
+    policy_number: "V-2026-90881",
+    quotation_id: "QT-2026-0155",
+    channel_name: "Telesales",
+    customer_name: "Nattapong Wattana",
+    insurer_id: "ins-viriyah",
+    insurer_name: "Viriyah Insurance (วิริยะประกันภัย)",
+    product_name: "Motor Voluntary Type 2+",
+    plan_name: "Standard Sedan",
     gross_premium: 12500.0,
     commission_rate: 17.5,
     gross_commission: 2187.5,
     wht_tax_deducted: 65.63,
     net_receivable: 2121.87,
-    payee_type: 'BROKER',
-    settlement_mode: 'GROSS',
+    payee_type: "BROKER",
+    settlement_mode: "GROSS",
     is_commission_received: true,
-    received_at: '2026-06-03T14:40:00Z',
-    bank_reference: 'SCB-INWARD-88712',
-    effective_date: '2026-05-01',
-    due_date: '2026-06-01',
-    status: 'RECEIVED',
+    received_at: "2026-06-03T14:40:00Z",
+    bank_reference: "SCB-INWARD-88712",
+    effective_date: "2026-05-01",
+    due_date: "2026-06-01",
+    status: "RECEIVED",
   },
 ];
 
 const INSURERS_LIST = [
-  { id: 'ALL', name: 'All Insurers (ทุกลุ่มบริษัทประกัน)' },
-  { id: 'ins-viriyah', name: 'Viriyah Insurance (วิริยะประกันภัย)' },
-  { id: 'ins-msig', name: 'MSIG Insurance Thailand' },
-  { id: 'ins-dhipaya', name: 'Dhipaya Insurance (ทิพยประกันภัย)' },
-  { id: 'ins-bangkok', name: 'Bangkok Insurance (กรุงเทพประกันภัย)' },
+  { id: "ALL", name: "All Insurers (ทุกลุ่มบริษัทประกัน)" },
+  { id: "ins-viriyah", name: "Viriyah Insurance (วิริยะประกันภัย)" },
+  { id: "ins-msig", name: "MSIG Insurance Thailand" },
+  { id: "ins-dhipaya", name: "Dhipaya Insurance (ทิพยประกันภัย)" },
+  { id: "ins-bangkok", name: "Bangkok Insurance (กรุงเทพประกันภัย)" },
 ];
 
 export const CommissionReceivablesPage: React.FC = () => {
@@ -190,20 +171,20 @@ export const CommissionReceivablesPage: React.FC = () => {
   // 3. State Management
   // ==========================================
   const [data, setData] = useState<CommissionReceivable[]>(INITIAL_RECEIVABLES);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedInsurer, setSelectedInsurer] = useState('ALL');
-  const [selectedStatusTab, setSelectedStatusTab] = useState<'ALL' | 'PENDING' | 'RECEIVED'>('ALL');
-  const [selectedSettlementMode, setSelectedSettlementMode] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedInsurer, setSelectedInsurer] = useState("ALL");
+  const [selectedStatusTab, setSelectedStatusTab] = useState<"ALL" | "PENDING" | "RECEIVED">("ALL");
+  const [selectedSettlementMode, setSelectedSettlementMode] = useState<string>("ALL");
   const [selectedPolicyIds, setSelectedPolicyIds] = useState<string[]>([]);
-  
+
   // Modals & Drawers
   const [isSettleModalOpen, setIsSettleModalOpen] = useState(false);
-  const [settlementBankRef, setSettlementBankRef] = useState('');
-  const [settlementNotes, setSettlementNotes] = useState('');
+  const [settlementBankRef, setSettlementBankRef] = useState("");
+  const [settlementNotes, setSettlementNotes] = useState("");
   const [inspectItem, setInspectItem] = useState<CommissionReceivable | null>(null);
-  const [notification, setNotification] = useState<{ type: 'success' | 'info'; message: string } | null>(null);
+  const [notification, setNotification] = useState<{ type: "success" | "info"; message: string } | null>(null);
 
-  const showNotification = (message: string, type: 'success' | 'info' = 'success') => {
+  const showNotification = (message: string, type: "success" | "info" = "success") => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 4000);
   };
@@ -219,14 +200,10 @@ export const CommissionReceivablesPage: React.FC = () => {
         item.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.quotation_id.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchInsurer = selectedInsurer === 'ALL' || item.insurer_id === selectedInsurer;
-      const matchStatus =
-        selectedStatusTab === 'ALL' ||
-        (selectedStatusTab === 'PENDING' && !item.is_commission_received) ||
-        (selectedStatusTab === 'RECEIVED' && item.is_commission_received);
+      const matchInsurer = selectedInsurer === "ALL" || item.insurer_id === selectedInsurer;
+      const matchStatus = selectedStatusTab === "ALL" || (selectedStatusTab === "PENDING" && !item.is_commission_received) || (selectedStatusTab === "RECEIVED" && item.is_commission_received);
 
-      const matchMode =
-        selectedSettlementMode === 'ALL' || item.settlement_mode === selectedSettlementMode;
+      const matchMode = selectedSettlementMode === "ALL" || item.settlement_mode === selectedSettlementMode;
 
       return matchSearch && matchInsurer && matchStatus && matchMode;
     });
@@ -283,20 +260,17 @@ export const CommissionReceivablesPage: React.FC = () => {
           return {
             ...item,
             is_commission_received: nextReceived,
-            status: nextReceived ? 'RECEIVED' : 'PENDING',
+            status: nextReceived ? "RECEIVED" : "PENDING",
             received_at: nextReceived ? new Date().toISOString() : null,
-            bank_reference: nextReceived ? (item.bank_reference || 'MANUAL-OPS-CONFIRMED') : undefined,
+            bank_reference: nextReceived ? item.bank_reference || "MANUAL-OPS-CONFIRMED" : undefined,
           };
         }
         return item;
-      })
+      }),
     );
 
     const target = data.find((d) => d.policy_id === policyId);
-    showNotification(
-      `Flag updated for ${target?.policy_number}: ${!target?.is_commission_received ? 'Marked as Received' : 'Reverted to Pending'}`,
-      'info'
-    );
+    showNotification(`Flag updated for ${target?.policy_number}: ${!target?.is_commission_received ? "Marked as Received" : "Reverted to Pending"}`, "info");
   };
 
   // Bulk Selection Checkboxes
@@ -309,15 +283,13 @@ export const CommissionReceivablesPage: React.FC = () => {
   };
 
   const handleSelectOne = (policyId: string) => {
-    setSelectedPolicyIds((prev) =>
-      prev.includes(policyId) ? prev.filter((id) => id !== policyId) : [...prev, policyId]
-    );
+    setSelectedPolicyIds((prev) => (prev.includes(policyId) ? prev.filter((id) => id !== policyId) : [...prev, policyId]));
   };
 
   // Execute Insurer Receivable Settlement (POST /admin/ledger/insurer-receivables/{insurer_id}/settle)
   const handleConfirmBatchSettle = () => {
     if (!settlementBankRef.trim()) {
-      alert('Please enter bank deposit reference code.');
+      alert("Please enter bank deposit reference code.");
       return;
     }
 
@@ -328,23 +300,21 @@ export const CommissionReceivablesPage: React.FC = () => {
           return {
             ...item,
             is_commission_received: true,
-            status: 'RECEIVED',
+            status: "RECEIVED",
             received_at: now,
             bank_reference: settlementBankRef,
           };
         }
         return item;
-      })
+      }),
     );
 
-    showNotification(
-      `Successfully reconciled ${selectedPolicyIds.length} receivable entries. Total Net Inward: ฿${selectedSummary.net.toLocaleString('en-US', { minimumFractionDigits: 2 })}`
-    );
+    showNotification(`Successfully reconciled ${selectedPolicyIds.length} receivable entries. Total Net Inward: ฿${selectedSummary.net.toLocaleString("en-US", { minimumFractionDigits: 2 })}`);
 
     setSelectedPolicyIds([]);
     setIsSettleModalOpen(false);
-    setSettlementBankRef('');
-    setSettlementNotes('');
+    setSettlementBankRef("");
+    setSettlementNotes("");
   };
 
   return (
@@ -355,10 +325,7 @@ export const CommissionReceivablesPage: React.FC = () => {
         <div className="fixed top-4 right-6 z-50 flex items-center gap-3 bg-white border border-emerald-300 text-emerald-900 px-4 py-3 rounded-lg shadow-xl shadow-zinc-200/50 transition-all">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
           <span className="text-sm font-medium">{notification.message}</span>
-          <button
-            onClick={() => setNotification(null)}
-            className="text-zinc-400 hover:text-zinc-700 ml-2"
-          >
+          <button onClick={() => setNotification(null)} className="text-zinc-400 hover:text-zinc-700 ml-2">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -377,17 +344,13 @@ export const CommissionReceivablesPage: React.FC = () => {
               <span>/</span>
               <span className="text-blue-600">REP-04 Compliance</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
-              Commission Receivables Ledger
-            </h1>
-            <p className="text-sm text-zinc-500 mt-0.5">
-              Track outstanding broker commission owed by insurers under Gross Settlement (Deduct After) and Direct-to-Carrier payment collections.
-            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Commission Receivables Ledger</h1>
+            <p className="text-sm text-zinc-500 mt-0.5">Track outstanding broker commission owed by insurers under Gross Settlement (Deduct After) and Direct-to-Carrier payment collections.</p>
           </div>
 
           <div className="flex items-center gap-2.5">
             <button
-              onClick={() => showNotification('Exporting official Por.Lor. / Receivable CSV Statement...', 'info')}
+              onClick={() => showNotification("Exporting official Por.Lor. / Receivable CSV Statement...", "info")}
               className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-zinc-700 bg-white border border-zinc-300 rounded-lg hover:bg-zinc-50 transition shadow-sm"
             >
               <Download className="w-4 h-4 text-zinc-500" />
@@ -398,9 +361,7 @@ export const CommissionReceivablesPage: React.FC = () => {
               disabled={selectedPolicyIds.length === 0}
               onClick={() => setIsSettleModalOpen(true)}
               className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg shadow-sm transition ${
-                selectedPolicyIds.length > 0
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
-                  : 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed'
+                selectedPolicyIds.length > 0 ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed"
               }`}
             >
               <FileCheck2 className="w-4 h-4" />
@@ -423,9 +384,7 @@ export const CommissionReceivablesPage: React.FC = () => {
             </div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-zinc-900">
-              ฿{metrics.totalGross.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-            </div>
+            <div className="text-2xl font-bold text-zinc-900">฿{metrics.totalGross.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
             <div className="text-xs text-zinc-500 mt-1 flex items-center gap-1.5">
               <span>Across {data.length} issued policies</span>
             </div>
@@ -441,12 +400,10 @@ export const CommissionReceivablesPage: React.FC = () => {
             </div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-amber-900">
-              ฿{metrics.pendingGross.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-            </div>
+            <div className="text-2xl font-bold text-amber-900">฿{metrics.pendingGross.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
             <div className="text-xs text-amber-700 font-medium mt-1 flex items-center justify-between">
               <span>{metrics.pendingCount} policies uncollected</span>
-              <span>Net: ฿{metrics.pendingNet.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+              <span>Net: ฿{metrics.pendingNet.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
         </div>
@@ -460,9 +417,7 @@ export const CommissionReceivablesPage: React.FC = () => {
             </div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-emerald-900">
-              ฿{metrics.receivedGross.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-            </div>
+            <div className="text-2xl font-bold text-emerald-900">฿{metrics.receivedGross.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
             <div className="text-xs text-emerald-700 font-medium mt-1">
               <span>{metrics.receivedCount} policies credited to Trust Ledger</span>
             </div>
@@ -478,9 +433,7 @@ export const CommissionReceivablesPage: React.FC = () => {
             </div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-purple-950">
-              ฿{metrics.totalWHTAsset.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-            </div>
+            <div className="text-2xl font-bold text-purple-950">฿{metrics.totalWHTAsset.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
             <div className="text-xs text-zinc-500 mt-1">
               <span>Thai Revenue Code 50 Tawi Asset</span>
             </div>
@@ -537,32 +490,20 @@ export const CommissionReceivablesPage: React.FC = () => {
             {/* Status Tabs */}
             <div className="inline-flex rounded-lg border border-zinc-200 p-0.5 bg-zinc-100">
               <button
-                onClick={() => setSelectedStatusTab('ALL')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${
-                  selectedStatusTab === 'ALL'
-                    ? 'bg-white text-zinc-900 shadow-sm'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                }`}
+                onClick={() => setSelectedStatusTab("ALL")}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${selectedStatusTab === "ALL" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-600 hover:text-zinc-900"}`}
               >
                 All ({data.length})
               </button>
               <button
-                onClick={() => setSelectedStatusTab('PENDING')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${
-                  selectedStatusTab === 'PENDING'
-                    ? 'bg-white text-amber-700 shadow-sm'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                }`}
+                onClick={() => setSelectedStatusTab("PENDING")}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${selectedStatusTab === "PENDING" ? "bg-white text-amber-700 shadow-sm" : "text-zinc-600 hover:text-zinc-900"}`}
               >
                 Pending ({metrics.pendingCount})
               </button>
               <button
-                onClick={() => setSelectedStatusTab('RECEIVED')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${
-                  selectedStatusTab === 'RECEIVED'
-                    ? 'bg-white text-emerald-700 shadow-sm'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                }`}
+                onClick={() => setSelectedStatusTab("RECEIVED")}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${selectedStatusTab === "RECEIVED" ? "bg-white text-emerald-700 shadow-sm" : "text-zinc-600 hover:text-zinc-900"}`}
               >
                 Received ({metrics.receivedCount})
               </button>
@@ -583,10 +524,7 @@ export const CommissionReceivablesPage: React.FC = () => {
                   <th className="py-3.5 px-4 w-10 text-center">
                     <input
                       type="checkbox"
-                      checked={
-                        filteredData.length > 0 &&
-                        selectedPolicyIds.length === filteredData.length
-                      }
+                      checked={filteredData.length > 0 && selectedPolicyIds.length === filteredData.length}
                       onChange={handleSelectAll}
                       className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
                     />
@@ -608,21 +546,14 @@ export const CommissionReceivablesPage: React.FC = () => {
                     <td colSpan={10} className="py-12 text-center text-zinc-500">
                       <AlertCircle className="w-8 h-8 text-zinc-300 mx-auto mb-2" />
                       <p className="font-medium text-base text-zinc-700">No receivable records found</p>
-                      <p className="text-xs text-zinc-400 mt-0.5">
-                        Try modifying your search or changing the insurer filter.
-                      </p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Try modifying your search or changing the insurer filter.</p>
                     </td>
                   </tr>
                 ) : (
                   filteredData.map((item) => {
                     const isSelected = selectedPolicyIds.includes(item.policy_id);
                     return (
-                      <tr
-                        key={item.policy_id}
-                        className={`hover:bg-zinc-50/80 transition-colors ${
-                          isSelected ? 'bg-blue-50/30' : ''
-                        }`}
-                      >
+                      <tr key={item.policy_id} className={`hover:bg-zinc-50/80 transition-colors ${isSelected ? "bg-blue-50/30" : ""}`}>
                         {/* Checkbox */}
                         <td className="py-4 px-4 text-center">
                           <input
@@ -635,69 +566,43 @@ export const CommissionReceivablesPage: React.FC = () => {
 
                         {/* Policy & Product */}
                         <td className="py-4 px-4">
-                          <div className="font-semibold text-zinc-900 font-mono text-xs">
-                            {item.policy_number}
-                          </div>
-                          <div className="text-xs font-medium text-zinc-600 mt-0.5">
-                            {item.product_name}
-                          </div>
-                          <div className="text-[11px] text-zinc-400">
-                            {item.plan_name}
-                          </div>
+                          <div className="font-semibold text-zinc-900 font-mono text-xs">{item.policy_number}</div>
+                          <div className="text-xs font-medium text-zinc-600 mt-0.5">{item.product_name}</div>
+                          <div className="text-[11px] text-zinc-400">{item.plan_name}</div>
                         </td>
 
                         {/* Insurer */}
                         <td className="py-4 px-4">
-                          <div className="text-xs font-semibold text-zinc-800">
-                            {item.insurer_name}
-                          </div>
+                          <div className="text-xs font-semibold text-zinc-800">{item.insurer_name}</div>
                           <span
                             className={`inline-block text-[10px] font-medium px-2 py-0.5 rounded-full mt-1 ${
-                              item.settlement_mode === 'DIRECT_INSURER'
-                                ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                                : 'bg-blue-50 text-blue-700 border border-blue-200'
+                              item.settlement_mode === "DIRECT_INSURER" ? "bg-purple-50 text-purple-700 border border-purple-200" : "bg-blue-50 text-blue-700 border border-blue-200"
                             }`}
                           >
-                            {item.settlement_mode === 'DIRECT_INSURER'
-                              ? 'Direct to Carrier'
-                              : 'Gross Remit (SOA)'}
+                            {item.settlement_mode === "DIRECT_INSURER" ? "Direct to Carrier" : "Gross Remit (SOA)"}
                           </span>
                         </td>
 
                         {/* Customer */}
                         <td className="py-4 px-4">
-                          <div className="text-xs font-medium text-zinc-900">
-                            {item.customer_name}
-                          </div>
-                          <div className="text-[11px] text-zinc-500 mt-0.5">
-                            {item.channel_name}
-                          </div>
+                          <div className="text-xs font-medium text-zinc-900">{item.customer_name}</div>
+                          <div className="text-[11px] text-zinc-500 mt-0.5">{item.channel_name}</div>
                         </td>
 
                         {/* Gross Premium */}
-                        <td className="py-4 px-4 text-right font-mono text-xs text-zinc-700">
-                          ฿{item.gross_premium.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </td>
+                        <td className="py-4 px-4 text-right font-mono text-xs text-zinc-700">฿{item.gross_premium.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
                         {/* Commission Rate & Gross Commission */}
                         <td className="py-4 px-4 text-right">
-                          <div className="font-semibold text-xs font-mono text-zinc-900">
-                            ฿{item.gross_commission.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                          </div>
-                          <div className="text-[11px] text-zinc-500">
-                            ({item.commission_rate}%)
-                          </div>
+                          <div className="font-semibold text-xs font-mono text-zinc-900">฿{item.gross_commission.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+                          <div className="text-[11px] text-zinc-500">({item.commission_rate}%)</div>
                         </td>
 
                         {/* WHT 3% */}
-                        <td className="py-4 px-4 text-right font-mono text-xs text-purple-700">
-                          -฿{item.wht_tax_deducted.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </td>
+                        <td className="py-4 px-4 text-right font-mono text-xs text-purple-700">-฿{item.wht_tax_deducted.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
                         {/* Net Receivable */}
-                        <td className="py-4 px-4 text-right font-mono text-xs font-bold text-zinc-900">
-                          ฿{item.net_receivable.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                        </td>
+                        <td className="py-4 px-4 text-right font-mono text-xs font-bold text-zinc-900">฿{item.net_receivable.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
 
                         {/* FIN-05 Manual Tracking Toggle */}
                         <td className="py-4 px-4 text-center">
@@ -705,24 +610,18 @@ export const CommissionReceivablesPage: React.FC = () => {
                             <button
                               onClick={() => handleToggleCommissionFlag(item.policy_id)}
                               className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-                                item.is_commission_received ? 'bg-emerald-600' : 'bg-zinc-300'
+                                item.is_commission_received ? "bg-emerald-600" : "bg-zinc-300"
                               }`}
                               title="FIN-05: Click to toggle Get Commission From Insurer Yet?"
                             >
                               <span
                                 className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                                  item.is_commission_received ? 'translate-x-4' : 'translate-x-0'
+                                  item.is_commission_received ? "translate-x-4" : "translate-x-0"
                                 }`}
                               />
                             </button>
-                            <span
-                              className={`text-[10px] font-semibold uppercase tracking-wider ${
-                                item.is_commission_received
-                                  ? 'text-emerald-700'
-                                  : 'text-amber-600'
-                              }`}
-                            >
-                              {item.is_commission_received ? 'Received' : 'Pending'}
+                            <span className={`text-[10px] font-semibold uppercase tracking-wider ${item.is_commission_received ? "text-emerald-700" : "text-amber-600"}`}>
+                              {item.is_commission_received ? "Received" : "Pending"}
                             </span>
                           </div>
                         </td>
@@ -748,16 +647,13 @@ export const CommissionReceivablesPage: React.FC = () => {
           {/* Table Footer Summary Bar */}
           <div className="bg-zinc-50 border-t border-zinc-200 px-6 py-3.5 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-600 gap-2">
             <div>
-              Showing <span className="font-semibold text-zinc-900">{filteredData.length}</span> of{' '}
-              <span className="font-semibold text-zinc-900">{data.length}</span> policy receivables
+              Showing <span className="font-semibold text-zinc-900">{filteredData.length}</span> of <span className="font-semibold text-zinc-900">{data.length}</span> policy receivables
             </div>
 
             <div className="flex items-center gap-4 font-mono">
               <span>
-                Total Filtered Net:{' '}
-                <strong className="text-zinc-900 font-bold">
-                  ฿{filteredData.reduce((acc, c) => acc + c.net_receivable, 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                </strong>
+                Total Filtered Net:{" "}
+                <strong className="text-zinc-900 font-bold">฿{filteredData.reduce((acc, c) => acc + c.net_receivable, 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}</strong>
               </span>
             </div>
           </div>
@@ -774,22 +670,16 @@ export const CommissionReceivablesPage: React.FC = () => {
             <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
               <div className="flex items-center gap-2">
                 <FileCheck2 className="w-5 h-5 text-blue-600" />
-                <h3 className="font-bold text-zinc-900 text-base">
-                  Reconcile Insurer Receivable Settlement
-                </h3>
+                <h3 className="font-bold text-zinc-900 text-base">Reconcile Insurer Receivable Settlement</h3>
               </div>
-              <button
-                onClick={() => setIsSettleModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-700 p-1"
-              >
+              <button onClick={() => setIsSettleModalOpen(false)} className="text-zinc-400 hover:text-zinc-700 p-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="p-6 space-y-4">
               <div className="bg-blue-50/70 border border-blue-200 rounded-lg p-3 text-xs text-blue-900 leading-relaxed">
-                <strong>TRD Statutory Accounting Note:</strong> This inward settlement automatically books
-                the calculated <strong>3% Withholding Tax</strong> to the <em>Prepaid WHT Asset GL</em> and
+                <strong>TRD Statutory Accounting Note:</strong> This inward settlement automatically books the calculated <strong>3% Withholding Tax</strong> to the <em>Prepaid WHT Asset GL</em> and
                 offsets the carrier accounts receivable.
               </div>
 
@@ -801,21 +691,15 @@ export const CommissionReceivablesPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-zinc-600">
                   <span>Gross Commission Incurred:</span>
-                  <span className="font-mono font-medium text-zinc-800">
-                    ฿{selectedSummary.gross.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
+                  <span className="font-mono font-medium text-zinc-800">฿{selectedSummary.gross.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                 </div>
                 <div className="flex justify-between text-purple-700">
                   <span>Deducted Withholding Tax (3% WHT):</span>
-                  <span className="font-mono font-medium">
-                    -฿{selectedSummary.wht.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
+                  <span className="font-mono font-medium">-฿{selectedSummary.wht.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                 </div>
                 <div className="border-t border-zinc-200 pt-2 flex justify-between text-sm font-bold text-zinc-900">
                   <span>Net Inward Settlement (Baht):</span>
-                  <span className="font-mono text-blue-600">
-                    ฿{selectedSummary.net.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </span>
+                  <span className="font-mono text-blue-600">฿{selectedSummary.net.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                 </div>
               </div>
 
@@ -835,9 +719,7 @@ export const CommissionReceivablesPage: React.FC = () => {
 
               {/* Input: Notes */}
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                  Reconciliation Notes (Optional)
-                </label>
+                <label className="block text-xs font-semibold text-zinc-700 mb-1">Reconciliation Notes (Optional)</label>
                 <textarea
                   rows={2}
                   value={settlementNotes}
@@ -849,16 +731,10 @@ export const CommissionReceivablesPage: React.FC = () => {
             </div>
 
             <div className="px-6 py-3.5 border-t border-zinc-200 bg-zinc-50 flex items-center justify-end gap-3">
-              <button
-                onClick={() => setIsSettleModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900"
-              >
+              <button onClick={() => setIsSettleModalOpen(false)} className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900">
                 Cancel
               </button>
-              <button
-                onClick={handleConfirmBatchSettle}
-                className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
-              >
+              <button onClick={handleConfirmBatchSettle} className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm">
                 Confirm Settlement
               </button>
             </div>
@@ -875,17 +751,10 @@ export const CommissionReceivablesPage: React.FC = () => {
             {/* Drawer Header */}
             <div className="px-6 py-5 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
               <div>
-                <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
-                  Ledger Snapshot
-                </div>
-                <h3 className="font-bold text-zinc-900 text-lg">
-                  {inspectItem.policy_number}
-                </h3>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Ledger Snapshot</div>
+                <h3 className="font-bold text-zinc-900 text-lg">{inspectItem.policy_number}</h3>
               </div>
-              <button
-                onClick={() => setInspectItem(null)}
-                className="text-zinc-400 hover:text-zinc-700 p-1 rounded-md"
-              >
+              <button onClick={() => setInspectItem(null)} className="text-zinc-400 hover:text-zinc-700 p-1 rounded-md">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -895,25 +764,15 @@ export const CommissionReceivablesPage: React.FC = () => {
               {/* Status Banner */}
               <div
                 className={`p-4 rounded-xl border flex items-center justify-between ${
-                  inspectItem.is_commission_received
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                    : 'bg-amber-50 border-amber-200 text-amber-900'
+                  inspectItem.is_commission_received ? "bg-emerald-50 border-emerald-200 text-emerald-900" : "bg-amber-50 border-amber-200 text-amber-900"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  {inspectItem.is_commission_received ? (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  ) : (
-                    <Clock className="w-5 h-5 text-amber-600" />
-                  )}
+                  {inspectItem.is_commission_received ? <CheckCircle2 className="w-5 h-5 text-emerald-600" /> : <Clock className="w-5 h-5 text-amber-600" />}
                   <div>
-                    <div className="font-bold text-xs uppercase">
-                      {inspectItem.is_commission_received ? 'Settled & Received' : 'Pending From Insurer'}
-                    </div>
+                    <div className="font-bold text-xs uppercase">{inspectItem.is_commission_received ? "Settled & Received" : "Pending From Insurer"}</div>
                     <div className="text-xs opacity-80">
-                      {inspectItem.received_at
-                        ? `Reconciled: ${new Date(inspectItem.received_at).toLocaleDateString()}`
-                        : `Payment due: ${inspectItem.due_date}`}
+                      {inspectItem.received_at ? `Reconciled: ${new Date(inspectItem.received_at).toLocaleDateString()}` : `Payment due: ${inspectItem.due_date}`}
                     </div>
                   </div>
                 </div>
@@ -921,9 +780,7 @@ export const CommissionReceivablesPage: React.FC = () => {
 
               {/* Policy & Product Spec */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                  Contract Attribution
-                </h4>
+                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Contract Attribution</h4>
                 <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-200 space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-zinc-500">Customer:</span>
@@ -950,39 +807,27 @@ export const CommissionReceivablesPage: React.FC = () => {
 
               {/* Double-Entry Journal Calculation */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                  Accounting & Tax Matrix
-                </h4>
+                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Accounting & Tax Matrix</h4>
                 <div className="border border-zinc-200 rounded-lg divide-y divide-zinc-200 text-xs">
                   <div className="p-3 flex justify-between bg-zinc-50/50">
                     <span className="text-zinc-600">Gross Contract Premium</span>
-                    <span className="font-mono font-medium text-zinc-900">
-                      ฿{inspectItem.gross_premium.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </span>
+                    <span className="font-mono font-medium text-zinc-900">฿{inspectItem.gross_premium.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="p-3 flex justify-between">
                     <span className="text-zinc-600">Base Commission Rate</span>
-                    <span className="font-mono font-medium text-zinc-900">
-                      {inspectItem.commission_rate}%
-                    </span>
+                    <span className="font-mono font-medium text-zinc-900">{inspectItem.commission_rate}%</span>
                   </div>
                   <div className="p-3 flex justify-between bg-blue-50/30">
                     <span className="font-semibold text-blue-900">Gross Receivable Commission</span>
-                    <span className="font-mono font-bold text-blue-700">
-                      ฿{inspectItem.gross_commission.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </span>
+                    <span className="font-mono font-bold text-blue-700">฿{inspectItem.gross_commission.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="p-3 flex justify-between">
                     <span className="text-purple-700">Withholding Tax (3% WHT Deducted)</span>
-                    <span className="font-mono font-medium text-purple-700">
-                      -฿{inspectItem.wht_tax_deducted.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </span>
+                    <span className="font-mono font-medium text-purple-700">-฿{inspectItem.wht_tax_deducted.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="p-3 flex justify-between bg-emerald-50/40 text-sm font-bold text-emerald-950">
                     <span>Net Baht Inward Expected</span>
-                    <span className="font-mono text-emerald-700">
-                      ฿{inspectItem.net_receivable.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </span>
+                    <span className="font-mono text-emerald-700">฿{inspectItem.net_receivable.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                   </div>
                 </div>
               </div>
@@ -990,12 +835,8 @@ export const CommissionReceivablesPage: React.FC = () => {
               {/* Bank Reference Trace */}
               {inspectItem.bank_reference && (
                 <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                    Bank Reference Audit
-                  </h4>
-                  <div className="p-3 rounded-lg bg-zinc-100 border border-zinc-200 text-xs font-mono text-zinc-800">
-                    {inspectItem.bank_reference}
-                  </div>
+                  <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Bank Reference Audit</h4>
+                  <div className="p-3 rounded-lg bg-zinc-100 border border-zinc-200 text-xs font-mono text-zinc-800">{inspectItem.bank_reference}</div>
                 </div>
               )}
             </div>
@@ -1008,12 +849,10 @@ export const CommissionReceivablesPage: React.FC = () => {
                   setInspectItem(null);
                 }}
                 className={`w-full py-2.5 px-4 text-xs font-semibold rounded-lg shadow-sm transition ${
-                  inspectItem.is_commission_received
-                    ? 'bg-zinc-200 text-zinc-800 hover:bg-zinc-300'
-                    : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  inspectItem.is_commission_received ? "bg-zinc-200 text-zinc-800 hover:bg-zinc-300" : "bg-emerald-600 text-white hover:bg-emerald-700"
                 }`}
               >
-                {inspectItem.is_commission_received ? 'Revert to Pending' : 'Mark as Received (FIN-05)'}
+                {inspectItem.is_commission_received ? "Revert to Pending" : "Mark as Received (FIN-05)"}
               </button>
             </div>
           </div>
