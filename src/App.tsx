@@ -32,6 +32,10 @@ import AgentWalletsPayoutsPage from './features/finance/pages/AgentWalletsPayout
 import SuspenseReconciliationPage from './features/finance/pages/SuspenseReconciliationPage';
 import TaxDocumentCenterPage from './features/finance/pages/TaxDocumentCenterPage';
 import LedgerPeriodManagementPage from './features/finance/pages/LedgerPeriodManagementPage';
+import CustomerDirectoryPage from './features/crm/pages/CustomerDirectoryPage';
+import DataPrivacyCenterPage from './features/crm/pages/DataPrivacyCenterPage';
+import AgentSalesForceDirectoryPage from './features/crm/pages/AgentSalesForceDirectoryPage';
+import PartnerChannelHierarchyPage from './features/crm/pages/PartnerChannelHierarchyPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -86,10 +90,10 @@ export default function App() {
           <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />
 
           {/* CRM & Sales Hierarchy */}
-          <Route path="/crm/customers" element={<PlaceholderView title="crm customers" />} />
-          <Route path="/crm/pdpa" element={<PlaceholderView title="crm pdpa" />} />
-          <Route path="/crm/agents" element={<PlaceholderView title="crm agents" />} />
-          <Route path="/crm/channels" element={<PlaceholderView title="crm channels" />} />
+          <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
+          <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
+          <Route path="/crm/agents" element={<AgentSalesForceDirectoryPage />} />
+          <Route path="/crm/channels" element={<PartnerChannelHierarchyPage />} />
 
           {/* =====================================================================
               Compliance & Governance
