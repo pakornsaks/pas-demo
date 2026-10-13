@@ -1,10 +1,10 @@
 import "./App.css";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AccessControlRbacPage from "./features/admin/pages/AccessControlRbacPage";
+import AccessControlPage from "./features/admin/pages/AccessControlPage";
 import DocumentTemplateRegistryPage from "./features/admin/pages/DocumentTemplateRegistryPage";
 import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
-import OperationalSettingsSLAsPage from "./features/admin/pages/OperationalSettingsSLAsPage";
+import { OperationalSettingsPage } from "./features/admin/pages/OperationalSettingsPage";
 import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
 import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
@@ -120,8 +120,8 @@ export default function App() {
           {/* Workflow & Administration */}
           <Route path="/admin/workflows" element={<WorkflowVisualizerPage />} />
           <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
-          <Route path="/admin/rbac" element={<AccessControlRbacPage />} />
-          <Route path="/admin/settings" element={<OperationalSettingsSLAsPage />} />
+          <Route path="/admin/rbac" element={<AccessControlPage />} />
+          <Route path="/admin/settings" element={<OperationalSettingsPage />} />
           <Route path="/admin/integrations" element={<IntegrationHubPage />} />
           <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
 
