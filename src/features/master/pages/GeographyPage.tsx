@@ -1,10 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGeoRiskData, type GeoRiskRecord, type RiskZoneType } from "../../../hooks/useGeoRiskData";
 
-const RISK_BADGES: Record<
-  RiskZoneType,
-  { label: string; badgeClass: string; impact: string }
-> = {
+const RISK_BADGES: Record<RiskZoneType, { label: string; badgeClass: string; impact: string }> = {
   STANDARD: {
     label: "Standard / Low Risk",
     badgeClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
@@ -81,8 +78,8 @@ export default function GeoRiskMappingPage() {
               risk_zone: tempRisk,
               updated_at: new Date().toISOString().split("T")[0],
             }
-          : r
-      )
+          : r,
+      ),
     );
     setEditingId(null);
   };
@@ -98,11 +95,10 @@ export default function GeoRiskMappingPage() {
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-2">
           <div>
-            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-              Geographical & Risk Mapping Manager
-            </h1>
+            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Geographical & Risk Mapping Manager</h1>
             <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              ระบบจัดเก็บฐานข้อมูลรหัสไปรษณีย์ไทยเพื่อแบ่งเขตความเสี่ยง (Risk Zoning) สำหรับกฎพิจารณาภัย (Fire & Motor URE Rules)
+              ระบบจัดเก็บฐานข้อมูลรหัสไปรษณีย์ไทยเพื่อแบ่งเขตความเสี่ยง (Risk Zoning) สำหรับกฎพิจารณาภัย (Fire & Motor
+              URE Rules)
             </p>
           </div>
         </div>
@@ -112,10 +108,7 @@ export default function GeoRiskMappingPage() {
       {error && (
         <div className="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-lg flex items-center justify-between text-xs text-red-700 dark:text-red-300">
           <span>{error}</span>
-          <button
-            onClick={refetch}
-            className="font-semibold underline hover:no-underline"
-          >
+          <button onClick={refetch} className="font-semibold underline hover:no-underline">
             ลองใหม่อีกครั้ง
           </button>
         </div>
@@ -192,24 +185,15 @@ export default function GeoRiskMappingPage() {
                   const currentBadge = RISK_BADGES[item.risk_zone];
 
                   return (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-zinc-50/70 dark:hover:bg-zinc-900/40 transition-colors"
-                    >
+                    <tr key={item.id} className="hover:bg-zinc-50/70 dark:hover:bg-zinc-900/40 transition-colors">
                       <td className="py-3 px-4 font-mono text-zinc-500">{item.id}</td>
                       <td className="py-3 px-4">
-                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                          {item.province_name_th}
-                        </span>
-                        <span className="block text-zinc-400 text-[11px]">
-                          {item.province_name_en}
-                        </span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">{item.province_name_th}</span>
+                        <span className="block text-zinc-400 text-[11px]">{item.province_name_en}</span>
                       </td>
                       <td className="py-3 px-4">
                         <span>{item.district_name_th}</span>
-                        <span className="block text-zinc-400 text-[11px]">
-                          {item.district_name_en}
-                        </span>
+                        <span className="block text-zinc-400 text-[11px]">{item.district_name_en}</span>
                       </td>
                       <td className="py-3 px-4 font-mono font-medium">{item.postal_code}</td>
                       <td className="py-3 px-4">
@@ -233,12 +217,8 @@ export default function GeoRiskMappingPage() {
                           </span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-zinc-600 dark:text-zinc-400">
-                        {currentBadge.impact}
-                      </td>
-                      <td className="py-3 px-4 text-zinc-400 text-[11px]">
-                        {item.updated_at}
-                      </td>
+                      <td className="py-3 px-4 text-zinc-600 dark:text-zinc-400">{currentBadge.impact}</td>
+                      <td className="py-3 px-4 text-zinc-400 text-[11px]">{item.updated_at}</td>
                       <td className="py-3 px-4 text-right">
                         {isEditing ? (
                           <div className="flex items-center justify-end space-x-1.5">

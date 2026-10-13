@@ -1,35 +1,28 @@
-import React, { useState, useMemo } from "react";
 import {
-  Building2,
-  ShieldCheck,
   AlertTriangle,
-  Clock,
-  Search,
-  Plus,
+  Building2,
   CheckCircle2,
-  XCircle,
   ChevronRight,
-  Sliders,
+  Clock,
   DollarSign,
   FileCheck,
   History,
   Info,
-  X,
   Layers,
+  Plus,
+  Search,
+  ShieldCheck,
+  Sliders,
+  X,
+  XCircle,
 } from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // ============================================================================
 // TYPES & DATA STRUCTURES (Aligned with BRD & SDD Section 4.3)
 // ============================================================================
 
-export type LOBCode =
-  | "MOTOR"
-  | "FIRE"
-  | "HEALTH"
-  | "PA"
-  | "LIFE"
-  | "TRAVEL"
-  | "CUSTOM";
+export type LOBCode = "MOTOR" | "FIRE" | "HEALTH" | "PA" | "LIFE" | "TRAVEL" | "CUSTOM";
 
 export interface LicenseDetails {
   licenseNumber: string;
@@ -102,15 +95,7 @@ const INITIAL_BROKERS: BrokerRecord[] = [
       licenseType: "GENERAL_AND_LIFE",
       status: "ACTIVE",
     },
-    authorizedLobs: [
-      "MOTOR",
-      "FIRE",
-      "HEALTH",
-      "PA",
-      "LIFE",
-      "TRAVEL",
-      "CUSTOM",
-    ],
+    authorizedLobs: ["MOTOR", "FIRE", "HEALTH", "PA", "LIFE", "TRAVEL", "CUSTOM"],
     effectiveStartDate: "2023-01-15T00:00:00Z",
     effectiveEndDate: null,
     insurerSettings: [
@@ -171,8 +156,7 @@ const INITIAL_BROKERS: BrokerRecord[] = [
         versionNumber: 3,
         effectiveStartDate: "2025-01-01",
         effectiveEndDate: null,
-        changeReason:
-          "Added Custom Specialty Lines authorization (OIC Phase 2)",
+        changeReason: "Added Custom Specialty Lines authorization (OIC Phase 2)",
         updatedBy: "Pakornsak S. (Maker)",
         status: "ACTIVE",
       },
@@ -326,9 +310,7 @@ export const BrokerDirectoryPage: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
   const [selectedLob, setSelectedLob] = useState<string>("ALL");
   const [activeBroker, setActiveBroker] = useState<BrokerRecord | null>(null);
-  const [drawerTab, setDrawerTab] = useState<
-    "profile" | "lobs" | "insurers" | "channels" | "versions"
-  >("profile");
+  const [drawerTab, setDrawerTab] = useState<"profile" | "lobs" | "insurers" | "channels" | "versions">("profile");
   const [isNewBrokerModalOpen, setIsNewBrokerModalOpen] = useState(false);
   const [actionSuccessMsg, setActionSuccessMsg] = useState<string | null>(null);
 
@@ -348,16 +330,10 @@ export const BrokerDirectoryPage: React.FC = () => {
   // Calculate Metrics for Header Summary
   const metrics = useMemo(() => {
     const total = brokers.length;
-    const active = brokers.filter(
-      (b) => b.licenseDetails.status === "ACTIVE",
-    ).length;
-    const expiringSoon = brokers.filter(
-      (b) => b.licenseDetails.status === "EXPIRING_SOON",
-    ).length;
+    const active = brokers.filter((b) => b.licenseDetails.status === "ACTIVE").length;
+    const expiringSoon = brokers.filter((b) => b.licenseDetails.status === "EXPIRING_SOON").length;
     const expiredOrSuspended = brokers.filter(
-      (b) =>
-        b.licenseDetails.status === "EXPIRED" ||
-        b.licenseDetails.status === "SUSPENDED",
+      (b) => b.licenseDetails.status === "EXPIRED" || b.licenseDetails.status === "SUSPENDED",
     ).length;
     return { total, active, expiringSoon, expiredOrSuspended };
   }, [brokers]);
@@ -369,17 +345,11 @@ export const BrokerDirectoryPage: React.FC = () => {
         broker.brokerCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
         broker.brokerNameTh.toLowerCase().includes(searchTerm.toLowerCase()) ||
         broker.brokerNameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        broker.licenseDetails.licenseNumber
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+        broker.licenseDetails.licenseNumber.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesStatus =
-        selectedStatus === "ALL" ||
-        broker.licenseDetails.status === selectedStatus;
+      const matchesStatus = selectedStatus === "ALL" || broker.licenseDetails.status === selectedStatus;
 
-      const matchesLob =
-        selectedLob === "ALL" ||
-        broker.authorizedLobs.includes(selectedLob as LOBCode);
+      const matchesLob = selectedLob === "ALL" || broker.authorizedLobs.includes(selectedLob as LOBCode);
 
       return matchesSearch && matchesStatus && matchesLob;
     });
@@ -522,13 +492,10 @@ export const BrokerDirectoryPage: React.FC = () => {
               <ShieldCheck className="w-4 h-4" />
               <span>OIC Regulatory Registry & Master Entities</span>
             </div>
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight mt-0.5">
-              Broker Directory & Licensing
-            </h1>
+            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight mt-0.5">Broker Directory & Licensing</h1>
             <p className="text-xs text-zinc-500 mt-1">
-              Centralized repository for licensed corporate intermediaries, OIC
-              license renewals, Authorized LOBs, and SCD Type 2 version audit
-              trails.
+              Centralized repository for licensed corporate intermediaries, OIC license renewals, Authorized LOBs, and
+              SCD Type 2 version audit trails.
             </p>
           </div>
 
@@ -565,15 +532,9 @@ export const BrokerDirectoryPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
           <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-zinc-500">
-                Total Registered Brokers
-              </p>
-              <p className="text-2xl font-bold text-zinc-900 mt-1">
-                {metrics.total}
-              </p>
-              <span className="text-[11px] text-zinc-400 font-medium">
-                Headless PAS Directory
-              </span>
+              <p className="text-xs font-medium text-zinc-500">Total Registered Brokers</p>
+              <p className="text-2xl font-bold text-zinc-900 mt-1">{metrics.total}</p>
+              <span className="text-[11px] text-zinc-400 font-medium">Headless PAS Directory</span>
             </div>
             <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
               <Building2 className="w-5 h-5" />
@@ -582,15 +543,9 @@ export const BrokerDirectoryPage: React.FC = () => {
 
           <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-zinc-500">
-                Active & Compliant
-              </p>
-              <p className="text-2xl font-bold text-emerald-600 mt-1">
-                {metrics.active}
-              </p>
-              <span className="text-[11px] text-emerald-600 font-medium">
-                Verified by OIC
-              </span>
+              <p className="text-xs font-medium text-zinc-500">Active & Compliant</p>
+              <p className="text-2xl font-bold text-emerald-600 mt-1">{metrics.active}</p>
+              <span className="text-[11px] text-emerald-600 font-medium">Verified by OIC</span>
             </div>
             <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
               <CheckCircle2 className="w-5 h-5" />
@@ -599,15 +554,9 @@ export const BrokerDirectoryPage: React.FC = () => {
 
           <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-zinc-500">
-                OIC Expiring Soon (&lt;90d)
-              </p>
-              <p className="text-2xl font-bold text-amber-600 mt-1">
-                {metrics.expiringSoon}
-              </p>
-              <span className="text-[11px] text-amber-600 font-medium">
-                Action Required
-              </span>
+              <p className="text-xs font-medium text-zinc-500">OIC Expiring Soon (&lt;90d)</p>
+              <p className="text-2xl font-bold text-amber-600 mt-1">{metrics.expiringSoon}</p>
+              <span className="text-[11px] text-amber-600 font-medium">Action Required</span>
             </div>
             <div className="w-10 h-10 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
               <AlertTriangle className="w-5 h-5" />
@@ -616,15 +565,9 @@ export const BrokerDirectoryPage: React.FC = () => {
 
           <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-zinc-500">
-                Expired / Blocked
-              </p>
-              <p className="text-2xl font-bold text-rose-600 mt-1">
-                {metrics.expiredOrSuspended}
-              </p>
-              <span className="text-[11px] text-rose-500 font-medium">
-                Checkout Sales Halted
-              </span>
+              <p className="text-xs font-medium text-zinc-500">Expired / Blocked</p>
+              <p className="text-2xl font-bold text-rose-600 mt-1">{metrics.expiredOrSuspended}</p>
+              <span className="text-[11px] text-rose-500 font-medium">Checkout Sales Halted</span>
             </div>
             <div className="w-10 h-10 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
               <XCircle className="w-5 h-5" />
@@ -653,9 +596,7 @@ export const BrokerDirectoryPage: React.FC = () => {
 
             {/* Status Filter */}
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-medium text-zinc-500 shrink-0">
-                Status:
-              </span>
+              <span className="text-xs font-medium text-zinc-500 shrink-0">Status:</span>
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
@@ -671,9 +612,7 @@ export const BrokerDirectoryPage: React.FC = () => {
 
             {/* LOB Filter */}
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-medium text-zinc-500 shrink-0">
-                LOB:
-              </span>
+              <span className="text-xs font-medium text-zinc-500 shrink-0">LOB:</span>
               <select
                 value={selectedLob}
                 onChange={(e) => setSelectedLob(e.target.value)}
@@ -692,10 +631,8 @@ export const BrokerDirectoryPage: React.FC = () => {
           </div>
 
           <div className="text-xs text-zinc-500 self-center">
-            Showing{" "}
-            <strong className="text-zinc-800">{filteredBrokers.length}</strong>{" "}
-            of <strong className="text-zinc-800">{brokers.length}</strong>{" "}
-            brokers
+            Showing <strong className="text-zinc-800">{filteredBrokers.length}</strong> of{" "}
+            <strong className="text-zinc-800">{brokers.length}</strong> brokers
           </div>
         </div>
 
@@ -726,8 +663,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                           No broker entities match your filter criteria.
                         </p>
                         <p className="text-xs text-zinc-400 mt-0.5">
-                          Try clearing the search query or changing status
-                          filter.
+                          Try clearing the search query or changing status filter.
                         </p>
                       </div>
                     </td>
@@ -757,21 +693,15 @@ export const BrokerDirectoryPage: React.FC = () => {
                                 </span>
                               )}
                             </div>
-                            <div className="text-[11px] text-zinc-400">
-                              ID: {broker.brokerId}
-                            </div>
+                            <div className="text-[11px] text-zinc-400">ID: {broker.brokerId}</div>
                           </div>
                         </div>
                       </td>
 
                       {/* Corporate Name */}
                       <td className="py-3.5 px-4 max-w-xs">
-                        <div className="font-medium text-zinc-900 truncate">
-                          {broker.brokerNameTh}
-                        </div>
-                        <div className="text-[11px] text-zinc-500 truncate">
-                          {broker.brokerNameEn}
-                        </div>
+                        <div className="font-medium text-zinc-900 truncate">{broker.brokerNameTh}</div>
+                        <div className="text-[11px] text-zinc-500 truncate">{broker.brokerNameEn}</div>
                         {broker.partnerName && (
                           <div className="text-[10px] text-blue-600 flex items-center gap-1 mt-0.5">
                             <span>Partner:</span> {broker.partnerName}
@@ -781,12 +711,9 @@ export const BrokerDirectoryPage: React.FC = () => {
 
                       {/* OIC License Details */}
                       <td className="py-3.5 px-4">
-                        <div className="font-mono font-medium text-zinc-800">
-                          {broker.licenseDetails.licenseNumber}
-                        </div>
+                        <div className="font-mono font-medium text-zinc-800">{broker.licenseDetails.licenseNumber}</div>
                         <div className="text-[11px] text-zinc-500">
-                          {broker.licenseDetails.licenseType ===
-                          "GENERAL_AND_LIFE"
+                          {broker.licenseDetails.licenseType === "GENERAL_AND_LIFE"
                             ? "General & Life Ins."
                             : "Direct Brokerage"}
                         </div>
@@ -820,8 +747,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                       {/* SCD Version State */}
                       <td className="py-3.5 px-4">
                         <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-zinc-100 text-zinc-600">
-                          <History className="w-3 h-3 text-zinc-400" />v
-                          {broker.versionHistory[0].versionNumber}.0
+                          <History className="w-3 h-3 text-zinc-400" />v{broker.versionHistory[0].versionNumber}.0
                         </div>
                         <div className="text-[10px] text-zinc-400 mt-0.5">
                           Since {broker.versionHistory[0].effectiveStartDate}
@@ -829,10 +755,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                       </td>
 
                       {/* Actions */}
-                      <td
-                        className="py-3.5 px-4 text-right"
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <td className="py-3.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => {
@@ -870,12 +793,8 @@ export const BrokerDirectoryPage: React.FC = () => {
                   </span>
                   {getStatusBadge(activeBroker.licenseDetails.status)}
                 </div>
-                <h2 className="text-lg font-bold text-zinc-900 mt-1">
-                  {activeBroker.brokerNameTh}
-                </h2>
-                <p className="text-xs text-zinc-500">
-                  {activeBroker.brokerNameEn}
-                </p>
+                <h2 className="text-lg font-bold text-zinc-900 mt-1">{activeBroker.brokerNameTh}</h2>
+                <p className="text-xs text-zinc-500">{activeBroker.brokerNameEn}</p>
               </div>
               <button
                 onClick={() => setActiveBroker(null)}
@@ -960,33 +879,24 @@ export const BrokerDirectoryPage: React.FC = () => {
                     </h3>
                     <div className="grid grid-cols-2 gap-4 text-xs">
                       <div>
-                        <span className="text-zinc-500">
-                          OIC License Number:
-                        </span>
+                        <span className="text-zinc-500">OIC License Number:</span>
                         <p className="font-mono font-semibold text-zinc-900 mt-0.5">
                           {activeBroker.licenseDetails.licenseNumber}
                         </p>
                       </div>
                       <div>
-                        <span className="text-zinc-500">
-                          License Regulator:
-                        </span>
-                        <p className="font-medium text-zinc-900 mt-0.5">
-                          {activeBroker.licenseDetails.issuedBy}
-                        </p>
+                        <span className="text-zinc-500">License Regulator:</span>
+                        <p className="font-medium text-zinc-900 mt-0.5">{activeBroker.licenseDetails.issuedBy}</p>
                       </div>
                       <div>
                         <span className="text-zinc-500">Issue Date:</span>
-                        <p className="font-medium text-zinc-900 mt-0.5">
-                          {activeBroker.licenseDetails.issueDate}
-                        </p>
+                        <p className="font-medium text-zinc-900 mt-0.5">{activeBroker.licenseDetails.issueDate}</p>
                       </div>
                       <div>
                         <span className="text-zinc-500">Expiry Date:</span>
                         <p className="font-semibold text-zinc-900 mt-0.5 flex items-center gap-1">
                           {activeBroker.licenseDetails.expiryDate}
-                          {activeBroker.licenseDetails.status ===
-                            "EXPIRING_SOON" && (
+                          {activeBroker.licenseDetails.status === "EXPIRING_SOON" && (
                             <span className="text-[10px] text-amber-600 font-bold bg-amber-50 px-1 rounded">
                               RENEWAL DUE
                             </span>
@@ -996,17 +906,12 @@ export const BrokerDirectoryPage: React.FC = () => {
                       <div>
                         <span className="text-zinc-500">Scope Type:</span>
                         <p className="font-medium text-zinc-900 mt-0.5">
-                          {activeBroker.licenseDetails.licenseType.replace(
-                            /_/g,
-                            " ",
-                          )}
+                          {activeBroker.licenseDetails.licenseType.replace(/_/g, " ")}
                         </p>
                       </div>
                       <div>
                         <span className="text-zinc-500">PDPA Data Anchor:</span>
-                        <p className="font-mono text-[11px] text-zinc-600 mt-0.5">
-                          UUID: {activeBroker.brokerId}
-                        </p>
+                        <p className="font-mono text-[11px] text-zinc-600 mt-0.5">UUID: {activeBroker.brokerId}</p>
                       </div>
                     </div>
                   </div>
@@ -1019,19 +924,14 @@ export const BrokerDirectoryPage: React.FC = () => {
                     </h3>
                     <div className="grid grid-cols-2 gap-4 text-xs">
                       <div>
-                        <span className="text-zinc-500">
-                          Parent Corporate Partner:
-                        </span>
+                        <span className="text-zinc-500">Parent Corporate Partner:</span>
                         <p className="font-medium text-zinc-900 mt-0.5">
-                          {activeBroker.partnerName ||
-                            "Independent Entity (No Corporate Parent)"}
+                          {activeBroker.partnerName || "Independent Entity (No Corporate Parent)"}
                         </p>
                       </div>
                       <div>
                         <span className="text-zinc-500">Partner Link ID:</span>
-                        <p className="font-mono text-[11px] text-zinc-600 mt-0.5">
-                          {activeBroker.partnerId || "N/A"}
-                        </p>
+                        <p className="font-mono text-[11px] text-zinc-600 mt-0.5">{activeBroker.partnerId || "N/A"}</p>
                       </div>
                     </div>
                   </div>
@@ -1044,9 +944,8 @@ export const BrokerDirectoryPage: React.FC = () => {
                   <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800 flex items-start gap-2">
                     <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                     <span>
-                      Policies created for unauthorized lines of business are
-                      rejected by the core Underwriting Rules Engine (URE)
-                      during checkout validation.
+                      Policies created for unauthorized lines of business are rejected by the core Underwriting Rules
+                      Engine (URE) during checkout validation.
                     </span>
                   </div>
 
@@ -1055,8 +954,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                       [
                         {
                           id: "MOTOR",
-                          label:
-                            "Motor Insurance (Voluntary & CMI Por Ror Bor)",
+                          label: "Motor Insurance (Voluntary & CMI Por Ror Bor)",
                         },
                         {
                           id: "HEALTH",
@@ -1068,14 +966,12 @@ export const BrokerDirectoryPage: React.FC = () => {
                         },
                         {
                           id: "FIRE",
-                          label:
-                            "Fire & Property All Risks (Residential/Commercial)",
+                          label: "Fire & Property All Risks (Residential/Commercial)",
                         },
                         { id: "PA", label: "Personal Accident (PA)" },
                         {
                           id: "TRAVEL",
-                          label:
-                            "Travel Insurance (Single & Annual Multi-Trip)",
+                          label: "Travel Insurance (Single & Annual Multi-Trip)",
                         },
                         {
                           id: "CUSTOM",
@@ -1083,25 +979,17 @@ export const BrokerDirectoryPage: React.FC = () => {
                         },
                       ] as { id: LOBCode; label: string }[]
                     ).map((lob) => {
-                      const isAuth = activeBroker.authorizedLobs.includes(
-                        lob.id,
-                      );
+                      const isAuth = activeBroker.authorizedLobs.includes(lob.id);
                       return (
                         <div
                           key={lob.id}
                           className={`p-3.5 rounded-xl border flex items-center justify-between ${
-                            isAuth
-                              ? "bg-white border-emerald-300 shadow-sm"
-                              : "bg-zinc-50 border-zinc-200 opacity-60"
+                            isAuth ? "bg-white border-emerald-300 shadow-sm" : "bg-zinc-50 border-zinc-200 opacity-60"
                           }`}
                         >
                           <div>
-                            <span className="font-bold text-zinc-900 block">
-                              {lob.id}
-                            </span>
-                            <span className="text-[11px] text-zinc-500">
-                              {lob.label}
-                            </span>
+                            <span className="font-bold text-zinc-900 block">{lob.id}</span>
+                            <span className="text-[11px] text-zinc-500">{lob.label}</span>
                           </div>
                           {isAuth ? (
                             <span className="p-1 rounded-full bg-emerald-100 text-emerald-700">
@@ -1128,11 +1016,8 @@ export const BrokerDirectoryPage: React.FC = () => {
                         Broker Payable Remittance Schedules
                       </h3>
                       <p className="text-[11px] text-zinc-500">
-                        Mapped to{" "}
-                        <code className="font-mono text-blue-600">
-                          broker_insurer_settings
-                        </code>{" "}
-                        (BRD 8.1.3 Tab A)
+                        Mapped to <code className="font-mono text-blue-600">broker_insurer_settings</code> (BRD 8.1.3
+                        Tab A)
                       </p>
                     </div>
                   </div>
@@ -1144,25 +1029,16 @@ export const BrokerDirectoryPage: React.FC = () => {
                           <th className="py-2.5 px-3">Insurance Carrier</th>
                           <th className="py-2.5 px-3">Monthly Pay Date</th>
                           <th className="py-2.5 px-3">Settlement Mode</th>
-                          <th className="py-2.5 px-3 text-right">
-                            EOM Remittance
-                          </th>
+                          <th className="py-2.5 px-3 text-right">EOM Remittance</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-zinc-200">
                         {activeBroker.insurerSettings.map((setting) => (
-                          <tr
-                            key={setting.insurerId}
-                            className="hover:bg-zinc-50"
-                          >
-                            <td className="py-3 px-3 font-medium text-zinc-900">
-                              {setting.insurerName}
-                            </td>
+                          <tr key={setting.insurerId} className="hover:bg-zinc-50">
+                            <td className="py-3 px-3 font-medium text-zinc-900">{setting.insurerName}</td>
                             <td className="py-3 px-3">
-                              <span className="font-semibold text-zinc-800">
-                                Every {setting.monthlyPayDate}th
-                              </span>{" "}
-                              of the month
+                              <span className="font-semibold text-zinc-800">Every {setting.monthlyPayDate}th</span> of
+                              the month
                             </td>
                             <td className="py-3 px-3">
                               <span
@@ -1173,15 +1049,10 @@ export const BrokerDirectoryPage: React.FC = () => {
                                 }`}
                               >
                                 {setting.settlementMode} (
-                                {setting.settlementMode === "NET"
-                                  ? "Deduct Before"
-                                  : "Deduct After"}
-                                )
+                                {setting.settlementMode === "NET" ? "Deduct Before" : "Deduct After"})
                               </span>
                             </td>
-                            <td className="py-3 px-3 text-right text-zinc-500 font-mono text-[11px]">
-                              Bordereau Auto
-                            </td>
+                            <td className="py-3 px-3 text-right text-zinc-500 font-mono text-[11px]">Bordereau Auto</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1198,20 +1069,14 @@ export const BrokerDirectoryPage: React.FC = () => {
                       Channel SLA & Auto-Cancellation Configuration
                     </h3>
                     <p className="text-[11px] text-zinc-500">
-                      Mapped to{" "}
-                      <code className="font-mono text-blue-600">
-                        broker_channel_settings
-                      </code>{" "}
-                      (BRD 8.1.3 Tab B)
+                      Mapped to <code className="font-mono text-blue-600">broker_channel_settings</code> (BRD 8.1.3 Tab
+                      B)
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {activeBroker.channelSettings.map((channel) => (
-                      <div
-                        key={channel.channelId}
-                        className="bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-xs"
-                      >
+                      <div key={channel.channelId} className="bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-xs">
                         <div className="flex items-center justify-between font-bold text-zinc-900 text-sm mb-3">
                           <span>{channel.channelName}</span>
                           <span className="text-[10px] font-mono font-normal bg-zinc-200 px-1.5 py-0.5 rounded text-zinc-700">
@@ -1220,17 +1085,11 @@ export const BrokerDirectoryPage: React.FC = () => {
                         </div>
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-zinc-500">
-                              Warning Days Before Due:
-                            </span>
-                            <span className="font-semibold text-zinc-900">
-                              {channel.warningDaysBefore} Days
-                            </span>
+                            <span className="text-zinc-500">Warning Days Before Due:</span>
+                            <span className="font-semibold text-zinc-900">{channel.warningDaysBefore} Days</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-zinc-500">
-                              Auto-Cancel Offset:
-                            </span>
+                            <span className="text-zinc-500">Auto-Cancel Offset:</span>
                             <span className="font-semibold text-zinc-900">
                               {channel.autoCancelOffset === 0
                                 ? "0 Days (Cancels on Effective Date)"
@@ -1252,11 +1111,8 @@ export const BrokerDirectoryPage: React.FC = () => {
                       Immutable Historical Versions (SCD Type 2)
                     </h3>
                     <p className="text-[11px] text-zinc-500">
-                      Snapshots frozen in{" "}
-                      <code className="font-mono text-blue-600">
-                        broker_versions
-                      </code>{" "}
-                      table to safeguard 10-year OIC compliance.
+                      Snapshots frozen in <code className="font-mono text-blue-600">broker_versions</code> table to
+                      safeguard 10-year OIC compliance.
                     </p>
                   </div>
 
@@ -1265,16 +1121,12 @@ export const BrokerDirectoryPage: React.FC = () => {
                       <div key={hist.versionId} className="relative">
                         <div
                           className={`absolute -left-6 top-1 w-3 h-3 rounded-full border-2 bg-white ${
-                            hist.status === "ACTIVE"
-                              ? "border-emerald-500"
-                              : "border-zinc-400"
+                            hist.status === "ACTIVE" ? "border-emerald-500" : "border-zinc-400"
                           }`}
                         />
                         <div className="bg-zinc-50 p-3.5 rounded-lg border border-zinc-200 text-xs">
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-zinc-900">
-                              Version {hist.versionNumber}.0
-                            </span>
+                            <span className="font-bold text-zinc-900">Version {hist.versionNumber}.0</span>
                             <span
                               className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
                                 hist.status === "ACTIVE"
@@ -1285,9 +1137,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                               {hist.status}
                             </span>
                           </div>
-                          <p className="text-zinc-700 font-medium mt-1">
-                            {hist.changeReason}
-                          </p>
+                          <p className="text-zinc-700 font-medium mt-1">{hist.changeReason}</p>
                           <div className="mt-2 pt-2 border-t border-zinc-200/60 flex items-center justify-between text-[11px] text-zinc-400">
                             <span>Author: {hist.updatedBy}</span>
                             <span>Effective: {hist.effectiveStartDate}</span>
@@ -1332,13 +1182,10 @@ export const BrokerDirectoryPage: React.FC = () => {
             {/* Modal Header */}
             <div className="px-6 py-4 bg-zinc-50 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Stage New Broker for Licensing Approval
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Stage New Broker for Licensing Approval</h3>
                 <p className="text-xs text-zinc-500">
-                  Initializes permanent{" "}
-                  <code className="font-mono text-blue-600">brokers</code>{" "}
-                  anchor & version 1 snapshot.
+                  Initializes permanent <code className="font-mono text-blue-600">brokers</code> anchor & version 1
+                  snapshot.
                 </p>
               </div>
               <button
@@ -1350,15 +1197,10 @@ export const BrokerDirectoryPage: React.FC = () => {
             </div>
 
             {/* Form */}
-            <form
-              onSubmit={handleStageBrokerSubmit}
-              className="p-6 space-y-4 text-xs"
-            >
+            <form onSubmit={handleStageBrokerSubmit} className="p-6 space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-medium text-zinc-700 mb-1">
-                    Broker Code (Permanent Key)*
-                  </label>
+                  <label className="block font-medium text-zinc-700 mb-1">Broker Code (Permanent Key)*</label>
                   <input
                     type="text"
                     required
@@ -1375,9 +1217,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-zinc-700 mb-1">
-                    Corporate Partner (Optional)
-                  </label>
+                  <label className="block font-medium text-zinc-700 mb-1">Corporate Partner (Optional)</label>
                   <input
                     type="text"
                     placeholder="e.g. Siam Commercial Bank"
@@ -1394,9 +1234,7 @@ export const BrokerDirectoryPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
-                  Broker Corporate Name (Thai)*
-                </label>
+                <label className="block font-medium text-zinc-700 mb-1">Broker Corporate Name (Thai)*</label>
                 <input
                   type="text"
                   required
@@ -1413,9 +1251,7 @@ export const BrokerDirectoryPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
-                  Broker Corporate Name (English)*
-                </label>
+                <label className="block font-medium text-zinc-700 mb-1">Broker Corporate Name (English)*</label>
                 <input
                   type="text"
                   required
@@ -1433,9 +1269,7 @@ export const BrokerDirectoryPage: React.FC = () => {
 
               <div className="grid grid-cols-3 gap-4 pt-2 border-t border-zinc-200">
                 <div>
-                  <label className="block font-medium text-zinc-700 mb-1">
-                    OIC License No.*
-                  </label>
+                  <label className="block font-medium text-zinc-700 mb-1">OIC License No.*</label>
                   <input
                     type="text"
                     required
@@ -1452,9 +1286,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-zinc-700 mb-1">
-                    Issue Date*
-                  </label>
+                  <label className="block font-medium text-zinc-700 mb-1">Issue Date*</label>
                   <input
                     type="date"
                     required
@@ -1470,9 +1302,7 @@ export const BrokerDirectoryPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-zinc-700 mb-1">
-                    Expiry Date*
-                  </label>
+                  <label className="block font-medium text-zinc-700 mb-1">Expiry Date*</label>
                   <input
                     type="date"
                     required
@@ -1490,21 +1320,9 @@ export const BrokerDirectoryPage: React.FC = () => {
 
               {/* LOB Selector */}
               <div>
-                <label className="block font-medium text-zinc-700 mb-1.5">
-                  Authorized Lines of Business (LOBs)*
-                </label>
+                <label className="block font-medium text-zinc-700 mb-1.5">Authorized Lines of Business (LOBs)*</label>
                 <div className="grid grid-cols-4 gap-2">
-                  {(
-                    [
-                      "MOTOR",
-                      "FIRE",
-                      "HEALTH",
-                      "PA",
-                      "LIFE",
-                      "TRAVEL",
-                      "CUSTOM",
-                    ] as LOBCode[]
-                  ).map((lob) => {
+                  {(["MOTOR", "FIRE", "HEALTH", "PA", "LIFE", "TRAVEL", "CUSTOM"] as LOBCode[]).map((lob) => {
                     const checked = newBrokerForm.authorizedLobs.includes(lob);
                     return (
                       <button
@@ -1527,12 +1345,10 @@ export const BrokerDirectoryPage: React.FC = () => {
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <span>
-                  <strong>Maker-Checker Policy:</strong> Creating this entity
-                  will save it as a{" "}
+                  <strong>Maker-Checker Policy:</strong> Creating this entity will save it as a{" "}
                   <span className="font-mono">PENDING_APPROVAL</span> draft in{" "}
-                  <code className="font-mono">approval_requests</code>. A
-                  designated Compliance Checker must authorize this record
-                  before sales APIs unlock.
+                  <code className="font-mono">approval_requests</code>. A designated Compliance Checker must authorize
+                  this record before sales APIs unlock.
                 </span>
               </div>
 

@@ -1,49 +1,39 @@
-import React, { useState } from 'react';
-import {
-  Sliders,
-  GitBranch,
-  Plus,
-  Trash2,
-  Play,
-  Save,
-  Send,
-  Info,
-  Zap,
-} from 'lucide-react';
+import { GitBranch, Info, Play, Plus, Save, Send, Sliders, Trash2, Zap } from "lucide-react";
+import React, { useState } from "react";
 
 // ============================================================================
 // Types & Domain Entities (PAS Schema Alignment)
 // ============================================================================
 
-export type LOBType = 'MOTOR' | 'HEALTH' | 'PA' | 'FIRE' | 'TRAVEL' | 'CUSTOM';
+export type LOBType = "MOTOR" | "HEALTH" | "PA" | "FIRE" | "TRAVEL" | "CUSTOM";
 
 export type RuleField =
-  | 'vehicle.age_years'
-  | 'vehicle.sum_insured_ratio'
-  | 'vehicle.is_modified'
-  | 'driver.age'
-  | 'health.bmi'
-  | 'health.is_smoker'
-  | 'pa.occupation_class'
-  | 'pa.has_motorcycle_risk';
+  | "vehicle.age_years"
+  | "vehicle.sum_insured_ratio"
+  | "vehicle.is_modified"
+  | "driver.age"
+  | "health.bmi"
+  | "health.is_smoker"
+  | "pa.occupation_class"
+  | "pa.has_motorcycle_risk";
 
 export type ComparisonOperator =
-  | 'EQUALS'
-  | 'NOT_EQUALS'
-  | 'GREATER_THAN'
-  | 'GREATER_THAN_OR_EQUAL'
-  | 'LESS_THAN'
-  | 'LESS_THAN_OR_EQUAL'
-  | 'IN'
-  | 'BETWEEN';
+  | "EQUALS"
+  | "NOT_EQUALS"
+  | "GREATER_THAN"
+  | "GREATER_THAN_OR_EQUAL"
+  | "LESS_THAN"
+  | "LESS_THAN_OR_EQUAL"
+  | "IN"
+  | "BETWEEN";
 
-export type LogicalOperator = 'AND' | 'OR';
+export type LogicalOperator = "AND" | "OR";
 
 export type EnforcementAction =
-  | 'AUTO_APPROVE'       // Green Channel (APPROVED_WAITING_PAYMENT)
-  | 'REFER'              // Yellow Channel (PENDING_REVIEW)
-  | 'REJECT'             // Red Channel (Hard decline)
-  | 'APPLY_LOADING';     // Rated Counter-Offer (QUOTATION_RATED)
+  | "AUTO_APPROVE" // Green Channel (APPROVED_WAITING_PAYMENT)
+  | "REFER" // Yellow Channel (PENDING_REVIEW)
+  | "REJECT" // Red Channel (Hard decline)
+  | "APPLY_LOADING"; // Rated Counter-Offer (QUOTATION_RATED)
 
 export interface RuleCondition {
   id: string;
@@ -67,7 +57,7 @@ export interface RuleAction {
   deductibleOverrideThb?: number;
   referralTemplateRequired?: string; // Required documents / questions
   internalNotes: string;
-  policyExclusionClause?: string;     // Red text clause on PDF schedule
+  policyExclusionClause?: string; // Red text clause on PDF schedule
 }
 
 export interface CanvasRuleNode {
@@ -86,82 +76,83 @@ export interface CanvasRuleNode {
 
 const INITIAL_RULES: CanvasRuleNode[] = [
   {
-    id: 'rule-node-101',
-    ruleCode: 'URE-MTR-01',
-    name: 'Young Driver Risk Loading',
+    id: "rule-node-101",
+    ruleCode: "URE-MTR-01",
+    name: "Young Driver Risk Loading",
     priorityOrder: 1,
     isOverridden: true, // Overridden at Plan level
     conditionGroup: {
-      id: 'grp-1',
-      logicalOperator: 'AND',
+      id: "grp-1",
+      logicalOperator: "AND",
       conditions: [
         {
-          id: 'cond-1-1',
-          field: 'driver.age',
-          operator: 'LESS_THAN',
+          id: "cond-1-1",
+          field: "driver.age",
+          operator: "LESS_THAN",
           value: 22,
         },
       ],
     },
     action: {
-      enforcement: 'APPLY_LOADING',
+      enforcement: "APPLY_LOADING",
       loadingPercent: 15.0,
       loadingAmountThb: 0,
-      internalNotes: 'Young driver actuarial index loading (+15% base)',
-      policyExclusionClause: '',
+      internalNotes: "Young driver actuarial index loading (+15% base)",
+      policyExclusionClause: "",
     },
   },
   {
-    id: 'rule-node-102',
-    ruleCode: 'URE-MTR-02',
-    name: 'Aging Vehicle Referral (Yellow Channel)',
+    id: "rule-node-102",
+    ruleCode: "URE-MTR-02",
+    name: "Aging Vehicle Referral (Yellow Channel)",
     priorityOrder: 2,
     isOverridden: false, // Inherited from Product Master
     conditionGroup: {
-      id: 'grp-2',
-      logicalOperator: 'AND',
+      id: "grp-2",
+      logicalOperator: "AND",
       conditions: [
         {
-          id: 'cond-2-1',
-          field: 'vehicle.age_years',
-          operator: 'GREATER_THAN',
+          id: "cond-2-1",
+          field: "vehicle.age_years",
+          operator: "GREATER_THAN",
           value: 10,
         },
       ],
     },
     action: {
-      enforcement: 'REFER',
+      enforcement: "REFER",
       loadingPercent: 0,
       loadingAmountThb: 0,
-      referralTemplateRequired: 'MTR_CAR_4_CORNERS_INSPECTION_PHOTO',
-      internalNotes: 'Automated lock to PENDING_REVIEW; requires physical garage inspection review.',
-      policyExclusionClause: 'Subject to mechanical pre-inspection verification',
+      referralTemplateRequired: "MTR_CAR_4_CORNERS_INSPECTION_PHOTO",
+      internalNotes: "Automated lock to PENDING_REVIEW; requires physical garage inspection review.",
+      policyExclusionClause: "Subject to mechanical pre-inspection verification",
     },
   },
   {
-    id: 'rule-node-103',
-    ruleCode: 'URE-MTR-03',
-    name: 'Performance Modified Suspension Hard Stop',
+    id: "rule-node-103",
+    ruleCode: "URE-MTR-03",
+    name: "Performance Modified Suspension Hard Stop",
     priorityOrder: 3,
     isOverridden: false,
     conditionGroup: {
-      id: 'grp-3',
-      logicalOperator: 'AND',
+      id: "grp-3",
+      logicalOperator: "AND",
       conditions: [
         {
-          id: 'cond-3-1',
-          field: 'vehicle.is_modified',
-          operator: 'EQUALS',
-          value: 'true',
+          id: "cond-3-1",
+          field: "vehicle.is_modified",
+          operator: "EQUALS",
+          value: "true",
         },
       ],
     },
     action: {
-      enforcement: 'REJECT',
+      enforcement: "REJECT",
       loadingPercent: 0,
       loadingAmountThb: 0,
-      internalNotes: 'Hard Stop: Street-racing and aftermarket performance modifications breach underwriting guidelines.',
-      policyExclusionClause: '',
+      internalNotes:
+        "Hard Stop: Street-racing and aftermarket performance modifications breach underwriting guidelines.",
+      policyExclusionClause: "",
     },
   },
 ];
@@ -172,11 +163,11 @@ const INITIAL_RULES: CanvasRuleNode[] = [
 
 export const PricingUWRulesCanvasPage: React.FC = () => {
   // Navigation / Product Header State
-  const [selectedLob] = useState<LOBType>('MOTOR');
-  const [productCode] = useState('P-VIRIYAH-MTR-T1');
-  const [planCode] = useState('PLAN-GOLD-2026');
-  const [productVersion] = useState('v2.1 (Active)');
-  const [draftVersion] = useState('v2.2-draft');
+  const [selectedLob] = useState<LOBType>("MOTOR");
+  const [productCode] = useState("P-VIRIYAH-MTR-T1");
+  const [planCode] = useState("PLAN-GOLD-2026");
+  const [productVersion] = useState("v2.1 (Active)");
+  const [draftVersion] = useState("v2.2-draft");
   const [inheritFromProduct, setInheritFromProduct] = useState<boolean>(false);
 
   // Canvas State
@@ -214,16 +205,16 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               isOverridden: true, // Mutating flags it as a Plan override (BO-03)
               action: { ...r.action, ...updatedAction },
             }
-          : r
-      )
+          : r,
+      ),
     );
   };
 
   const handleAddCondition = () => {
     const newCondition: RuleCondition = {
       id: `cond-${Date.now()}`,
-      field: 'driver.age',
-      operator: 'GREATER_THAN',
+      field: "driver.age",
+      operator: "GREATER_THAN",
       value: 25,
     };
     setRules((prev) =>
@@ -237,8 +228,8 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 conditions: [...r.conditionGroup.conditions, newCondition],
               },
             }
-          : r
-      )
+          : r,
+      ),
     );
   };
 
@@ -254,8 +245,8 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 conditions: r.conditionGroup.conditions.filter((c) => c.id !== condId),
               },
             }
-          : r
-      )
+          : r,
+      ),
     );
   };
 
@@ -268,13 +259,11 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               isOverridden: true,
               conditionGroup: {
                 ...r.conditionGroup,
-                conditions: r.conditionGroup.conditions.map((c) =>
-                  c.id === condId ? { ...c, ...partial } : c
-                ),
+                conditions: r.conditionGroup.conditions.map((c) => (c.id === condId ? { ...c, ...partial } : c)),
               },
             }
-          : r
-      )
+          : r,
+      ),
     );
   };
 
@@ -282,26 +271,26 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
     const newRule: CanvasRuleNode = {
       id: `rule-node-${Date.now()}`,
       ruleCode: `URE-CUSTOM-${rules.length + 1}`,
-      name: 'New Custom Underwriting Rule',
+      name: "New Custom Underwriting Rule",
       priorityOrder: rules.length + 1,
       isOverridden: true,
       conditionGroup: {
         id: `grp-${Date.now()}`,
-        logicalOperator: 'AND',
+        logicalOperator: "AND",
         conditions: [
           {
             id: `cond-new-${Date.now()}`,
-            field: 'vehicle.age_years',
-            operator: 'GREATER_THAN',
+            field: "vehicle.age_years",
+            operator: "GREATER_THAN",
             value: 8,
           },
         ],
       },
       action: {
-        enforcement: 'AUTO_APPROVE',
+        enforcement: "AUTO_APPROVE",
         loadingPercent: 0,
         loadingAmountThb: 0,
-        internalNotes: 'Drafted via Visual Canvas',
+        internalNotes: "Drafted via Visual Canvas",
       },
     };
     setRules([...rules, newRule]);
@@ -311,7 +300,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
   // Dry Run Evaluator (Local Engine Simulation)
   const runSimulator = () => {
     const logs: string[] = [];
-    let currentStatus: EnforcementAction = 'AUTO_APPROVE';
+    let currentStatus: EnforcementAction = "AUTO_APPROVE";
     let cumulativeLoadingPct = 0;
     let cumulativeLoadingAmount = 0;
 
@@ -321,29 +310,29 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
       let ruleMatched = true;
 
       for (const cond of rule.conditionGroup.conditions) {
-        if (cond.field === 'driver.age') {
+        if (cond.field === "driver.age") {
           const val = Number(cond.value);
-          if (cond.operator === 'LESS_THAN' && !(simAge < val)) ruleMatched = false;
-          if (cond.operator === 'GREATER_THAN' && !(simAge > val)) ruleMatched = false;
-        } else if (cond.field === 'vehicle.age_years') {
+          if (cond.operator === "LESS_THAN" && !(simAge < val)) ruleMatched = false;
+          if (cond.operator === "GREATER_THAN" && !(simAge > val)) ruleMatched = false;
+        } else if (cond.field === "vehicle.age_years") {
           const val = Number(cond.value);
-          if (cond.operator === 'GREATER_THAN' && !(simCarAge > val)) ruleMatched = false;
-        } else if (cond.field === 'vehicle.is_modified') {
-          const val = cond.value === 'true';
+          if (cond.operator === "GREATER_THAN" && !(simCarAge > val)) ruleMatched = false;
+        } else if (cond.field === "vehicle.is_modified") {
+          const val = cond.value === "true";
           if (simIsModified !== val) ruleMatched = false;
         }
       }
 
       if (ruleMatched) {
         logs.push(`-> TRIGGERED: Action is ${rule.action.enforcement}`);
-        if (rule.action.enforcement === 'REJECT') {
-          currentStatus = 'REJECT';
+        if (rule.action.enforcement === "REJECT") {
+          currentStatus = "REJECT";
           logs.push(`Hard stop trigger reached. Policy execution declines immediately.`);
           break; // Stop waterfall evaluation immediately
-        } else if (rule.action.enforcement === 'REFER') {
-          currentStatus = 'REFER'; // Fixed: direct assignment without redundant comparison
+        } else if (rule.action.enforcement === "REFER") {
+          currentStatus = "REFER"; // Fixed: direct assignment without redundant comparison
           logs.push(`Yellow channel triggered. S2 Lock enforced. Dynamic form required.`);
-        } else if (rule.action.enforcement === 'APPLY_LOADING') {
+        } else if (rule.action.enforcement === "APPLY_LOADING") {
           cumulativeLoadingPct += rule.action.loadingPercent;
           cumulativeLoadingAmount += rule.action.loadingAmountThb;
           logs.push(`Added loading: +${rule.action.loadingPercent}% and +${rule.action.loadingAmountThb} THB.`);
@@ -387,11 +376,10 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 Editing: {draftVersion} (SCD Type-2)
               </span>
             </div>
-            <h1 className="text-xl font-bold text-zinc-900 mt-2">
-              Pricing & Underwriting Rules Canvas
-            </h1>
+            <h1 className="text-xl font-bold text-zinc-900 mt-2">Pricing & Underwriting Rules Canvas</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
-              Target Plan: <strong className="text-zinc-700">{productCode}</strong> / <span className="text-zinc-700 font-medium">{planCode}</span>
+              Target Plan: <strong className="text-zinc-700">{productCode}</strong> /{" "}
+              <span className="text-zinc-700 font-medium">{planCode}</span>
             </p>
           </div>
 
@@ -407,21 +395,21 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 type="button"
                 onClick={handleToggleInheritance}
                 className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                  inheritFromProduct ? 'bg-emerald-600' : 'bg-blue-600'
+                  inheritFromProduct ? "bg-emerald-600" : "bg-blue-600"
                 }`}
               >
                 <span
                   className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                    inheritFromProduct ? 'translate-x-4' : 'translate-x-0'
+                    inheritFromProduct ? "translate-x-4" : "translate-x-0"
                   }`}
                 />
               </button>
               <span
                 className={`ml-2 text-[11px] font-semibold ${
-                  inheritFromProduct ? 'text-emerald-700' : 'text-blue-700'
+                  inheritFromProduct ? "text-emerald-700" : "text-blue-700"
                 }`}
               >
-                {inheritFromProduct ? 'Inherited' : 'Plan Override'}
+                {inheritFromProduct ? "Inherited" : "Plan Override"}
               </span>
             </div>
 
@@ -477,9 +465,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 <Sliders className="w-4 h-4 text-zinc-600" />
                 Underwriting Rule Nodes
               </h2>
-              <span className="text-[11px] text-zinc-500">
-                Evaluated Waterfall (Priority Order)
-              </span>
+              <span className="text-[11px] text-zinc-500">Evaluated Waterfall (Priority Order)</span>
             </div>
             <button
               onClick={handleAddNewRule}
@@ -496,15 +482,15 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               const isSelected = rule.id === activeRule.id;
 
               // Action color badge
-              let badgeColor = 'bg-zinc-100 text-zinc-700 border-zinc-200';
-              if (rule.action.enforcement === 'AUTO_APPROVE') {
-                badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-              } else if (rule.action.enforcement === 'REFER') {
-                badgeColor = 'bg-amber-50 text-amber-800 border-amber-200';
-              } else if (rule.action.enforcement === 'REJECT') {
-                badgeColor = 'bg-rose-50 text-rose-700 border-rose-200';
-              } else if (rule.action.enforcement === 'APPLY_LOADING') {
-                badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
+              let badgeColor = "bg-zinc-100 text-zinc-700 border-zinc-200";
+              if (rule.action.enforcement === "AUTO_APPROVE") {
+                badgeColor = "bg-emerald-50 text-emerald-700 border-emerald-200";
+              } else if (rule.action.enforcement === "REFER") {
+                badgeColor = "bg-amber-50 text-amber-800 border-amber-200";
+              } else if (rule.action.enforcement === "REJECT") {
+                badgeColor = "bg-rose-50 text-rose-700 border-rose-200";
+              } else if (rule.action.enforcement === "APPLY_LOADING") {
+                badgeColor = "bg-blue-50 text-blue-700 border-blue-200";
               }
 
               return (
@@ -513,23 +499,17 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   onClick={() => setSelectedRuleId(rule.id)}
                   className={`p-3.5 rounded-lg border cursor-pointer transition relative ${
                     isSelected
-                      ? 'border-blue-500 bg-blue-50/20 shadow-sm ring-1 ring-blue-400'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/50'
+                      ? "border-blue-500 bg-blue-50/20 shadow-sm ring-1 ring-blue-400"
+                      : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/50"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[11px] font-mono font-bold text-zinc-600">
-                          #{idx + 1}
-                        </span>
-                        <h3 className="text-xs font-bold text-zinc-900 line-clamp-1">
-                          {rule.name}
-                        </h3>
+                        <span className="text-[11px] font-mono font-bold text-zinc-600">#{idx + 1}</span>
+                        <h3 className="text-xs font-bold text-zinc-900 line-clamp-1">{rule.name}</h3>
                       </div>
-                      <span className="text-[10px] font-mono text-zinc-400 block mt-0.5">
-                        {rule.ruleCode}
-                      </span>
+                      <span className="text-[10px] font-mono text-zinc-400 block mt-0.5">{rule.ruleCode}</span>
                     </div>
 
                     {/* Blue Override Pill (Req BO-03) */}
@@ -541,14 +521,12 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   </div>
 
                   <div className="mt-2.5 flex items-center justify-between text-[11px]">
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${badgeColor}`}
-                    >
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${badgeColor}`}>
                       {rule.action.enforcement}
                     </span>
                     <span className="text-zinc-500 text-[10px]">
                       {rule.conditionGroup.conditions.length} condition
-                      {rule.conditionGroup.conditions.length > 1 ? 's' : ''}
+                      {rule.conditionGroup.conditions.length > 1 ? "s" : ""}
                     </span>
                   </div>
                 </div>
@@ -568,9 +546,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 <span className="px-2 py-1 bg-amber-50 text-amber-900 border border-amber-200 text-xs font-black rounded uppercase">
                   IF Block
                 </span>
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Risk Assessment Criteria (Trigger Group)
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Risk Assessment Criteria (Trigger Group)</h3>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-zinc-500 font-medium">Logical Match:</span>
@@ -585,17 +561,17 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                                 ...r,
                                 conditionGroup: {
                                   ...r.conditionGroup,
-                                  logicalOperator: 'AND',
+                                  logicalOperator: "AND",
                                 },
                               }
-                            : r
-                        )
+                            : r,
+                        ),
                       )
                     }
                     className={`px-2.5 py-1 text-xs font-semibold rounded-l-md border ${
-                      activeRule.conditionGroup.logicalOperator === 'AND'
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-50'
+                      activeRule.conditionGroup.logicalOperator === "AND"
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-50"
                     }`}
                   >
                     AND
@@ -610,17 +586,17 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                                 ...r,
                                 conditionGroup: {
                                   ...r.conditionGroup,
-                                  logicalOperator: 'OR',
+                                  logicalOperator: "OR",
                                 },
                               }
-                            : r
-                        )
+                            : r,
+                        ),
                       )
                     }
                     className={`px-2.5 py-1 text-xs font-semibold rounded-r-md border border-l-0 ${
-                      activeRule.conditionGroup.logicalOperator === 'OR'
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-50'
+                      activeRule.conditionGroup.logicalOperator === "OR"
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-zinc-700 border-zinc-300 hover:bg-zinc-50"
                     }`}
                   >
                     OR
@@ -636,9 +612,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   key={cond.id}
                   className="flex items-center gap-2.5 p-3 rounded-lg bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition"
                 >
-                  <span className="text-[11px] font-bold text-zinc-400 w-6 text-center">
-                    #{index + 1}
-                  </span>
+                  <span className="text-[11px] font-bold text-zinc-400 w-6 text-center">#{index + 1}</span>
 
                   {/* Schema Field Selector */}
                   <div className="flex-1 min-w-[200px]">
@@ -694,9 +668,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                     <input
                       type="text"
                       value={cond.value}
-                      onChange={(e) =>
-                        handleUpdateCondition(cond.id, { value: e.target.value })
-                      }
+                      onChange={(e) => handleUpdateCondition(cond.id, { value: e.target.value })}
                       placeholder="Value"
                       className="w-full text-xs font-mono bg-white border border-zinc-300 rounded-lg px-2.5 py-1.5 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
@@ -732,9 +704,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 <span className="px-2 py-1 bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-black rounded uppercase">
                   THEN Block
                 </span>
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Underwriting Triage & Premium Adjustment Action
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Underwriting Triage & Premium Adjustment Action</h3>
               </div>
             </div>
 
@@ -753,18 +723,10 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   }
                   className="w-full text-xs font-semibold bg-white border border-zinc-300 rounded-lg px-3 py-2 text-zinc-900 focus:ring-1 focus:ring-blue-500"
                 >
-                  <option value="AUTO_APPROVE">
-                    Green Channel: AUTO_APPROVE (Unlock Checkout)
-                  </option>
-                  <option value="REFER">
-                    Yellow Channel: REFER (Lock Payment / Require Dynamic Template)
-                  </option>
-                  <option value="APPLY_LOADING">
-                    Rated Counter-Offer: APPLY_LOADING (Recalculate Premium)
-                  </option>
-                  <option value="REJECT">
-                    Red Channel: REJECT (Hard Stop / Blacklist)
-                  </option>
+                  <option value="AUTO_APPROVE">Green Channel: AUTO_APPROVE (Unlock Checkout)</option>
+                  <option value="REFER">Yellow Channel: REFER (Lock Payment / Require Dynamic Template)</option>
+                  <option value="APPLY_LOADING">Rated Counter-Offer: APPLY_LOADING (Recalculate Premium)</option>
+                  <option value="REJECT">Red Channel: REJECT (Hard Stop / Blacklist)</option>
                 </select>
                 <p className="text-[11px] text-zinc-500 mt-1">
                   Enforces exact API responses during customer application transition.
@@ -772,13 +734,13 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               </div>
 
               {/* Dynamic Referral Requirements (Yellow Channel only) */}
-              {activeRule.action.enforcement === 'REFER' && (
+              {activeRule.action.enforcement === "REFER" && (
                 <div>
                   <label className="block text-xs font-semibold text-amber-900 mb-1.5">
                     Trigger Refer Template Form (Yellow Channel)
                   </label>
                   <select
-                    value={activeRule.action.referralTemplateRequired || ''}
+                    value={activeRule.action.referralTemplateRequired || ""}
                     onChange={(e) =>
                       handleUpdateActiveAction({
                         referralTemplateRequired: e.target.value,
@@ -792,9 +754,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                     <option value="HLT_ATTENDING_PHYSICIAN_STATEMENT">
                       Health: Attending Physician Statement (APS)
                     </option>
-                    <option value="PA_DANGEROUS_DUTY_QUESTIONNAIRE">
-                      PA: Dangerous Occupation Exposure Form
-                    </option>
+                    <option value="PA_DANGEROUS_DUTY_QUESTIONNAIRE">PA: Dangerous Occupation Exposure Form</option>
                   </select>
                   <p className="text-[11px] text-zinc-500 mt-1">
                     Defines the dynamic upload schema returned in GET /requirements.
@@ -803,7 +763,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               )}
 
               {/* Actuarial Loadings (Rated Offer) */}
-              {activeRule.action.enforcement === 'APPLY_LOADING' && (
+              {activeRule.action.enforcement === "APPLY_LOADING" && (
                 <>
                   <div>
                     <label className="block text-xs font-semibold text-zinc-700 mb-1.5">
@@ -821,9 +781,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                         }
                         className="w-full text-xs font-mono bg-white border border-zinc-300 rounded-lg px-3 py-2 pr-8 text-zinc-900 focus:ring-1 focus:ring-blue-500"
                       />
-                      <span className="absolute right-3 top-2 text-xs font-bold text-zinc-400">
-                        %
-                      </span>
+                      <span className="absolute right-3 top-2 text-xs font-bold text-zinc-400">%</span>
                     </div>
                   </div>
 
@@ -843,9 +801,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                         }
                         className="w-full text-xs font-mono bg-white border border-zinc-300 rounded-lg px-3 py-2 pr-12 text-zinc-900 focus:ring-1 focus:ring-blue-500"
                       />
-                      <span className="absolute right-3 top-2 text-xs font-bold text-zinc-400">
-                        THB
-                      </span>
+                      <span className="absolute right-3 top-2 text-xs font-bold text-zinc-400">THB</span>
                     </div>
                   </div>
                 </>
@@ -862,7 +818,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               </label>
               <textarea
                 rows={2}
-                value={activeRule.action.policyExclusionClause || ''}
+                value={activeRule.action.policyExclusionClause || ""}
                 onChange={(e) =>
                   handleUpdateActiveAction({
                     policyExclusionClause: e.target.value,
@@ -902,9 +858,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
-              <h3 className="text-sm font-bold text-zinc-900">
-                Rule Engine Execution Sandbox (Local Simulation)
-              </h3>
+              <h3 className="text-sm font-bold text-zinc-900">Rule Engine Execution Sandbox (Local Simulation)</h3>
             </div>
             <button
               onClick={() => setIsSimulatorOpen(false)}
@@ -923,9 +877,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-600">
-                    Primary Driver Age
-                  </label>
+                  <label className="text-[11px] font-medium text-zinc-600">Primary Driver Age</label>
                   <input
                     type="number"
                     value={simAge}
@@ -934,9 +886,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-600">
-                    Vehicle Age (Years)
-                  </label>
+                  <label className="text-[11px] font-medium text-zinc-600">Vehicle Age (Years)</label>
                   <input
                     type="number"
                     value={simCarAge}
@@ -948,9 +898,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3 items-center pt-1">
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-600">
-                    Base Net Premium (THB)
-                  </label>
+                  <label className="text-[11px] font-medium text-zinc-600">Base Net Premium (THB)</label>
                   <input
                     type="number"
                     value={simBasePremium}
@@ -988,13 +936,13 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   {simResult && (
                     <span
                       className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        simResult.status === 'AUTO_APPROVE'
-                          ? 'bg-emerald-900/80 text-emerald-300 border border-emerald-700'
-                          : simResult.status === 'REFER'
-                          ? 'bg-amber-900/80 text-amber-300 border border-amber-700'
-                          : simResult.status === 'APPLY_LOADING'
-                          ? 'bg-blue-900/80 text-blue-300 border border-blue-700'
-                          : 'bg-rose-900/80 text-rose-300 border border-rose-700'
+                        simResult.status === "AUTO_APPROVE"
+                          ? "bg-emerald-900/80 text-emerald-300 border border-emerald-700"
+                          : simResult.status === "REFER"
+                            ? "bg-amber-900/80 text-amber-300 border border-amber-700"
+                            : simResult.status === "APPLY_LOADING"
+                              ? "bg-blue-900/80 text-blue-300 border border-blue-700"
+                              : "bg-rose-900/80 text-rose-300 border border-rose-700"
                       }`}
                     >
                       TRIAGE: {simResult.status}
@@ -1013,7 +961,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
               </div>
 
               {/* Financial Math Verification */}
-              {simResult && simResult.status !== 'REJECT' && (
+              {simResult && simResult.status !== "REJECT" && (
                 <div className="mt-4 pt-3 border-t border-zinc-800 grid grid-cols-4 gap-2 text-center">
                   <div className="bg-zinc-800/60 p-2 rounded">
                     <span className="text-[10px] text-zinc-400 block">Base Rated</span>
@@ -1023,21 +971,15 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                   </div>
                   <div className="bg-zinc-800/60 p-2 rounded">
                     <span className="text-[10px] text-zinc-400 block">Stamp (0.4%)</span>
-                    <span className="text-xs font-bold text-zinc-300">
-                      {simResult.stamp.toLocaleString()} ฿
-                    </span>
+                    <span className="text-xs font-bold text-zinc-300">{simResult.stamp.toLocaleString()} ฿</span>
                   </div>
                   <div className="bg-zinc-800/60 p-2 rounded">
                     <span className="text-[10px] text-zinc-400 block">VAT (7.0%)</span>
-                    <span className="text-xs font-bold text-zinc-300">
-                      {simResult.vat.toLocaleString()} ฿
-                    </span>
+                    <span className="text-xs font-bold text-zinc-300">{simResult.vat.toLocaleString()} ฿</span>
                   </div>
                   <div className="bg-blue-900/50 border border-blue-800 p-2 rounded">
                     <span className="text-[10px] text-blue-300 block font-sans">Final Gross</span>
-                    <span className="text-xs font-bold text-blue-200">
-                      {simResult.grossPremium.toLocaleString()} ฿
-                    </span>
+                    <span className="text-xs font-bold text-blue-200">{simResult.grossPremium.toLocaleString()} ฿</span>
                   </div>
                 </div>
               )}

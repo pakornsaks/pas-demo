@@ -1,45 +1,45 @@
-import React, { useState } from 'react';
 import {
-  Type,
-  Hash,
-  ToggleLeft,
-  ListFilter,
-  Calendar,
-  FileUp,
-  AlignLeft,
-  Plus,
-  Trash2,
-  Copy,
-  ArrowUp,
-  ArrowDown,
-  Eye,
-  Code2,
-  Sliders,
-  Send,
-  Save,
   AlertCircle,
+  AlignLeft,
+  ArrowDown,
+  ArrowUp,
+  Calendar,
   CheckCircle2,
-  Layers,
   ChevronRight,
+  Code2,
+  Copy,
+  Eye,
+  FileUp,
+  Hash,
+  Layers,
+  ListFilter,
+  Plus,
+  Save,
+  Send,
   ShieldAlert,
-} from 'lucide-react';
+  Sliders,
+  ToggleLeft,
+  Trash2,
+  Type,
+} from "lucide-react";
+import React, { useState } from "react";
 
 // ============================================================================
 // Types & API Contracts (Aligned with PAS SDD Section 3.2.3 & BRD Section 7.1)
 // ============================================================================
 
-export type FieldType = 'string' | 'number' | 'boolean' | 'select' | 'date' | 'file';
+export type FieldType = "string" | "number" | "boolean" | "select" | "date" | "file";
 
 export type UIComponentType =
-  | 'text_input'
-  | 'number_input'
-  | 'toggle'
-  | 'select_dropdown'
-  | 'datepicker'
-  | 'file_upload'
-  | 'textarea';
+  | "text_input"
+  | "number_input"
+  | "toggle"
+  | "select_dropdown"
+  | "datepicker"
+  | "file_upload"
+  | "textarea";
 
-export type ConditionOperator = 'EQUALS' | 'NOT_EQUALS' | 'GREATER_THAN' | 'LESS_THAN';
+export type ConditionOperator = "EQUALS" | "NOT_EQUALS" | "GREATER_THAN" | "LESS_THAN";
 
 export interface VisibilityRule {
   depends_on: string;
@@ -68,81 +68,81 @@ export interface ProductSchemaEnvelope {
   product_code: string;
   marketing_name: string;
   lob_code: string;
-  version_status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
-  required_risk_fields: Omit<SchemaField, 'id'>[];
+  version_status: "DRAFT" | "ACTIVE" | "ARCHIVED";
+  required_risk_fields: Omit<SchemaField, "id">[];
 }
 
 // Pre-seeded with sample Custom LOB fields (e.g. Cyber Risk)
 const INITIAL_FIELDS: SchemaField[] = [
   {
-    id: 'f-1',
-    field: 'company_annual_revenue',
-    label: 'Company Annual Revenue (THB)',
-    type: 'number',
-    ui_component: 'number_input',
+    id: "f-1",
+    field: "company_annual_revenue",
+    label: "Company Annual Revenue (THB)",
+    type: "number",
+    ui_component: "number_input",
     is_required: true,
-    placeholder: 'e.g. 50000000',
-    description: 'Audited gross revenue for previous fiscal year.',
+    placeholder: "e.g. 50000000",
+    description: "Audited gross revenue for previous fiscal year.",
     min: 1000000,
   },
   {
-    id: 'f-2',
-    field: 'number_of_servers',
-    label: 'Total Active Servers / Endpoints',
-    type: 'number',
-    ui_component: 'number_input',
+    id: "f-2",
+    field: "number_of_servers",
+    label: "Total Active Servers / Endpoints",
+    type: "number",
+    ui_component: "number_input",
     is_required: true,
-    placeholder: 'e.g. 45',
+    placeholder: "e.g. 45",
     min: 1,
   },
   {
-    id: 'f-3',
-    field: 'has_firewall',
-    label: 'Dedicated Hardware Firewall Installed',
-    type: 'boolean',
-    ui_component: 'toggle',
+    id: "f-3",
+    field: "has_firewall",
+    label: "Dedicated Hardware Firewall Installed",
+    type: "boolean",
+    ui_component: "toggle",
     is_required: true,
-    description: 'Must have active UTM/Next-Gen Firewall license.',
+    description: "Must have active UTM/Next-Gen Firewall license.",
   },
   {
-    id: 'f-4',
-    field: 'firewall_vendor',
-    label: 'Firewall Hardware Vendor',
-    type: 'string',
-    ui_component: 'select_dropdown',
+    id: "f-4",
+    field: "firewall_vendor",
+    label: "Firewall Hardware Vendor",
+    type: "string",
+    ui_component: "select_dropdown",
     is_required: false,
-    options: ['Fortinet', 'Palo Alto Networks', 'Cisco', 'Sophos', 'Other'],
+    options: ["Fortinet", "Palo Alto Networks", "Cisco", "Sophos", "Other"],
     visibility_rules: {
-      depends_on: 'has_firewall',
-      condition: 'EQUALS',
+      depends_on: "has_firewall",
+      condition: "EQUALS",
       value: true,
     },
   },
   {
-    id: 'f-5',
-    field: 'iso27001_certificate',
-    label: 'ISO/IEC 27001 Audit Certificate',
-    type: 'file',
-    ui_component: 'file_upload',
+    id: "f-5",
+    field: "iso27001_certificate",
+    label: "ISO/IEC 27001 Audit Certificate",
+    type: "file",
+    ui_component: "file_upload",
     is_required: false,
-    description: 'Attach valid PDF certificate for underwriting discount.',
+    description: "Attach valid PDF certificate for underwriting discount.",
   },
 ];
 
 export const DynamicSchemaBuilderPage: React.FC = () => {
   // Product Versioning & Schema State
   const [productMeta] = useState({
-    product_version_id: '550e8400-e29b-41d4-a716-446655440000',
-    product_code: 'CBR-CORP-2026',
-    marketing_name: 'Enterprise Cyber Security Shield',
-    lob_code: 'CUSTOM',
-    version: 'v2.1',
-    status: 'DRAFT' as const,
+    product_version_id: "550e8400-e29b-41d4-a716-446655440000",
+    product_code: "CBR-CORP-2026",
+    marketing_name: "Enterprise Cyber Security Shield",
+    lob_code: "CUSTOM",
+    version: "v2.1",
+    status: "DRAFT" as const,
   });
 
   const [fields, setFields] = useState<SchemaField[]>(INITIAL_FIELDS);
-  const [selectedFieldId, setSelectedFieldId] = useState<string>(INITIAL_FIELDS[0]?.id || '');
-  const [activeTab, setActiveTab] = useState<'inspector' | 'preview' | 'json'>('inspector');
+  const [selectedFieldId, setSelectedFieldId] = useState<string>(INITIAL_FIELDS[0]?.id || "");
+  const [activeTab, setActiveTab] = useState<"inspector" | "preview" | "json">("inspector");
   const [testFormValues, setTestFormValues] = useState<Record<string, any>>({
     has_firewall: true,
     company_annual_revenue: 25000000,
@@ -150,7 +150,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
   // Maker-Checker Submission Dialog State
   const [showSubmitModal, setShowSubmitModal] = useState(false);
-  const [makerNotes, setMakerNotes] = useState('');
+  const [makerNotes, setMakerNotes] = useState("");
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
 
   const selectedField = fields.find((f) => f.id === selectedFieldId);
@@ -165,13 +165,13 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
       type,
       ui_component,
       is_required: false,
-      placeholder: '',
-      description: '',
-      options: type === 'select' ? ['Option 1', 'Option 2'] : undefined,
+      placeholder: "",
+      description: "",
+      options: type === "select" ? ["Option 1", "Option 2"] : undefined,
     };
     setFields((prev) => [...prev, newField]);
     setSelectedFieldId(newId);
-    setActiveTab('inspector');
+    setActiveTab("inspector");
   };
 
   const handleUpdateField = (id: string, updates: Partial<SchemaField>) => {
@@ -182,7 +182,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
     setFields((prev) => prev.filter((f) => f.id !== id));
     if (selectedFieldId === id) {
       const remaining = fields.filter((f) => f.id !== id);
-      setSelectedFieldId(remaining[0]?.id || '');
+      setSelectedFieldId(remaining[0]?.id || "");
     }
   };
 
@@ -197,8 +197,8 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
     setSelectedFieldId(duplicated.id);
   };
 
-  const handleMoveField = (index: number, direction: 'up' | 'down') => {
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+  const handleMoveField = (index: number, direction: "up" | "down") => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= fields.length) return;
 
     const reordered = [...fields];
@@ -213,16 +213,16 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
     const { depends_on, condition, value } = field.visibility_rules;
     const parentValue = testFormValues[depends_on];
 
-    if (condition === 'EQUALS') {
+    if (condition === "EQUALS") {
       return String(parentValue) === String(value);
     }
-    if (condition === 'NOT_EQUALS') {
+    if (condition === "NOT_EQUALS") {
       return String(parentValue) !== String(value);
     }
-    if (condition === 'GREATER_THAN') {
+    if (condition === "GREATER_THAN") {
       return Number(parentValue) > Number(value);
     }
-    if (condition === 'LESS_THAN') {
+    if (condition === "LESS_THAN") {
       return Number(parentValue) < Number(value);
     }
     return true;
@@ -245,7 +245,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
     setTimeout(() => {
       setShowSubmitModal(false);
       setSubmissionSuccess(false);
-      setMakerNotes('');
+      setMakerNotes("");
     }, 1500);
   };
 
@@ -272,16 +272,16 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-zinc-500 mt-1">
-              Configure dynamic risk capture keys stored into{' '}
-              <code className="text-blue-600 font-mono">policy_custom.custom_risk_data</code> and
-              served via Headless UI endpoints.
+              Configure dynamic risk capture keys stored into{" "}
+              <code className="text-blue-600 font-mono">policy_custom.custom_risk_data</code> and served via Headless UI
+              endpoints.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5">
             <button
               type="button"
-              onClick={() => alert('Draft schema snapshot saved locally.')}
+              onClick={() => alert("Draft schema snapshot saved locally.")}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-zinc-700 bg-white border border-zinc-300 rounded-md hover:bg-zinc-50 transition-colors shadow-sm"
             >
               <Save className="w-3.5 h-3.5" />
@@ -303,14 +303,12 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
             <span>
-              <strong>Rule Engine Guard:</strong> All custom policies bound to this schema will
-              undergo <strong>100% Mandatory Referral</strong> (Status:{' '}
+              <strong>Rule Engine Guard:</strong> All custom policies bound to this schema will undergo{" "}
+              <strong>100% Mandatory Referral</strong> (Status:{" "}
               <span className="font-mono text-zinc-700">PENDING_REVIEW</span>).
             </span>
           </div>
-          <span className="font-mono text-zinc-400 text-[11px]">
-            Target: product_versions.ui_schema
-          </span>
+          <span className="font-mono text-zinc-400 text-[11px]">Target: product_versions.ui_schema</span>
         </div>
       </div>
 
@@ -330,7 +328,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
             <div className="space-y-2">
               <button
                 type="button"
-                onClick={() => handleAddField('string', 'text_input')}
+                onClick={() => handleAddField("string", "text_input")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -344,7 +342,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleAddField('number', 'number_input')}
+                onClick={() => handleAddField("number", "number_input")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -358,7 +356,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleAddField('boolean', 'toggle')}
+                onClick={() => handleAddField("boolean", "toggle")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -372,7 +370,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleAddField('select', 'select_dropdown')}
+                onClick={() => handleAddField("select", "select_dropdown")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -386,7 +384,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleAddField('date', 'datepicker')}
+                onClick={() => handleAddField("date", "datepicker")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -400,7 +398,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleAddField('file', 'file_upload')}
+                onClick={() => handleAddField("file", "file_upload")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -414,7 +412,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleAddField('string', 'textarea')}
+                onClick={() => handleAddField("string", "textarea")}
                 className="w-full flex items-center gap-3 p-2.5 rounded-md border border-zinc-200 hover:border-blue-400 hover:bg-blue-50/50 text-left transition-all group"
               >
                 <div className="w-8 h-8 rounded bg-zinc-100 group-hover:bg-blue-100 flex items-center justify-center text-zinc-600 group-hover:text-blue-600">
@@ -434,16 +432,12 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
           <div className="bg-white border border-zinc-200 rounded-lg p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h2 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
-                  Schema Fields Canvas
-                </h2>
-                <span className="text-xs text-zinc-500">
-                  {fields.length} active risk properties registered
-                </span>
+                <h2 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">Schema Fields Canvas</h2>
+                <span className="text-xs text-zinc-500">{fields.length} active risk properties registered</span>
               </div>
               <button
                 type="button"
-                onClick={() => handleAddField('string', 'text_input')}
+                onClick={() => handleAddField("string", "text_input")}
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -469,16 +463,14 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                       onClick={() => setSelectedFieldId(f.id)}
                       className={`group relative p-3.5 rounded-lg border text-left cursor-pointer transition-all ${
                         isSelected
-                          ? 'border-blue-500 bg-blue-50/30 ring-1 ring-blue-500/20 shadow-sm'
-                          : 'border-zinc-200 bg-white hover:border-zinc-300'
+                          ? "border-blue-500 bg-blue-50/30 ring-1 ring-blue-500/20 shadow-sm"
+                          : "border-zinc-200 bg-white hover:border-zinc-300"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="space-y-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-zinc-900 truncate">
-                              {f.label}
-                            </span>
+                            <span className="text-xs font-bold text-zinc-900 truncate">{f.label}</span>
                             {f.is_required ? (
                               <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">
                                 REQUIRED
@@ -488,16 +480,13 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             )}
                           </div>
                           <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
-                            <span className="bg-zinc-100 px-1 rounded text-zinc-700">
-                              key: {f.field}
-                            </span>
+                            <span className="bg-zinc-100 px-1 rounded text-zinc-700">key: {f.field}</span>
                             <span>•</span>
                             <span className="text-zinc-600">{f.ui_component}</span>
                           </div>
                           {f.visibility_rules && (
                             <div className="text-[11px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 inline-block font-mono">
-                              Depends on: {f.visibility_rules.depends_on} =={' '}
-                              {String(f.visibility_rules.value)}
+                              Depends on: {f.visibility_rules.depends_on} == {String(f.visibility_rules.value)}
                             </div>
                           )}
                         </div>
@@ -510,7 +499,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             disabled={index === 0}
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleMoveField(index, 'up');
+                              handleMoveField(index, "up");
                             }}
                             className="p-1 text-zinc-400 hover:text-zinc-700 disabled:opacity-30 rounded hover:bg-zinc-100"
                           >
@@ -522,7 +511,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             disabled={index === fields.length - 1}
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleMoveField(index, 'down');
+                              handleMoveField(index, "down");
                             }}
                             className="p-1 text-zinc-400 hover:text-zinc-700 disabled:opacity-30 rounded hover:bg-zinc-100"
                           >
@@ -567,11 +556,9 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
             <div className="flex border-b border-zinc-200 bg-zinc-50/70 p-1">
               <button
                 type="button"
-                onClick={() => setActiveTab('inspector')}
+                onClick={() => setActiveTab("inspector")}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
-                  activeTab === 'inspector'
-                    ? 'bg-white text-blue-600 shadow-xs'
-                    : 'text-zinc-500 hover:text-zinc-800'
+                  activeTab === "inspector" ? "bg-white text-blue-600 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
                 }`}
               >
                 <Sliders className="w-3.5 h-3.5" />
@@ -579,11 +566,9 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab('preview')}
+                onClick={() => setActiveTab("preview")}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
-                  activeTab === 'preview'
-                    ? 'bg-white text-blue-600 shadow-xs'
-                    : 'text-zinc-500 hover:text-zinc-800'
+                  activeTab === "preview" ? "bg-white text-blue-600 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
                 }`}
               >
                 <Eye className="w-3.5 h-3.5" />
@@ -591,11 +576,9 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab('json')}
+                onClick={() => setActiveTab("json")}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded ${
-                  activeTab === 'json'
-                    ? 'bg-white text-blue-600 shadow-xs'
-                    : 'text-zinc-500 hover:text-zinc-800'
+                  activeTab === "json" ? "bg-white text-blue-600 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
                 }`}
               >
                 <Code2 className="w-3.5 h-3.5" />
@@ -605,7 +588,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
             <div className="p-4">
               {/* TAB 1: FIELD INSPECTOR */}
-              {activeTab === 'inspector' && (
+              {activeTab === "inspector" && (
                 <>
                   {selectedField ? (
                     <div className="space-y-4">
@@ -618,7 +601,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                           value={selectedField.field}
                           onChange={(e) =>
                             handleUpdateField(selectedField.id, {
-                              field: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '_'),
+                              field: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "_"),
                             })
                           }
                           className="w-full text-xs font-mono px-3 py-2 border border-zinc-300 rounded-md bg-zinc-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -629,24 +612,18 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                          Display Label
-                        </label>
+                        <label className="block text-xs font-semibold text-zinc-700 mb-1">Display Label</label>
                         <input
                           type="text"
                           value={selectedField.label}
-                          onChange={(e) =>
-                            handleUpdateField(selectedField.id, { label: e.target.value })
-                          }
+                          onChange={(e) => handleUpdateField(selectedField.id, { label: e.target.value })}
                           className="w-full text-xs px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                            Data Type
-                          </label>
+                          <label className="block text-xs font-semibold text-zinc-700 mb-1">Data Type</label>
                           <select
                             value={selectedField.type}
                             onChange={(e) =>
@@ -665,9 +642,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                            UI Component
-                          </label>
+                          <label className="block text-xs font-semibold text-zinc-700 mb-1">UI Component</label>
                           <select
                             value={selectedField.ui_component}
                             onChange={(e) =>
@@ -693,15 +668,10 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                           id="req_toggle"
                           type="checkbox"
                           checked={selectedField.is_required}
-                          onChange={(e) =>
-                            handleUpdateField(selectedField.id, { is_required: e.target.checked })
-                          }
+                          onChange={(e) => handleUpdateField(selectedField.id, { is_required: e.target.checked })}
                           className="w-4 h-4 text-blue-600 rounded border-zinc-300 focus:ring-blue-500"
                         />
-                        <label
-                          htmlFor="req_toggle"
-                          className="text-xs font-semibold text-zinc-800 cursor-pointer"
-                        >
+                        <label htmlFor="req_toggle" className="text-xs font-semibold text-zinc-800 cursor-pointer">
                           Mandatory Underwriting Risk Field
                         </label>
                       </div>
@@ -712,26 +682,24 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                         </label>
                         <input
                           type="text"
-                          value={selectedField.placeholder || ''}
-                          onChange={(e) =>
-                            handleUpdateField(selectedField.id, { placeholder: e.target.value })
-                          }
+                          value={selectedField.placeholder || ""}
+                          onChange={(e) => handleUpdateField(selectedField.id, { placeholder: e.target.value })}
                           className="w-full text-xs px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                       </div>
 
                       {/* Dropdown Options Editor */}
-                      {selectedField.type === 'select' && (
+                      {selectedField.type === "select" && (
                         <div>
                           <label className="block text-xs font-semibold text-zinc-700 mb-1">
                             Dropdown Options (Comma separated)
                           </label>
                           <input
                             type="text"
-                            value={(selectedField.options || []).join(', ')}
+                            value={(selectedField.options || []).join(", ")}
                             onChange={(e) =>
                               handleUpdateField(selectedField.id, {
-                                options: e.target.value.split(',').map((o) => o.trim()),
+                                options: e.target.value.split(",").map((o) => o.trim()),
                               })
                             }
                             className="w-full text-xs px-3 py-2 border border-zinc-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -749,9 +717,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                           {selectedField.visibility_rules ? (
                             <button
                               type="button"
-                              onClick={() =>
-                                handleUpdateField(selectedField.id, { visibility_rules: undefined })
-                              }
+                              onClick={() => handleUpdateField(selectedField.id, { visibility_rules: undefined })}
                               className="text-[11px] text-rose-600 hover:underline"
                             >
                               Remove Rule
@@ -762,9 +728,8 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                               onClick={() =>
                                 handleUpdateField(selectedField.id, {
                                   visibility_rules: {
-                                    depends_on:
-                                      fields.find((f) => f.id !== selectedField.id)?.field || '',
-                                    condition: 'EQUALS',
+                                    depends_on: fields.find((f) => f.id !== selectedField.id)?.field || "",
+                                    condition: "EQUALS",
                                     value: true,
                                   },
                                 })
@@ -779,9 +744,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                         {selectedField.visibility_rules && (
                           <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-md space-y-2.5">
                             <div>
-                              <span className="text-[11px] text-zinc-500 block mb-1">
-                                Depends on Field:
-                              </span>
+                              <span className="text-[11px] text-zinc-500 block mb-1">Depends on Field:</span>
                               <select
                                 value={selectedField.visibility_rules.depends_on}
                                 onChange={(e) =>
@@ -806,9 +769,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-2">
                               <div>
-                                <span className="text-[11px] text-zinc-500 block mb-1">
-                                  Condition:
-                                </span>
+                                <span className="text-[11px] text-zinc-500 block mb-1">Condition:</span>
                                 <select
                                   value={selectedField.visibility_rules.condition}
                                   onChange={(e) =>
@@ -828,16 +789,14 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                                 </select>
                               </div>
                               <div>
-                                <span className="text-[11px] text-zinc-500 block mb-1">
-                                  Expected Value:
-                                </span>
+                                <span className="text-[11px] text-zinc-500 block mb-1">Expected Value:</span>
                                 <input
                                   type="text"
                                   value={String(selectedField.visibility_rules.value)}
                                   onChange={(e) => {
                                     let val: any = e.target.value;
-                                    if (val === 'true') val = true;
-                                    else if (val === 'false') val = false;
+                                    if (val === "true") val = true;
+                                    else if (val === "false") val = false;
                                     handleUpdateField(selectedField.id, {
                                       visibility_rules: {
                                         ...selectedField.visibility_rules!,
@@ -862,7 +821,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
               )}
 
               {/* TAB 2: LIVE SIMULATOR (HEADLESS UI PREVIEW) */}
-              {activeTab === 'preview' && (
+              {activeTab === "preview" && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between pb-2 border-b border-zinc-200">
                     <span className="text-xs font-bold text-zinc-800 uppercase tracking-wider">
@@ -877,8 +836,8 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                     </button>
                   </div>
                   <p className="text-xs text-zinc-500">
-                    This interactive simulator mimics how external aggregators and web portals
-                    render the schema in real-time.
+                    This interactive simulator mimics how external aggregators and web portals render the schema in
+                    real-time.
                   </p>
 
                   <form className="space-y-3 pt-2">
@@ -888,15 +847,14 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                       return (
                         <div key={f.id} className="space-y-1">
                           <label className="block text-xs font-medium text-zinc-800">
-                            {f.label}{' '}
-                            {f.is_required && <span className="text-rose-500 font-bold">*</span>}
+                            {f.label} {f.is_required && <span className="text-rose-500 font-bold">*</span>}
                           </label>
 
-                          {f.ui_component === 'text_input' && (
+                          {f.ui_component === "text_input" && (
                             <input
                               type="text"
                               placeholder={f.placeholder}
-                              value={testFormValues[f.field] || ''}
+                              value={testFormValues[f.field] || ""}
                               onChange={(e) =>
                                 setTestFormValues({
                                   ...testFormValues,
@@ -907,11 +865,11 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             />
                           )}
 
-                          {f.ui_component === 'number_input' && (
+                          {f.ui_component === "number_input" && (
                             <input
                               type="number"
                               placeholder={f.placeholder}
-                              value={testFormValues[f.field] || ''}
+                              value={testFormValues[f.field] || ""}
                               onChange={(e) =>
                                 setTestFormValues({
                                   ...testFormValues,
@@ -922,7 +880,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             />
                           )}
 
-                          {f.ui_component === 'toggle' && (
+                          {f.ui_component === "toggle" && (
                             <div className="flex items-center gap-2">
                               <input
                                 type="checkbox"
@@ -936,18 +894,15 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                                 }
                                 className="w-4 h-4 text-blue-600 rounded border-zinc-300 focus:ring-blue-500"
                               />
-                              <label
-                                htmlFor={`sim_${f.field}`}
-                                className="text-xs text-zinc-600 cursor-pointer"
-                              >
-                                {testFormValues[f.field] ? 'Active / Enabled' : 'Disabled'}
+                              <label htmlFor={`sim_${f.field}`} className="text-xs text-zinc-600 cursor-pointer">
+                                {testFormValues[f.field] ? "Active / Enabled" : "Disabled"}
                               </label>
                             </div>
                           )}
 
-                          {f.ui_component === 'select_dropdown' && (
+                          {f.ui_component === "select_dropdown" && (
                             <select
-                              value={testFormValues[f.field] || ''}
+                              value={testFormValues[f.field] || ""}
                               onChange={(e) =>
                                 setTestFormValues({
                                   ...testFormValues,
@@ -965,20 +920,18 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             </select>
                           )}
 
-                          {f.ui_component === 'file_upload' && (
+                          {f.ui_component === "file_upload" && (
                             <div className="border border-dashed border-zinc-300 rounded p-2 text-center bg-zinc-50">
                               <FileUp className="w-4 h-4 text-zinc-400 mx-auto mb-1" />
-                              <span className="text-[11px] text-zinc-500">
-                                Simulated S3 Attachment Dropzone
-                              </span>
+                              <span className="text-[11px] text-zinc-500">Simulated S3 Attachment Dropzone</span>
                             </div>
                           )}
 
-                          {f.ui_component === 'textarea' && (
+                          {f.ui_component === "textarea" && (
                             <textarea
                               rows={2}
                               placeholder={f.placeholder}
-                              value={testFormValues[f.field] || ''}
+                              value={testFormValues[f.field] || ""}
                               onChange={(e) =>
                                 setTestFormValues({
                                   ...testFormValues,
@@ -989,9 +942,7 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
                             />
                           )}
 
-                          {f.description && (
-                            <span className="text-[10px] text-zinc-400 block">{f.description}</span>
-                          )}
+                          {f.description && <span className="text-[10px] text-zinc-400 block">{f.description}</span>}
                         </div>
                       );
                     })}
@@ -1000,17 +951,15 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
               )}
 
               {/* TAB 3: API CONTRACT JSON VIEW */}
-              {activeTab === 'json' && (
+              {activeTab === "json" && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-zinc-800 uppercase tracking-wider">
-                      GET /products/{'{id}'}/schema
+                      GET /products/{"{id}"}/schema
                     </span>
                     <button
                       type="button"
-                      onClick={() =>
-                        navigator.clipboard.writeText(JSON.stringify(compiledSchemaPayload, null, 2))
-                      }
+                      onClick={() => navigator.clipboard.writeText(JSON.stringify(compiledSchemaPayload, null, 2))}
                       className="text-[11px] text-blue-600 hover:underline font-mono"
                     >
                       Copy JSON
@@ -1036,10 +985,9 @@ export const DynamicSchemaBuilderPage: React.FC = () => {
             </div>
 
             <p className="text-xs text-zinc-600 leading-relaxed">
-              Per <strong>BRD GOV-01</strong>, schema changes cannot be published straight to live
-              APIs. Submitting this ticket saves a pending record into{' '}
-              <code className="text-blue-600 font-mono">approval_requests</code> for Supervisor
-              review. The current active version remains intact until sign-off.
+              Per <strong>BRD GOV-01</strong>, schema changes cannot be published straight to live APIs. Submitting this
+              ticket saves a pending record into <code className="text-blue-600 font-mono">approval_requests</code> for
+              Supervisor review. The current active version remains intact until sign-off.
             </p>
 
             {submissionSuccess ? (

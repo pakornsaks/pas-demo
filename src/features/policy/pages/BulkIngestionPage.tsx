@@ -1,33 +1,28 @@
-import React, { useState, useRef, useId } from 'react';
 import {
-  UploadCloud,
-  FileSpreadsheet,
-  CheckCircle2,
   AlertTriangle,
-  XCircle,
-  RefreshCw,
-  Download,
-  Search,
-  Filter,
-  Eye,
-  X,
-  FileText,
-  Clock,
-  ShieldAlert,
+  CheckCircle2,
   ChevronDown,
-  Database
-} from 'lucide-react';
+  Clock,
+  Database,
+  Download,
+  Eye,
+  FileSpreadsheet,
+  FileText,
+  Filter,
+  RefreshCw,
+  Search,
+  ShieldAlert,
+  UploadCloud,
+  X,
+  XCircle,
+} from "lucide-react";
+import React, { useId, useRef, useState } from "react";
 
 // ============================================================================
 // TYPE DEFINITIONS (Aligined with SDD Section 5.6 & Database Architecture)
 // ============================================================================
 
-export type BatchJobStatus =
-  | 'PENDING'
-  | 'PROCESSING'
-  | 'COMPLETED'
-  | 'COMPLETED_WITH_ERRORS'
-  | 'FAILED';
+export type BatchJobStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "COMPLETED_WITH_ERRORS" | "FAILED";
 
 export interface BatchJobError {
   id: string;
@@ -42,7 +37,7 @@ export interface BatchJob {
   id: string;
   insurerId: string;
   insurerName: string;
-  productLob: 'MOTOR' | 'HEALTH' | 'TRAVEL' | 'PA' | 'FIRE' | 'LIFE';
+  productLob: "MOTOR" | "HEALTH" | "TRAVEL" | "PA" | "FIRE" | "LIFE";
   fileName: string;
   fileSizeBytes: number;
   status: BatchJobStatus;
@@ -67,89 +62,89 @@ export interface InsurerOption {
 // ============================================================================
 
 const INSURERS: InsurerOption[] = [
-  { id: 'ins-001', name: 'Viriyah Insurance', code: 'VIRIYAH' },
-  { id: 'ins-002', name: 'MSIG Insurance Thailand', code: 'MSIG' },
-  { id: 'ins-003', name: 'Dhipaya Insurance', code: 'DHIPAYA' },
-  { id: 'ins-004', name: 'Muang Thai Insurance', code: 'MTI' },
-  { id: 'ins-005', name: 'Bangkok Insurance', code: 'BKI' }
+  { id: "ins-001", name: "Viriyah Insurance", code: "VIRIYAH" },
+  { id: "ins-002", name: "MSIG Insurance Thailand", code: "MSIG" },
+  { id: "ins-003", name: "Dhipaya Insurance", code: "DHIPAYA" },
+  { id: "ins-004", name: "Muang Thai Insurance", code: "MTI" },
+  { id: "ins-005", name: "Bangkok Insurance", code: "BKI" },
 ];
 
 const INITIAL_BATCH_JOBS: BatchJob[] = [
   {
-    id: 'BATCH-2026-0891',
-    insurerId: 'ins-001',
-    insurerName: 'Viriyah Insurance',
-    productLob: 'MOTOR',
-    fileName: 'viriyah_offline_renewals_q3_2025.xlsx',
+    id: "BATCH-2026-0891",
+    insurerId: "ins-001",
+    insurerName: "Viriyah Insurance",
+    productLob: "MOTOR",
+    fileName: "viriyah_offline_renewals_q3_2025.xlsx",
     fileSizeBytes: 4210000,
-    status: 'COMPLETED_WITH_ERRORS',
+    status: "COMPLETED_WITH_ERRORS",
     totalRows: 1250,
     successCount: 1242,
     errorCount: 8,
-    s3FileUrl: 's3://pas-import-vault/2026/06/batch_0891.xlsx',
-    createdAt: '2026-06-15 09:20:11',
-    completedAt: '2026-06-15 09:23:44',
-    createdBy: 'operations.admin@broker.co.th',
+    s3FileUrl: "s3://pas-import-vault/2026/06/batch_0891.xlsx",
+    createdAt: "2026-06-15 09:20:11",
+    completedAt: "2026-06-15 09:23:44",
+    createdBy: "operations.admin@broker.co.th",
     errors: [
       {
-        id: 'err-1',
+        id: "err-1",
         rowNumber: 42,
-        fieldName: 'chassis_number',
-        errorReason: 'Chassis VIN must be exactly 17 alphanumeric characters.',
+        fieldName: "chassis_number",
+        errorReason: "Chassis VIN must be exactly 17 alphanumeric characters.",
         maskedRawData: {
-          customer_name: 'Somchai Jaidee',
-          national_id: '***-**-8812',
-          phone_number: '+66-81-***-4491',
-          license_plate: '1กข 9988',
-          chassis_number: 'MRH123456789'
-        }
+          customer_name: "Somchai Jaidee",
+          national_id: "***-**-8812",
+          phone_number: "+66-81-***-4491",
+          license_plate: "1กข 9988",
+          chassis_number: "MRH123456789",
+        },
       },
       {
-        id: 'err-2',
+        id: "err-2",
         rowNumber: 118,
-        fieldName: 'effective_start_date',
-        errorReason: 'Historical policy effective end date cannot precede start date.',
+        fieldName: "effective_start_date",
+        errorReason: "Historical policy effective end date cannot precede start date.",
         maskedRawData: {
-          customer_name: 'Nattapong Kittisak',
-          national_id: '***-**-3341',
-          phone_number: '+66-89-***-1122',
-          license_plate: '3กค 1122',
-          chassis_number: 'MNT12345678901234'
-        }
-      }
-    ]
+          customer_name: "Nattapong Kittisak",
+          national_id: "***-**-3341",
+          phone_number: "+66-89-***-1122",
+          license_plate: "3กค 1122",
+          chassis_number: "MNT12345678901234",
+        },
+      },
+    ],
   },
   {
-    id: 'BATCH-2026-0892',
-    insurerId: 'ins-002',
-    insurerName: 'MSIG Insurance Thailand',
-    productLob: 'TRAVEL',
-    fileName: 'msig_group_travel_migration_final.csv',
+    id: "BATCH-2026-0892",
+    insurerId: "ins-002",
+    insurerName: "MSIG Insurance Thailand",
+    productLob: "TRAVEL",
+    fileName: "msig_group_travel_migration_final.csv",
     fileSizeBytes: 1845000,
-    status: 'COMPLETED',
+    status: "COMPLETED",
     totalRows: 820,
     successCount: 820,
     errorCount: 0,
-    s3FileUrl: 's3://pas-import-vault/2026/06/batch_0892.csv',
-    createdAt: '2026-06-15 11:05:00',
-    completedAt: '2026-06-15 11:06:12',
-    createdBy: 'migration.lead@broker.co.th'
+    s3FileUrl: "s3://pas-import-vault/2026/06/batch_0892.csv",
+    createdAt: "2026-06-15 11:05:00",
+    completedAt: "2026-06-15 11:06:12",
+    createdBy: "migration.lead@broker.co.th",
   },
   {
-    id: 'BATCH-2026-0893',
-    insurerId: 'ins-003',
-    insurerName: 'Dhipaya Insurance',
-    productLob: 'FIRE',
-    fileName: 'dhipaya_commercial_property_list.csv',
+    id: "BATCH-2026-0893",
+    insurerId: "ins-003",
+    insurerName: "Dhipaya Insurance",
+    productLob: "FIRE",
+    fileName: "dhipaya_commercial_property_list.csv",
     fileSizeBytes: 934000,
-    status: 'PROCESSING',
+    status: "PROCESSING",
     totalRows: 500,
     successCount: 310,
     errorCount: 2,
-    s3FileUrl: 's3://pas-import-vault/2026/06/batch_0893.csv',
-    createdAt: '2026-06-15 11:42:19',
-    createdBy: 'operations.admin@broker.co.th'
-  }
+    s3FileUrl: "s3://pas-import-vault/2026/06/batch_0893.csv",
+    createdAt: "2026-06-15 11:42:19",
+    createdBy: "operations.admin@broker.co.th",
+  },
 ];
 
 // ============================================================================
@@ -159,7 +154,7 @@ const INITIAL_BATCH_JOBS: BatchJob[] = [
 export const BulkIngestionPage: React.FC = () => {
   // Form State
   const [selectedInsurer, setSelectedInsurer] = useState<string>(INSURERS[0].id);
-  const [selectedLob, setSelectedLob] = useState<BatchJob['productLob']>('MOTOR');
+  const [selectedLob, setSelectedLob] = useState<BatchJob["productLob"]>("MOTOR");
   const [stageRenewalApplications, setStageRenewalApplications] = useState<boolean>(true);
   const [dryRunMode, setDryRunMode] = useState<boolean>(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -168,8 +163,8 @@ export const BulkIngestionPage: React.FC = () => {
 
   // Table & Filter State
   const [jobs, setJobs] = useState<BatchJob[]>(INITIAL_BATCH_JOBS);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
 
   // Drawer / Modal State
   const [selectedJobForErrors, setSelectedJobForErrors] = useState<BatchJob | null>(null);
@@ -197,16 +192,16 @@ export const BulkIngestionPage: React.FC = () => {
   };
 
   const validateAndSetFile = (file: File) => {
-    const validExtensions = ['.csv', '.xlsx', '.xls'];
+    const validExtensions = [".csv", ".xlsx", ".xls"];
     const isExtensionValid = validExtensions.some((ext) => file.name.toLowerCase().endsWith(ext));
 
     if (!isExtensionValid) {
-      alert('Invalid file format. Please upload a standard CSV or Excel (.xlsx) file.');
+      alert("Invalid file format. Please upload a standard CSV or Excel (.xlsx) file.");
       return;
     }
 
     if (file.size > 25 * 1024 * 1024) {
-      alert('File size exceeds the 25MB limit.');
+      alert("File size exceeds the 25MB limit.");
       return;
     }
 
@@ -230,24 +225,24 @@ export const BulkIngestionPage: React.FC = () => {
             const newJob: BatchJob = {
               id: `BATCH-2026-${Math.floor(1000 + Math.random() * 9000)}`,
               insurerId: selectedInsurer,
-              insurerName: insurerObj?.name || 'Insurer',
+              insurerName: insurerObj?.name || "Insurer",
               productLob: selectedLob,
               fileName: uploadedFile.name,
               fileSizeBytes: uploadedFile.size,
-              status: dryRunMode ? 'COMPLETED' : 'PROCESSING',
+              status: dryRunMode ? "COMPLETED" : "PROCESSING",
               totalRows: 450,
               successCount: dryRunMode ? 450 : 12,
               errorCount: 0,
               s3FileUrl: `s3://pas-import-vault/2026/06/${uploadedFile.name}`,
-              createdAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
-              createdBy: 'operations.admin@broker.co.th'
+              createdAt: new Date().toISOString().replace("T", " ").substring(0, 19),
+              createdBy: "operations.admin@broker.co.th",
             };
 
             setJobs([newJob, ...jobs]);
             setIsUploading(false);
             setUploadProgress(0);
             setUploadedFile(null);
-            if (fileInputRef.current) fileInputRef.current.value = '';
+            if (fileInputRef.current) fileInputRef.current.value = "";
           }, 600);
           return 100;
         }
@@ -263,42 +258,42 @@ export const BulkIngestionPage: React.FC = () => {
       job.fileName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.insurerName.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = statusFilter === 'ALL' || job.status === statusFilter;
+    const matchesStatus = statusFilter === "ALL" || job.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
 
   const getStatusBadge = (status: BatchJobStatus) => {
     switch (status) {
-      case 'COMPLETED':
+      case "COMPLETED":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
             Completed
           </span>
         );
-      case 'COMPLETED_WITH_ERRORS':
+      case "COMPLETED_WITH_ERRORS":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
             Partial Success
           </span>
         );
-      case 'PROCESSING':
+      case "PROCESSING":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
             <RefreshCw className="w-3.5 h-3.5 text-blue-500 animate-spin" />
             Processing (Worker)
           </span>
         );
-      case 'PENDING':
+      case "PENDING":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-600 border border-zinc-200">
             <Clock className="w-3.5 h-3.5 text-zinc-400" />
             Queued
           </span>
         );
-      case 'FAILED':
+      case "FAILED":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
             <XCircle className="w-3.5 h-3.5 text-rose-500" />
@@ -320,11 +315,10 @@ export const BulkIngestionPage: React.FC = () => {
             <span>/</span>
             <span className="text-blue-600">Bulk Ingestion & Migration</span>
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
-            Bulk Policy Ingestion & Migration
-          </h1>
+          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Bulk Policy Ingestion & Migration</h1>
           <p className="text-sm text-zinc-500 mt-1">
-            Ingest external legacy policies, trigger the JIT Renewal Bridge, and stage renewal applications via async workers.
+            Ingest external legacy policies, trigger the JIT Renewal Bridge, and stage renewal applications via async
+            workers.
           </p>
         </div>
 
@@ -402,12 +396,11 @@ export const BulkIngestionPage: React.FC = () => {
         <div className="px-6 py-4 border-b border-zinc-200 bg-zinc-50/70 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileSpreadsheet className="w-5 h-5 text-blue-600" />
-            <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-wide">
-              New File Ingestion Staging
-            </h2>
+            <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-wide">New File Ingestion Staging</h2>
           </div>
           <span className="text-xs text-zinc-500">
-            Target Endpoint: <code className="bg-zinc-200/60 px-1 py-0.5 rounded text-zinc-700">POST /admin/imports/policies</code>
+            Target Endpoint:{" "}
+            <code className="bg-zinc-200/60 px-1 py-0.5 rounded text-zinc-700">POST /admin/imports/policies</code>
           </span>
         </div>
 
@@ -445,7 +438,7 @@ export const BulkIngestionPage: React.FC = () => {
               <div className="relative">
                 <select
                   value={selectedLob}
-                  onChange={(e) => setSelectedLob(e.target.value as BatchJob['productLob'])}
+                  onChange={(e) => setSelectedLob(e.target.value as BatchJob["productLob"])}
                   className="w-full text-sm bg-white border border-zinc-300 rounded-lg px-3.5 py-2.5 text-zinc-800 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   <option value="MOTOR">Motor & Compulsory (CMI)</option>
@@ -486,9 +479,7 @@ export const BulkIngestionPage: React.FC = () => {
                     onChange={(e) => setDryRunMode(e.target.checked)}
                     className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
                   />
-                  <span>
-                    Dry Run only (Validate URE without DB commit)
-                  </span>
+                  <span>Dry Run only (Validate URE without DB commit)</span>
                 </label>
               </div>
             </div>
@@ -505,8 +496,8 @@ export const BulkIngestionPage: React.FC = () => {
               onClick={() => fileInputRef.current?.click()}
               className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
                 uploadedFile
-                  ? 'border-blue-400 bg-blue-50/20'
-                  : 'border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50/50'
+                  ? "border-blue-400 bg-blue-50/20"
+                  : "border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50/50"
               }`}
             >
               <input
@@ -534,7 +525,7 @@ export const BulkIngestionPage: React.FC = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setUploadedFile(null);
-                      if (fileInputRef.current) fileInputRef.current.value = '';
+                      if (fileInputRef.current) fileInputRef.current.value = "";
                     }}
                     className="p-1 hover:bg-zinc-200 rounded-full text-zinc-400 hover:text-zinc-600 ml-4"
                   >
@@ -547,12 +538,8 @@ export const BulkIngestionPage: React.FC = () => {
                     <UploadCloud className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-zinc-700">
-                      Click to upload or drag and drop spreadsheet
-                    </p>
-                    <p className="text-xs text-zinc-400 mt-0.5">
-                      Accepts standard .CSV, .XLSX (Max file size: 25MB)
-                    </p>
+                    <p className="text-sm font-medium text-zinc-700">Click to upload or drag and drop spreadsheet</p>
+                    <p className="text-xs text-zinc-400 mt-0.5">Accepts standard .CSV, .XLSX (Max file size: 25MB)</p>
                   </div>
                 </div>
               )}
@@ -582,9 +569,7 @@ export const BulkIngestionPage: React.FC = () => {
           <div className="flex items-center justify-between pt-2">
             <div className="flex items-center gap-2 text-xs text-zinc-500">
               <ShieldAlert className="w-4 h-4 text-zinc-400" />
-              <span>
-                PII data is AES-256 encrypted at ingestion. Partial success pattern active.
-              </span>
+              <span>PII data is AES-256 encrypted at ingestion. Partial success pattern active.</span>
             </div>
 
             <button
@@ -592,8 +577,8 @@ export const BulkIngestionPage: React.FC = () => {
               disabled={!uploadedFile || isUploading}
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wide uppercase transition ${
                 !uploadedFile || isUploading
-                  ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
+                  ? "bg-zinc-200 text-zinc-400 cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
               }`}
             >
               {isUploading ? (
@@ -700,19 +685,17 @@ export const BulkIngestionPage: React.FC = () => {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4 text-center">
-                      {getStatusBadge(job.status)}
-                    </td>
+                    <td className="py-3.5 px-4 text-center">{getStatusBadge(job.status)}</td>
 
                     <td className="py-3.5 px-4 text-center">
                       <span className="font-semibold text-zinc-900">{job.successCount}</span>
                       <span className="text-zinc-400"> / {job.totalRows}</span>
-                      {job.status === 'PROCESSING' && (
+                      {job.status === "PROCESSING" && (
                         <div className="w-16 bg-zinc-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
                           <div
                             className="bg-blue-600 h-1.5 rounded-full"
                             style={{
-                              width: `${(job.successCount / job.totalRows) * 100}%`
+                              width: `${(job.successCount / job.totalRows) * 100}%`,
                             }}
                           />
                         </div>
@@ -775,9 +758,7 @@ export const BulkIngestionPage: React.FC = () => {
                     {selectedJobForErrors.id}
                   </span>
                   <span className="text-xs text-zinc-400">•</span>
-                  <span className="text-xs font-semibold text-zinc-700">
-                    Row-Level Dead Letter Queue
-                  </span>
+                  <span className="text-xs font-semibold text-zinc-700">Row-Level Dead Letter Queue</span>
                 </div>
                 <h3 className="text-base font-bold text-zinc-900 mt-1">
                   Validation Exceptions ({selectedJobForErrors.errors?.length || 0} Breaches)
@@ -795,8 +776,8 @@ export const BulkIngestionPage: React.FC = () => {
             <div className="bg-amber-50 px-6 py-3 border-b border-amber-200 flex items-start gap-3">
               <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <div className="text-xs text-amber-800">
-                <strong>Thai PDPA Compliance Notice:</strong> Personally Identifiable Information
-                (National ID, Phone) has been mathematically masked prior to persistence in the{' '}
+                <strong>Thai PDPA Compliance Notice:</strong> Personally Identifiable Information (National ID, Phone)
+                has been mathematically masked prior to persistence in the{" "}
                 <code className="bg-amber-100 px-1 py-0.5 rounded">batch_job_errors</code> ledger.
               </div>
             </div>
@@ -804,10 +785,7 @@ export const BulkIngestionPage: React.FC = () => {
             {/* Error Rows List */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {selectedJobForErrors.errors?.map((err) => (
-                <div
-                  key={err.id}
-                  className="bg-white border border-zinc-200 rounded-lg p-4 shadow-2xs space-y-3"
-                >
+                <div key={err.id} className="bg-white border border-zinc-200 rounded-lg p-4 shadow-2xs space-y-3">
                   <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
                     <span className="text-xs font-bold text-zinc-800 bg-zinc-100 px-2 py-0.5 rounded">
                       Row #{err.rowNumber}
@@ -838,9 +816,7 @@ export const BulkIngestionPage: React.FC = () => {
 
             {/* Drawer Actions */}
             <div className="p-4 border-t border-zinc-200 bg-zinc-50 flex items-center justify-between">
-              <span className="text-xs text-zinc-500">
-                Fix records in CSV and re-upload with identical headers.
-              </span>
+              <span className="text-xs text-zinc-500">Fix records in CSV and re-upload with identical headers.</span>
               <button
                 onClick={() => {
                   alert('Generating "Fix & Re-upload" CSV containing only failed rows...');
@@ -878,9 +854,8 @@ export const BulkIngestionPage: React.FC = () => {
 
             <div className="p-6 space-y-4">
               <p className="text-xs text-zinc-600">
-                To guarantee zero column mismatches and maintain Underwriting Rules Engine (URE)
-                stability, download the pre-formatted Excel or CSV schema template for your specific
-                Line of Business.
+                To guarantee zero column mismatches and maintain Underwriting Rules Engine (URE) stability, download the
+                pre-formatted Excel or CSV schema template for your specific Line of Business.
               </p>
 
               <div className="space-y-3">
@@ -890,16 +865,14 @@ export const BulkIngestionPage: React.FC = () => {
                       <FileText className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-zinc-900">
-                        Motor & CMI Ingestion Template (v2.4)
-                      </h4>
+                      <h4 className="text-xs font-bold text-zinc-900">Motor & CMI Ingestion Template (v2.4)</h4>
                       <p className="text-[11px] text-zinc-500">
                         Includes: Chassis (VIN), Red Plate flag, OIC Vehicle Code, Redbook Sum Insured.
                       </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => alert('Downloading motor_ingestion_template_v2.4.xlsx')}
+                    onClick={() => alert("Downloading motor_ingestion_template_v2.4.xlsx")}
                     className="p-2 text-zinc-500 hover:text-blue-600 hover:bg-white rounded border border-transparent hover:border-zinc-200"
                     title="Download Template"
                   >
@@ -913,16 +886,14 @@ export const BulkIngestionPage: React.FC = () => {
                       <FileText className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-zinc-900">
-                        Health & Medical Ingestion Template (v1.9)
-                      </h4>
+                      <h4 className="text-xs font-bold text-zinc-900">Health & Medical Ingestion Template (v1.9)</h4>
                       <p className="text-[11px] text-zinc-500">
                         Includes: Height/Weight, Smoker toggle, Pre-existing exclusion codes.
                       </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => alert('Downloading health_ingestion_template_v1.9.xlsx')}
+                    onClick={() => alert("Downloading health_ingestion_template_v1.9.xlsx")}
                     className="p-2 text-zinc-500 hover:text-emerald-600 hover:bg-white rounded border border-transparent hover:border-zinc-200"
                     title="Download Template"
                   >
@@ -936,16 +907,14 @@ export const BulkIngestionPage: React.FC = () => {
                       <FileText className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-zinc-900">
-                        Fire & Property Ingestion Template (v1.2)
-                      </h4>
+                      <h4 className="text-xs font-bold text-zinc-900">Fire & Property Ingestion Template (v1.2)</h4>
                       <p className="text-[11px] text-zinc-500">
                         Includes: Building Class (1-3), Property Type, Building/Content Sum Insured split.
                       </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => alert('Downloading fire_ingestion_template_v1.2.xlsx')}
+                    onClick={() => alert("Downloading fire_ingestion_template_v1.2.xlsx")}
                     className="p-2 text-zinc-500 hover:text-purple-600 hover:bg-white rounded border border-transparent hover:border-zinc-200"
                     title="Download Template"
                   >

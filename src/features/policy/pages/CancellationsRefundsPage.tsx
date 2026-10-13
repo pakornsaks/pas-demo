@@ -1,37 +1,33 @@
-import React, { useState, useMemo } from 'react';
 import {
-  Search,
-  Filter,
   AlertTriangle,
-  CheckCircle2,
-  XCircle,
-  Clock,
   ArrowRight,
-  ShieldAlert,
+  Building2,
+  CheckCircle2,
+  CheckSquare,
+  Clock,
   Eye,
   EyeOff,
-  Building2,
-  CheckSquare,
+  Filter,
+  Info,
+  Search,
+  ShieldAlert,
   Square,
   TrendingDown,
-  Info
-} from 'lucide-react';
+  XCircle,
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // ==========================================
 // TYPES & INTERFACES (Mapped to PAS Data Schema)
 // ==========================================
 
-export type CancellationCaseType = 
-  | 'CASE_A' // Customer Paid, Broker holds funds
-  | 'CASE_B' // Customer Paid, Broker already sent to Insurer (5-Step manual)
-  | 'CASE_C' // Customer is Unpaid
-  | 'CASE_D'; // Installment (Partially Paid)
+export type CancellationCaseType =
+  | "CASE_A" // Customer Paid, Broker holds funds
+  | "CASE_B" // Customer Paid, Broker already sent to Insurer (5-Step manual)
+  | "CASE_C" // Customer is Unpaid
+  | "CASE_D"; // Installment (Partially Paid)
 
-export type CancellationReasonCode = 
-  | 'CUSTOMER_REQUEST'
-  | 'NON_PAYMENT'
-  | 'INSURER_MANDATED'
-  | 'INSTALLMENT_EXHAUSTION';
+export type CancellationReasonCode = "CUSTOMER_REQUEST" | "NON_PAYMENT" | "INSURER_MANDATED" | "INSTALLMENT_EXHAUSTION";
 
 export interface TrackingFlags {
   is_inform_insurer_cancel: boolean;
@@ -50,16 +46,16 @@ export interface PolicyRecord {
   national_id_raw: string;
   insurer_name: string;
   product_name: string;
-  line_of_business: 'MOTOR' | 'HEALTH' | 'TRAVEL' | 'FIRE';
+  line_of_business: "MOTOR" | "HEALTH" | "TRAVEL" | "FIRE";
   gross_premium: number;
   paid_amount: number;
   agent_id: string;
   agent_name: string;
   original_commission_amount: number;
   commission_rate_percent: number;
-  status: 'ACTIVE' | 'CANCELLED' | 'SUSPENDED';
+  status: "ACTIVE" | "CANCELLED" | "SUSPENDED";
   cancellation_case: CancellationCaseType;
-  payment_method: 'CASH' | 'CREDIT_CARD_FULL' | 'INSTALLMENT';
+  payment_method: "CASH" | "CREDIT_CARD_FULL" | "INSTALLMENT";
   effective_start_date: string;
   expiry_date: string;
   tracking_flags: TrackingFlags;
@@ -80,14 +76,14 @@ export interface ApprovalRequest {
   requested_by_name: string;
   reason_code: CancellationReasonCode;
   created_at: string;
-  status: 'PENDING_APPROVAL' | 'EXECUTED' | 'REJECTED';
+  status: "PENDING_APPROVAL" | "EXECUTED" | "REJECTED";
 }
 
 // Current logged-in user in Backoffice
 const CURRENT_ADMIN_USER = {
-  id: 'usr-admin-002',
-  name: 'Karn (Finance Checker)',
-  role: 'FINANCE_MANAGER',
+  id: "usr-admin-002",
+  name: "Karn (Finance Checker)",
+  role: "FINANCE_MANAGER",
 };
 
 // ==========================================
@@ -96,27 +92,27 @@ const CURRENT_ADMIN_USER = {
 
 const INITIAL_POLICIES: PolicyRecord[] = [
   {
-    policy_id: 'pol-001',
-    policy_number: 'VIR-2026-09121',
-    reference_number: 'TMP-2026-0041',
-    customer_id: 'cust-101',
-    customer_name: 'Somchai Prasert',
-    national_id_masked: '1-1004-XXXX-88-9',
-    national_id_raw: '1-1004-58291-88-9',
-    insurer_name: 'Viriyah Insurance',
-    product_name: 'Motor Type 1 Comprehensive',
-    line_of_business: 'MOTOR',
+    policy_id: "pol-001",
+    policy_number: "VIR-2026-09121",
+    reference_number: "TMP-2026-0041",
+    customer_id: "cust-101",
+    customer_name: "Somchai Prasert",
+    national_id_masked: "1-1004-XXXX-88-9",
+    national_id_raw: "1-1004-58291-88-9",
+    insurer_name: "Viriyah Insurance",
+    product_name: "Motor Type 1 Comprehensive",
+    line_of_business: "MOTOR",
     gross_premium: 24000,
     paid_amount: 24000,
-    agent_id: 'agt-88',
-    agent_name: 'Chatchai Broker Group',
+    agent_id: "agt-88",
+    agent_name: "Chatchai Broker Group",
     original_commission_amount: 4320, // 18%
     commission_rate_percent: 18,
-    status: 'ACTIVE',
-    cancellation_case: 'CASE_A',
-    payment_method: 'CREDIT_CARD_FULL',
-    effective_start_date: '2026-01-10',
-    expiry_date: '2027-01-10',
+    status: "ACTIVE",
+    cancellation_case: "CASE_A",
+    payment_method: "CREDIT_CARD_FULL",
+    effective_start_date: "2026-01-10",
+    expiry_date: "2027-01-10",
     tracking_flags: {
       is_inform_insurer_cancel: false,
       is_insurer_confirmed_cancel: false,
@@ -125,27 +121,27 @@ const INITIAL_POLICIES: PolicyRecord[] = [
     },
   },
   {
-    policy_id: 'pol-002',
-    policy_number: 'BKI-2026-55823',
-    reference_number: 'TMP-2026-0082',
-    customer_id: 'cust-102',
-    customer_name: 'Wandee Siriporn',
-    national_id_masked: '3-1002-XXXX-11-2',
-    national_id_raw: '3-1002-99321-11-2',
-    insurer_name: 'Bangkok Insurance',
-    product_name: 'Health Shield Elite',
-    line_of_business: 'HEALTH',
+    policy_id: "pol-002",
+    policy_number: "BKI-2026-55823",
+    reference_number: "TMP-2026-0082",
+    customer_id: "cust-102",
+    customer_name: "Wandee Siriporn",
+    national_id_masked: "3-1002-XXXX-11-2",
+    national_id_raw: "3-1002-99321-11-2",
+    insurer_name: "Bangkok Insurance",
+    product_name: "Health Shield Elite",
+    line_of_business: "HEALTH",
     gross_premium: 36000,
     paid_amount: 36000,
-    agent_id: 'agt-12',
-    agent_name: 'Sirirat Telesales',
+    agent_id: "agt-12",
+    agent_name: "Sirirat Telesales",
     original_commission_amount: 5400, // 15%
     commission_rate_percent: 15,
-    status: 'ACTIVE',
-    cancellation_case: 'CASE_B',
-    payment_method: 'CASH',
-    effective_start_date: '2026-02-01',
-    expiry_date: '2027-02-01',
+    status: "ACTIVE",
+    cancellation_case: "CASE_B",
+    payment_method: "CASH",
+    effective_start_date: "2026-02-01",
+    expiry_date: "2027-02-01",
     tracking_flags: {
       is_inform_insurer_cancel: true,
       is_insurer_confirmed_cancel: false,
@@ -154,27 +150,27 @@ const INITIAL_POLICIES: PolicyRecord[] = [
     },
   },
   {
-    policy_id: 'pol-003',
-    policy_number: 'TMP-2026-0914',
-    reference_number: 'TMP-2026-0914',
-    customer_id: 'cust-103',
-    customer_name: 'Anan Charoenrat',
-    national_id_masked: '1-4401-XXXX-44-0',
-    national_id_raw: '1-4401-87654-44-0',
-    insurer_name: 'Muang Thai Insurance',
-    product_name: 'Personal Accident Plus',
-    line_of_business: 'MOTOR',
+    policy_id: "pol-003",
+    policy_number: "TMP-2026-0914",
+    reference_number: "TMP-2026-0914",
+    customer_id: "cust-103",
+    customer_name: "Anan Charoenrat",
+    national_id_masked: "1-4401-XXXX-44-0",
+    national_id_raw: "1-4401-87654-44-0",
+    insurer_name: "Muang Thai Insurance",
+    product_name: "Personal Accident Plus",
+    line_of_business: "MOTOR",
     gross_premium: 4500,
     paid_amount: 0,
-    agent_id: 'agt-99',
-    agent_name: 'Direct Online Channel',
+    agent_id: "agt-99",
+    agent_name: "Direct Online Channel",
     original_commission_amount: 450,
     commission_rate_percent: 10,
-    status: 'ACTIVE',
-    cancellation_case: 'CASE_C',
-    payment_method: 'CASH',
-    effective_start_date: '2026-03-01',
-    expiry_date: '2027-03-01',
+    status: "ACTIVE",
+    cancellation_case: "CASE_C",
+    payment_method: "CASH",
+    effective_start_date: "2026-03-01",
+    expiry_date: "2027-03-01",
     tracking_flags: {
       is_inform_insurer_cancel: false,
       is_insurer_confirmed_cancel: false,
@@ -183,27 +179,27 @@ const INITIAL_POLICIES: PolicyRecord[] = [
     },
   },
   {
-    policy_id: 'pol-004',
-    policy_number: 'TIP-2026-44019',
-    reference_number: 'TMP-2026-0309',
-    customer_id: 'cust-104',
-    customer_name: 'Nataporn Srisuk',
-    national_id_masked: '1-1009-XXXX-65-3',
-    national_id_raw: '1-1009-12345-65-3',
-    insurer_name: 'Dhipaya Insurance',
-    product_name: 'Commercial Fire & Asset',
-    line_of_business: 'FIRE',
+    policy_id: "pol-004",
+    policy_number: "TIP-2026-44019",
+    reference_number: "TMP-2026-0309",
+    customer_id: "cust-104",
+    customer_name: "Nataporn Srisuk",
+    national_id_masked: "1-1009-XXXX-65-3",
+    national_id_raw: "1-1009-12345-65-3",
+    insurer_name: "Dhipaya Insurance",
+    product_name: "Commercial Fire & Asset",
+    line_of_business: "FIRE",
     gross_premium: 18000,
     paid_amount: 6000, // 1st cycle paid of 3-month installment
-    agent_id: 'agt-88',
-    agent_name: 'Chatchai Broker Group',
+    agent_id: "agt-88",
+    agent_name: "Chatchai Broker Group",
     original_commission_amount: 2700,
     commission_rate_percent: 15,
-    status: 'ACTIVE',
-    cancellation_case: 'CASE_D',
-    payment_method: 'INSTALLMENT',
-    effective_start_date: '2026-01-15',
-    expiry_date: '2027-01-15',
+    status: "ACTIVE",
+    cancellation_case: "CASE_D",
+    payment_method: "INSTALLMENT",
+    effective_start_date: "2026-01-15",
+    expiry_date: "2027-01-15",
     tracking_flags: {
       is_inform_insurer_cancel: false,
       is_insurer_confirmed_cancel: false,
@@ -215,43 +211,45 @@ const INITIAL_POLICIES: PolicyRecord[] = [
 
 const INITIAL_APPROVAL_REQUESTS: ApprovalRequest[] = [
   {
-    request_id: 'req-001',
-    policy_id: 'pol-002',
-    policy_number: 'BKI-2026-55823',
-    customer_name: 'Wandee Siriporn',
-    cancellation_case: 'CASE_B',
+    request_id: "req-001",
+    policy_id: "pol-002",
+    policy_number: "BKI-2026-55823",
+    customer_name: "Wandee Siriporn",
+    cancellation_case: "CASE_B",
     proposed_refund_amount: 18000,
     calculated_clawback_net: 2619, // Gross 2700 - 3% WHT (81) = 2619
-    requested_by_user_id: 'usr-ops-001',
-    requested_by_name: 'Pakornsak (Ops Maker)',
-    reason_code: 'CUSTOMER_REQUEST',
-    created_at: '2026-03-12 14:20',
-    status: 'PENDING_APPROVAL',
+    requested_by_user_id: "usr-ops-001",
+    requested_by_name: "Pakornsak (Ops Maker)",
+    reason_code: "CUSTOMER_REQUEST",
+    created_at: "2026-03-12 14:20",
+    status: "PENDING_APPROVAL",
   },
 ];
 
 const CancellationsRefundsPage: React.FC = () => {
   // Navigation / Tabs
-  const [activeTab, setActiveTab] = useState<'ACTIVE_POLICIES' | 'APPROVAL_HUB' | 'CANCELLATION_LEDGER'>('ACTIVE_POLICIES');
-  
+  const [activeTab, setActiveTab] = useState<"ACTIVE_POLICIES" | "APPROVAL_HUB" | "CANCELLATION_LEDGER">(
+    "ACTIVE_POLICIES",
+  );
+
   // Data state
   const [policies, setPolicies] = useState<PolicyRecord[]>(INITIAL_POLICIES);
   const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest[]>(INITIAL_APPROVAL_REQUESTS);
-  
+
   // Filters & Search
-  const [searchQuery, setSearchQuery] = useState('');
-  const [caseFilter, setCaseFilter] = useState<string>('ALL');
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [caseFilter, setCaseFilter] = useState<string>("ALL");
+
   // PDPA unmasked items tracker
   const [unmaskedCustomerIds, setUnmaskedCustomerIds] = useState<Record<string, boolean>>({});
 
   // Action Modal State (Screen 8.3.3)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyRecord | null>(null);
-  
+
   // Modal Inputs
-  const [cancelReason, setCancelReason] = useState<CancellationReasonCode>('CUSTOMER_REQUEST');
-  const [refundAmountInput, setRefundAmountInput] = useState<string>('0');
+  const [cancelReason, setCancelReason] = useState<CancellationReasonCode>("CUSTOMER_REQUEST");
+  const [refundAmountInput, setRefundAmountInput] = useState<string>("0");
   const [isExhaustionSelected, setIsExhaustionSelected] = useState<boolean>(false);
   const [modalFlags, setModalFlags] = useState({
     informInsurer: false,
@@ -270,7 +268,7 @@ const CancellationsRefundsPage: React.FC = () => {
 
   // Toggle PDPA Unmask
   const toggleUnmaskPII = (customerId: string) => {
-    setUnmaskedCustomerIds(prev => ({
+    setUnmaskedCustomerIds((prev) => ({
       ...prev,
       [customerId]: !prev[customerId],
     }));
@@ -280,13 +278,12 @@ const CancellationsRefundsPage: React.FC = () => {
   // Open Cancellation Modal (Screen 8.3.3)
   const handleOpenCancelModal = (policy: PolicyRecord) => {
     setSelectedPolicy(policy);
-    setCancelReason('CUSTOMER_REQUEST');
+    setCancelReason("CUSTOMER_REQUEST");
     setIsExhaustionSelected(false);
-    
+
     // Auto-calculate suggested Pro-Rata refund (simplified standard formula)
-    const suggestedRefund = policy.cancellation_case === 'CASE_C' 
-      ? 0 
-      : Math.round((policy.paid_amount * 0.6) * 100) / 100;
+    const suggestedRefund =
+      policy.cancellation_case === "CASE_C" ? 0 : Math.round(policy.paid_amount * 0.6 * 100) / 100;
 
     setRefundAmountInput(suggestedRefund.toString());
     setModalFlags({
@@ -301,7 +298,7 @@ const CancellationsRefundsPage: React.FC = () => {
   // Formula: Clawback Amount = (Refunded Premium / Original Premium) * Original Commission
   const clawbackCalculations = useMemo(() => {
     if (!selectedPolicy) return { grossClawback: 0, whtAmount: 0, netClawback: 0 };
-    
+
     // If Exhaustion Cancel (Case D Option 2): Clawback is 0
     if (isExhaustionSelected) {
       return { grossClawback: 0, whtAmount: 0, netClawback: 0 };
@@ -313,8 +310,8 @@ const CancellationsRefundsPage: React.FC = () => {
     }
 
     const refundRatio = Math.min(parsedRefund / selectedPolicy.gross_premium, 1);
-    const grossClawback = Math.round((refundRatio * selectedPolicy.original_commission_amount) * 100) / 100;
-    const whtAmount = Math.round((grossClawback * 0.03) * 100) / 100; // 3% Thai Withholding Tax reversal
+    const grossClawback = Math.round(refundRatio * selectedPolicy.original_commission_amount * 100) / 100;
+    const whtAmount = Math.round(grossClawback * 0.03 * 100) / 100; // 3% Thai Withholding Tax reversal
     const netClawback = Math.round((grossClawback - whtAmount) * 100) / 100;
 
     return { grossClawback, whtAmount, netClawback };
@@ -324,10 +321,10 @@ const CancellationsRefundsPage: React.FC = () => {
   const handleSubmitCancellation = () => {
     if (!selectedPolicy) return;
 
-    const refundAmt = isExhaustionSelected ? 0 : (parseFloat(refundAmountInput) || 0);
+    const refundAmt = isExhaustionSelected ? 0 : parseFloat(refundAmountInput) || 0;
 
     // If refund > 0 or Case B, route through Maker-Checker approval_requests
-    if (refundAmt > 0 || selectedPolicy.cancellation_case === 'CASE_B') {
+    if (refundAmt > 0 || selectedPolicy.cancellation_case === "CASE_B") {
       const newRequest: ApprovalRequest = {
         request_id: `req-${Date.now()}`,
         policy_id: selectedPolicy.policy_id,
@@ -338,32 +335,36 @@ const CancellationsRefundsPage: React.FC = () => {
         calculated_clawback_net: clawbackCalculations.netClawback,
         requested_by_user_id: CURRENT_ADMIN_USER.id,
         requested_by_name: CURRENT_ADMIN_USER.name,
-        reason_code: isExhaustionSelected ? 'INSTALLMENT_EXHAUSTION' : cancelReason,
-        created_at: new Date().toISOString().replace('T', ' ').substring(0, 16),
-        status: 'PENDING_APPROVAL',
+        reason_code: isExhaustionSelected ? "INSTALLMENT_EXHAUSTION" : cancelReason,
+        created_at: new Date().toISOString().replace("T", " ").substring(0, 16),
+        status: "PENDING_APPROVAL",
       };
 
       setApprovalRequests([newRequest, ...approvalRequests]);
       setIsModalOpen(false);
-      showToast(`Maker-Checker Ticket Staged: Cancellation Request #${newRequest.request_id} created for manager verification.`);
-      setActiveTab('APPROVAL_HUB');
+      showToast(
+        `Maker-Checker Ticket Staged: Cancellation Request #${newRequest.request_id} created for manager verification.`,
+      );
+      setActiveTab("APPROVAL_HUB");
       return;
     }
 
     // Direct termination for Unpaid (Case C) or 0 Refund cases
-    setPolicies(prev =>
-      prev.map(p => {
+    setPolicies((prev) =>
+      prev.map((p) => {
         if (p.policy_id === selectedPolicy.policy_id) {
           return {
             ...p,
-            status: 'CANCELLED',
+            status: "CANCELLED",
             refund_amount: 0,
             clawback_amount: 0,
-            scheduled_cancellation_date: isExhaustionSelected ? '2026-05-15 (Exhausted)' : new Date().toISOString().split('T')[0],
+            scheduled_cancellation_date: isExhaustionSelected
+              ? "2026-05-15 (Exhausted)"
+              : new Date().toISOString().split("T")[0],
           };
         }
         return p;
-      })
+      }),
     );
 
     setIsModalOpen(false);
@@ -377,28 +378,28 @@ const CancellationsRefundsPage: React.FC = () => {
     // Enforce BRD Segregation of Duties (GOV-02, BO-08)
     if (request.requested_by_user_id === CURRENT_ADMIN_USER.id) {
       setApprovalError(
-        `Segregation of Duties Violation (BO-08): You created this request (${request.requested_by_name}) and cannot approve your own submission.`
+        `Segregation of Duties Violation (BO-08): You created this request (${request.requested_by_name}) and cannot approve your own submission.`,
       );
       return;
     }
 
     // Process Approval & Balance Ledger
-    setApprovalRequests(prev =>
-      prev.map(r => (r.request_id === request.request_id ? { ...r, status: 'EXECUTED' } : r))
+    setApprovalRequests((prev) =>
+      prev.map((r) => (r.request_id === request.request_id ? { ...r, status: "EXECUTED" } : r)),
     );
 
-    setPolicies(prev =>
-      prev.map(p => {
+    setPolicies((prev) =>
+      prev.map((p) => {
         if (p.policy_id === request.policy_id) {
           return {
             ...p,
-            status: 'CANCELLED',
+            status: "CANCELLED",
             refund_amount: request.proposed_refund_amount,
             clawback_amount: request.calculated_clawback_net,
           };
         }
         return p;
-      })
+      }),
     );
 
     showToast(`Approved! Request #${request.request_id} executed. REFUND_OUT & CLAWBACK recorded in ledger.`);
@@ -406,18 +407,18 @@ const CancellationsRefundsPage: React.FC = () => {
 
   // Filtered Policies
   const filteredPolicies = useMemo(() => {
-    return policies.filter(p => {
+    return policies.filter((p) => {
       const matchesSearch =
         p.policy_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.reference_number.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesCase = caseFilter === 'ALL' || p.cancellation_case === caseFilter;
 
-      if (activeTab === 'CANCELLATION_LEDGER') {
-        return matchesSearch && matchesCase && p.status === 'CANCELLED';
+      const matchesCase = caseFilter === "ALL" || p.cancellation_case === caseFilter;
+
+      if (activeTab === "CANCELLATION_LEDGER") {
+        return matchesSearch && matchesCase && p.status === "CANCELLED";
       }
-      return matchesSearch && matchesCase && p.status === 'ACTIVE';
+      return matchesSearch && matchesCase && p.status === "ACTIVE";
     });
   }, [policies, searchQuery, caseFilter, activeTab]);
 
@@ -441,7 +442,8 @@ const CancellationsRefundsPage: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-zinc-500 mt-1">
-            Governs the 4 lifecycle cancellation cases, manual refund overrides, agent clawbacks, and Maker-Checker segregation.
+            Governs the 4 lifecycle cancellation cases, manual refund overrides, agent clawbacks, and Maker-Checker
+            segregation.
           </p>
         </div>
 
@@ -459,52 +461,52 @@ const CancellationsRefundsPage: React.FC = () => {
       {/* Navigation Tabs */}
       <div className="flex border-b border-zinc-200 gap-6">
         <button
-          onClick={() => setActiveTab('ACTIVE_POLICIES')}
+          onClick={() => setActiveTab("ACTIVE_POLICIES")}
           className={`pb-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
-            activeTab === 'ACTIVE_POLICIES'
-              ? 'border-indigo-600 text-indigo-600'
-              : 'border-transparent text-zinc-500 hover:text-zinc-800'
+            activeTab === "ACTIVE_POLICIES"
+              ? "border-indigo-600 text-indigo-600"
+              : "border-transparent text-zinc-500 hover:text-zinc-800"
           }`}
         >
           <span>Active Contracts Queue</span>
           <span className="bg-zinc-100 text-zinc-600 text-xs px-2 py-0.5 rounded-full border border-zinc-200 font-semibold">
-            {policies.filter(p => p.status === 'ACTIVE').length}
+            {policies.filter((p) => p.status === "ACTIVE").length}
           </span>
         </button>
 
         <button
-          onClick={() => setActiveTab('APPROVAL_HUB')}
+          onClick={() => setActiveTab("APPROVAL_HUB")}
           className={`pb-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
-            activeTab === 'APPROVAL_HUB'
-              ? 'border-indigo-600 text-indigo-600'
-              : 'border-transparent text-zinc-500 hover:text-zinc-800'
+            activeTab === "APPROVAL_HUB"
+              ? "border-indigo-600 text-indigo-600"
+              : "border-transparent text-zinc-500 hover:text-zinc-800"
           }`}
         >
           <span>Maker-Checker Approval Hub</span>
-          {approvalRequests.filter(r => r.status === 'PENDING_APPROVAL').length > 0 && (
+          {approvalRequests.filter((r) => r.status === "PENDING_APPROVAL").length > 0 && (
             <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full border border-amber-300 font-bold">
-              {approvalRequests.filter(r => r.status === 'PENDING_APPROVAL').length}
+              {approvalRequests.filter((r) => r.status === "PENDING_APPROVAL").length}
             </span>
           )}
         </button>
 
         <button
-          onClick={() => setActiveTab('CANCELLATION_LEDGER')}
+          onClick={() => setActiveTab("CANCELLATION_LEDGER")}
           className={`pb-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
-            activeTab === 'CANCELLATION_LEDGER'
-              ? 'border-indigo-600 text-indigo-600'
-              : 'border-transparent text-zinc-500 hover:text-zinc-800'
+            activeTab === "CANCELLATION_LEDGER"
+              ? "border-indigo-600 text-indigo-600"
+              : "border-transparent text-zinc-500 hover:text-zinc-800"
           }`}
         >
           <span>Cancelled Policies Ledger</span>
           <span className="bg-zinc-100 text-zinc-600 text-xs px-2 py-0.5 rounded-full border border-zinc-200 font-semibold">
-            {policies.filter(p => p.status === 'CANCELLED').length}
+            {policies.filter((p) => p.status === "CANCELLED").length}
           </span>
         </button>
       </div>
 
       {/* Main Content Area */}
-      {activeTab === 'APPROVAL_HUB' ? (
+      {activeTab === "APPROVAL_HUB" ? (
         /* ========================================================= */
         /* TAB 2: MAKER-CHECKER APPROVAL HUB                         */
         /* ========================================================= */
@@ -523,7 +525,9 @@ const CancellationsRefundsPage: React.FC = () => {
             <div className="p-4 bg-zinc-50 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-semibold text-zinc-800">Pending Cancellation & Refund Approvals</h2>
-                <p className="text-xs text-zinc-500">Requires Finance Manager check before REFUND_OUT and CLAWBACK hit the ledger.</p>
+                <p className="text-xs text-zinc-500">
+                  Requires Finance Manager check before REFUND_OUT and CLAWBACK hit the ledger.
+                </p>
               </div>
               <span className="text-xs font-mono text-zinc-500 bg-white border border-zinc-200 px-2.5 py-1 rounded">
                 Target: approval_requests
@@ -552,7 +556,7 @@ const CancellationsRefundsPage: React.FC = () => {
                     </td>
                   </tr>
                 ) : (
-                  approvalRequests.map(req => (
+                  approvalRequests.map((req) => (
                     <tr key={req.request_id} className="hover:bg-zinc-50/80 transition-colors">
                       <td className="py-3.5 px-4 font-mono font-medium text-zinc-700">{req.request_id}</td>
                       <td className="py-3.5 px-4 font-medium text-indigo-600">{req.policy_number}</td>
@@ -573,19 +577,19 @@ const CancellationsRefundsPage: React.FC = () => {
                         <span className="text-[10px] text-zinc-400 font-mono">{req.requested_by_user_id}</span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
-                        {req.status === 'PENDING_APPROVAL' && (
+                        {req.status === "PENDING_APPROVAL" && (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
                             <Clock className="w-3 h-3" /> Pending Review
                           </span>
                         )}
-                        {req.status === 'EXECUTED' && (
+                        {req.status === "EXECUTED" && (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                             <CheckCircle2 className="w-3 h-3" /> Executed
                           </span>
                         )}
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        {req.status === 'PENDING_APPROVAL' && (
+                        {req.status === "PENDING_APPROVAL" && (
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => handleApproveRequest(req)}
@@ -595,8 +599,8 @@ const CancellationsRefundsPage: React.FC = () => {
                             </button>
                             <button
                               onClick={() => {
-                                setApprovalRequests(prev =>
-                                  prev.map(r => (r.request_id === req.request_id ? { ...r, status: 'REJECTED' } : r))
+                                setApprovalRequests((prev) =>
+                                  prev.map((r) => (r.request_id === req.request_id ? { ...r, status: "REJECTED" } : r)),
                                 );
                                 showToast(`Request #${req.request_id} was rejected.`);
                               }}
@@ -627,7 +631,7 @@ const CancellationsRefundsPage: React.FC = () => {
                 type="text"
                 placeholder="Search policy no, customer, or reference ID..."
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-zinc-800"
               />
             </div>
@@ -637,7 +641,7 @@ const CancellationsRefundsPage: React.FC = () => {
               <span className="text-xs text-zinc-500 font-medium">Cancellation Case:</span>
               <select
                 value={caseFilter}
-                onChange={e => setCaseFilter(e.target.value)}
+                onChange={(e) => setCaseFilter(e.target.value)}
                 className="text-xs bg-zinc-50 border border-zinc-200 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-zinc-800 font-medium"
               >
                 <option value="ALL">All Handlers</option>
@@ -675,7 +679,7 @@ const CancellationsRefundsPage: React.FC = () => {
                       </td>
                     </tr>
                   ) : (
-                    filteredPolicies.map(pol => {
+                    filteredPolicies.map((pol) => {
                       const isUnmasked = !!unmaskedCustomerIds[pol.customer_id];
                       return (
                         <tr key={pol.policy_id} className="hover:bg-zinc-50/70 transition-colors">
@@ -713,22 +717,22 @@ const CancellationsRefundsPage: React.FC = () => {
 
                           {/* Case Badge */}
                           <td className="py-3 px-4">
-                            {pol.cancellation_case === 'CASE_A' && (
+                            {pol.cancellation_case === "CASE_A" && (
                               <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
                                 Case A: Held by Broker
                               </span>
                             )}
-                            {pol.cancellation_case === 'CASE_B' && (
+                            {pol.cancellation_case === "CASE_B" && (
                               <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
                                 Case B: Sent to Carrier
                               </span>
                             )}
-                            {pol.cancellation_case === 'CASE_C' && (
+                            {pol.cancellation_case === "CASE_C" && (
                               <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-100 text-zinc-700 border border-zinc-200">
                                 Case C: Unpaid (Offset)
                               </span>
                             )}
-                            {pol.cancellation_case === 'CASE_D' && (
+                            {pol.cancellation_case === "CASE_D" && (
                               <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
                                 Case D: Installment
                               </span>
@@ -747,19 +751,32 @@ const CancellationsRefundsPage: React.FC = () => {
                           <td className="py-3 px-4">
                             <div className="text-zinc-800 font-medium">{pol.agent_name}</div>
                             <div className="text-[11px] text-zinc-400 font-mono">
-                              Comm: THB {pol.original_commission_amount.toLocaleString()} ({pol.commission_rate_percent}%)
+                              Comm: THB {pol.original_commission_amount.toLocaleString()} ({pol.commission_rate_percent}
+                              %)
                             </div>
                           </td>
 
                           {/* Flags */}
                           <td className="py-3 px-4">
                             <div className="flex flex-col gap-1 text-[10px]">
-                              <span className={`inline-flex items-center gap-1 ${pol.tracking_flags.is_inform_insurer_cancel ? 'text-emerald-700 font-medium' : 'text-zinc-400'}`}>
-                                {pol.tracking_flags.is_inform_insurer_cancel ? <CheckSquare className="w-3 h-3 text-emerald-600" /> : <Square className="w-3 h-3" />}
+                              <span
+                                className={`inline-flex items-center gap-1 ${pol.tracking_flags.is_inform_insurer_cancel ? "text-emerald-700 font-medium" : "text-zinc-400"}`}
+                              >
+                                {pol.tracking_flags.is_inform_insurer_cancel ? (
+                                  <CheckSquare className="w-3 h-3 text-emerald-600" />
+                                ) : (
+                                  <Square className="w-3 h-3" />
+                                )}
                                 Carrier Informed
                               </span>
-                              <span className={`inline-flex items-center gap-1 ${pol.tracking_flags.is_insurer_confirmed_cancel ? 'text-emerald-700 font-medium' : 'text-zinc-400'}`}>
-                                {pol.tracking_flags.is_insurer_confirmed_cancel ? <CheckSquare className="w-3 h-3 text-emerald-600" /> : <Square className="w-3 h-3" />}
+                              <span
+                                className={`inline-flex items-center gap-1 ${pol.tracking_flags.is_insurer_confirmed_cancel ? "text-emerald-700 font-medium" : "text-zinc-400"}`}
+                              >
+                                {pol.tracking_flags.is_insurer_confirmed_cancel ? (
+                                  <CheckSquare className="w-3 h-3 text-emerald-600" />
+                                ) : (
+                                  <Square className="w-3 h-3" />
+                                )}
                                 Carrier Confirmed
                               </span>
                             </div>
@@ -767,7 +784,7 @@ const CancellationsRefundsPage: React.FC = () => {
 
                           {/* Status */}
                           <td className="py-3 px-4 text-center">
-                            {pol.status === 'ACTIVE' ? (
+                            {pol.status === "ACTIVE" ? (
                               <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                 ACTIVE
                               </span>
@@ -780,7 +797,7 @@ const CancellationsRefundsPage: React.FC = () => {
 
                           {/* Actions */}
                           <td className="py-3 px-4 text-right">
-                            {pol.status === 'ACTIVE' ? (
+                            {pol.status === "ACTIVE" ? (
                               <button
                                 onClick={() => handleOpenCancelModal(pol)}
                                 className="px-3 py-1 bg-white border border-rose-300 text-rose-700 font-medium rounded hover:bg-rose-50 transition shadow-2xs"
@@ -818,10 +835,7 @@ const CancellationsRefundsPage: React.FC = () => {
                   {selectedPolicy.policy_number} • {selectedPolicy.customer_name} ({selectedPolicy.product_name})
                 </p>
               </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-600 transition"
-              >
+              <button onClick={() => setIsModalOpen(false)} className="text-zinc-400 hover:text-zinc-600 transition">
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
@@ -839,13 +853,13 @@ const CancellationsRefundsPage: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-zinc-600 mt-0.5 leading-relaxed">
-                    {selectedPolicy.cancellation_case === 'CASE_A' &&
-                      'Customer paid, Broker holds money. Refund is handled directly by Broker and hidden from the Insurer Payable ledger.'}
-                    {selectedPolicy.cancellation_case === 'CASE_B' &&
-                      'Customer paid, Broker already remitted funds to Insurer. You must coordinate with the Insurer, capture the approved refund amount, and execute the 5-step checklist.'}
-                    {selectedPolicy.cancellation_case === 'CASE_C' &&
-                      'Customer has not paid. Policy contract will be immediately terminated. No refund or commission clawback is incurred.'}
-                    {selectedPolicy.cancellation_case === 'CASE_D' &&
+                    {selectedPolicy.cancellation_case === "CASE_A" &&
+                      "Customer paid, Broker holds money. Refund is handled directly by Broker and hidden from the Insurer Payable ledger."}
+                    {selectedPolicy.cancellation_case === "CASE_B" &&
+                      "Customer paid, Broker already remitted funds to Insurer. You must coordinate with the Insurer, capture the approved refund amount, and execute the 5-step checklist."}
+                    {selectedPolicy.cancellation_case === "CASE_C" &&
+                      "Customer has not paid. Policy contract will be immediately terminated. No refund or commission clawback is incurred."}
+                    {selectedPolicy.cancellation_case === "CASE_D" &&
                       'Installment policy. You may either issue an immediate manual refund or toggle "Cancel when paid money is exhausted".'}
                   </p>
                 </div>
@@ -858,7 +872,7 @@ const CancellationsRefundsPage: React.FC = () => {
                   <label className="block text-zinc-700 font-semibold mb-1">Cancellation Reason</label>
                   <select
                     value={cancelReason}
-                    onChange={e => setCancelReason(e.target.value as CancellationReasonCode)}
+                    onChange={(e) => setCancelReason(e.target.value as CancellationReasonCode)}
                     className="w-full bg-white border border-zinc-200 rounded px-3 py-2 text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                   >
                     <option value="CUSTOMER_REQUEST">Customer Direct Request</option>
@@ -870,16 +884,14 @@ const CancellationsRefundsPage: React.FC = () => {
 
                 {/* Refund Input */}
                 <div>
-                  <label className="block text-zinc-700 font-semibold mb-1">
-                    Approved Refund Amount (THB)
-                  </label>
+                  <label className="block text-zinc-700 font-semibold mb-1">Approved Refund Amount (THB)</label>
                   <div className="relative">
                     <span className="absolute left-3 top-2 text-zinc-400 font-mono">฿</span>
                     <input
                       type="number"
-                      disabled={isExhaustionSelected || selectedPolicy.cancellation_case === 'CASE_C'}
-                      value={isExhaustionSelected ? '0' : refundAmountInput}
-                      onChange={e => setRefundAmountInput(e.target.value)}
+                      disabled={isExhaustionSelected || selectedPolicy.cancellation_case === "CASE_C"}
+                      value={isExhaustionSelected ? "0" : refundAmountInput}
+                      onChange={(e) => setRefundAmountInput(e.target.value)}
                       className="w-full pl-7 pr-3 py-1.5 border border-zinc-200 rounded font-mono text-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
@@ -890,13 +902,13 @@ const CancellationsRefundsPage: React.FC = () => {
               </div>
 
               {/* Installment Exhaustion Option (Case D Special Feature) */}
-              {selectedPolicy.cancellation_case === 'CASE_D' && (
+              {selectedPolicy.cancellation_case === "CASE_D" && (
                 <div className="p-3 bg-amber-50/60 border border-amber-200 rounded-lg">
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={isExhaustionSelected}
-                      onChange={e => setIsExhaustionSelected(e.target.checked)}
+                      onChange={(e) => setIsExhaustionSelected(e.target.checked)}
                       className="w-4 h-4 text-indigo-600 rounded border-zinc-300 focus:ring-indigo-500"
                     />
                     <div>
@@ -904,7 +916,8 @@ const CancellationsRefundsPage: React.FC = () => {
                         Cancel when paid money is exhausted (Option 2)
                       </span>
                       <span className="text-zinc-600 text-[11px] block">
-                        The contract stays ACTIVE until the pro-rata value reaches 0 THB. Refund will be 0 THB and Agent Clawback will be 0 THB.
+                        The contract stays ACTIVE until the pro-rata value reaches 0 THB. Refund will be 0 THB and Agent
+                        Clawback will be 0 THB.
                       </span>
                     </div>
                   </label>
@@ -912,7 +925,7 @@ const CancellationsRefundsPage: React.FC = () => {
               )}
 
               {/* 5-Step Checklist Flags for Case B */}
-              {selectedPolicy.cancellation_case === 'CASE_B' && (
+              {selectedPolicy.cancellation_case === "CASE_B" && (
                 <div className="border border-zinc-200 rounded-lg p-4 bg-zinc-50/50 space-y-2.5">
                   <span className="font-bold text-zinc-800 block text-[11px] uppercase tracking-wider">
                     5-Step Manual Operational Flags (Case B Protocol)
@@ -922,7 +935,7 @@ const CancellationsRefundsPage: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={modalFlags.informInsurer}
-                      onChange={e => setModalFlags({ ...modalFlags, informInsurer: e.target.checked })}
+                      onChange={(e) => setModalFlags({ ...modalFlags, informInsurer: e.target.checked })}
                       className="w-3.5 h-3.5 rounded text-indigo-600 border-zinc-300"
                     />
                     <span>Flag 1: Inform Insurer of cancellation intent</span>
@@ -932,7 +945,7 @@ const CancellationsRefundsPage: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={modalFlags.insurerConfirmed}
-                      onChange={e => setModalFlags({ ...modalFlags, insurerConfirmed: e.target.checked })}
+                      onChange={(e) => setModalFlags({ ...modalFlags, insurerConfirmed: e.target.checked })}
                       className="w-3.5 h-3.5 rounded text-indigo-600 border-zinc-300"
                     />
                     <span>Flag 2: Insurer Confirmed Cancel & verified fiat refund amount</span>
@@ -942,7 +955,7 @@ const CancellationsRefundsPage: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={modalFlags.moneyReturned}
-                      onChange={e => setModalFlags({ ...modalFlags, moneyReturned: e.target.checked })}
+                      onChange={(e) => setModalFlags({ ...modalFlags, moneyReturned: e.target.checked })}
                       className="w-3.5 h-3.5 rounded text-indigo-600 border-zinc-300"
                     />
                     <span>Flag 3: Money Returned to Customer (Finance Wire Completed)</span>
@@ -981,7 +994,8 @@ const CancellationsRefundsPage: React.FC = () => {
               <div className="text-[11px] text-zinc-500 bg-blue-50 border border-blue-200 p-2.5 rounded text-blue-900 flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>
-                  Submitting this action will stage a record in <code className="font-bold">approval_requests</code>. A separate Finance Manager must confirm execution.
+                  Submitting this action will stage a record in <code className="font-bold">approval_requests</code>. A
+                  separate Finance Manager must confirm execution.
                 </span>
               </div>
             </div>

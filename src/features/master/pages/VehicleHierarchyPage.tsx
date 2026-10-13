@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 // --- Types & Interfaces ตามสเปก PAS Master Data ---
 export interface VehicleBrand {
@@ -130,18 +130,14 @@ export default function VehicleHierarchyPage({
   // ตัวกรอง Year ตาม Model ที่เลือก
   const availableYears = useMemo(() => {
     if (!selectedModelId) return [];
-    const years = MOCK_SUBMODELS.filter((s) => s.model_id === selectedModelId).map(
-      (s) => s.manufacture_year
-    );
+    const years = MOCK_SUBMODELS.filter((s) => s.model_id === selectedModelId).map((s) => s.manufacture_year);
     return Array.from(new Set(years)).sort((a, b) => b - a);
   }, [selectedModelId]);
 
   // ตัวกรอง Sub-model ตาม Model และ Year ที่เลือก
   const availableSubModels = useMemo(() => {
     if (!selectedModelId || !selectedYear) return [];
-    return MOCK_SUBMODELS.filter(
-      (s) => s.model_id === selectedModelId && s.manufacture_year === selectedYear
-    );
+    return MOCK_SUBMODELS.filter((s) => s.model_id === selectedModelId && s.manufacture_year === selectedYear);
   }, [selectedModelId, selectedYear]);
 
   // รายละเอียดของ Sub-model ที่เลือก
@@ -162,12 +158,10 @@ export default function VehicleHierarchyPage({
           <span>•</span>
           <span>Redbook Cascading Lookup</span>
         </div>
-        <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mt-2">
-          {title}
-        </h1>
+        <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mt-2">{title}</h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-          การจัดเก็บและเลือกข้อมูลแบบลำดับขั้น (Hierarchical Cascading Structure) ช่วยป้องกันข้อผิดพลาดจากการกรอกข้อมูล (Typo)
-          พร้อมล็อกรหัสพิกัด คปภ. (OIC Code) และมูลค่าตลาดกลาง Redbook โดยอัตโนมัติ
+          การจัดเก็บและเลือกข้อมูลแบบลำดับขั้น (Hierarchical Cascading Structure) ช่วยป้องกันข้อผิดพลาดจากการกรอกข้อมูล
+          (Typo) พร้อมล็อกรหัสพิกัด คปภ. (OIC Code) และมูลค่าตลาดกลาง Redbook โดยอัตโนมัติ
         </p>
       </div>
 
@@ -323,9 +317,9 @@ export default function VehicleHierarchyPage({
           <div className="text-xs font-bold text-zinc-400 uppercase tracking-wide">Level 3: Sub-model & Year</div>
           <h4 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 mt-1">vehicle_submodel</h4>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2">
-            ระดับย่อยที่สุด (Trim/Grade/Year) บันทึกมูลค่าตลาดกลาง{" "}
-            <code className="text-blue-500">redbook_value</code> และขนาดเครื่องยนต์/แบตเตอรี่ใน{" "}
-            <code className="text-blue-500">vehicle_submodel_version</code> เพื่อใช้กำหนดกรอบทุนประกัน
+            ระดับย่อยที่สุด (Trim/Grade/Year) บันทึกมูลค่าตลาดกลาง <code className="text-blue-500">redbook_value</code>{" "}
+            และขนาดเครื่องยนต์/แบตเตอรี่ใน <code className="text-blue-500">vehicle_submodel_version</code>{" "}
+            เพื่อใช้กำหนดกรอบทุนประกัน
           </p>
         </div>
       </div>

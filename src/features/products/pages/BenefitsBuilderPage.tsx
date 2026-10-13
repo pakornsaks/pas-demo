@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
 import {
+  AlertCircle,
+  ArrowUpDown,
+  CheckCircle2,
+  Copy,
+  Download,
+  Filter,
   GripVertical,
+  Layers,
   Plus,
-  Trash2,
   Save,
   Search,
-  Filter,
-  ArrowUpDown,
-  Download,
+  Trash2,
   Upload,
-  AlertCircle,
-  CheckCircle2,
-  Layers,
-  Copy,
-} from 'lucide-react';
+} from "lucide-react";
+import React, { useState } from "react";
 
 export interface PlanBenefitRow {
   id: string;
@@ -30,112 +30,112 @@ export interface PlanBenefitRow {
 export interface PlanMetadata {
   product_id: string;
   product_name: string;
-  lob_code: 'MOTOR' | 'HEALTH' | 'PA' | 'FIRE' | 'TRAVEL' | 'CUSTOM';
+  lob_code: "MOTOR" | "HEALTH" | "PA" | "FIRE" | "TRAVEL" | "CUSTOM";
   plan_id: string;
   plan_name: string;
   plan_code: string;
   version: string;
-  version_status: 'DRAFT' | 'ACTIVE' | 'SCHEDULED';
+  version_status: "DRAFT" | "ACTIVE" | "SCHEDULED";
   base_premium: number;
 }
 
 const BENEFIT_GROUPS = [
-  'Third Party Liability',
-  'Own Damage & Vehicle Protection',
-  'Personal Accident & Medical Expense',
-  'Additional Perils & Natural Disasters',
-  'Special Endorsement Clauses',
+  "Third Party Liability",
+  "Own Damage & Vehicle Protection",
+  "Personal Accident & Medical Expense",
+  "Additional Perils & Natural Disasters",
+  "Special Endorsement Clauses",
 ];
 
 const INITIAL_BENEFITS: PlanBenefitRow[] = [
   {
-    id: 'row-1',
-    benefit_id: 'ben-001',
-    benefit_code: 'BEN-TPL-BI-PERS',
-    coverage_name: 'Third Party Bodily Injury or Death (Per Person)',
-    group_name: 'Third Party Liability',
+    id: "row-1",
+    benefit_id: "ben-001",
+    benefit_code: "BEN-TPL-BI-PERS",
+    coverage_name: "Third Party Bodily Injury or Death (Per Person)",
+    group_name: "Third Party Liability",
     limit_amount: 500000,
-    limit_display_unit: 'THB / Person',
+    limit_display_unit: "THB / Person",
     display_order: 1,
   },
   {
-    id: 'row-2',
-    benefit_id: 'ben-002',
-    benefit_code: 'BEN-TPL-BI-OCCUR',
-    coverage_name: 'Third Party Bodily Injury or Death (Per Occurrence)',
-    group_name: 'Third Party Liability',
+    id: "row-2",
+    benefit_id: "ben-002",
+    benefit_code: "BEN-TPL-BI-OCCUR",
+    coverage_name: "Third Party Bodily Injury or Death (Per Occurrence)",
+    group_name: "Third Party Liability",
     limit_amount: 10000000,
-    limit_display_unit: 'THB / Occurrence',
+    limit_display_unit: "THB / Occurrence",
     display_order: 2,
   },
   {
-    id: 'row-3',
-    benefit_id: 'ben-003',
-    benefit_code: 'BEN-TPL-PROP',
-    coverage_name: 'Third Party Property Damage (Per Occurrence)',
-    group_name: 'Third Party Liability',
+    id: "row-3",
+    benefit_id: "ben-003",
+    benefit_code: "BEN-TPL-PROP",
+    coverage_name: "Third Party Property Damage (Per Occurrence)",
+    group_name: "Third Party Liability",
     limit_amount: 2500000,
-    limit_display_unit: 'THB / Occurrence',
+    limit_display_unit: "THB / Occurrence",
     display_order: 3,
   },
   {
-    id: 'row-4',
-    benefit_id: 'ben-004',
-    benefit_code: 'BEN-OD-SUM-INS',
-    coverage_name: 'Own Damage (Vehicle Sum Insured)',
-    group_name: 'Own Damage & Vehicle Protection',
+    id: "row-4",
+    benefit_id: "ben-004",
+    benefit_code: "BEN-OD-SUM-INS",
+    coverage_name: "Own Damage (Vehicle Sum Insured)",
+    group_name: "Own Damage & Vehicle Protection",
     limit_amount: 680000,
-    limit_display_unit: 'THB (Redbook 80%)',
+    limit_display_unit: "THB (Redbook 80%)",
     display_order: 4,
   },
   {
-    id: 'row-5',
-    benefit_id: 'ben-005',
-    benefit_code: 'BEN-OD-FIRE-THEFT',
-    coverage_name: 'Fire, Theft & Total Loss Protection',
-    group_name: 'Own Damage & Vehicle Protection',
+    id: "row-5",
+    benefit_id: "ben-005",
+    benefit_code: "BEN-OD-FIRE-THEFT",
+    coverage_name: "Fire, Theft & Total Loss Protection",
+    group_name: "Own Damage & Vehicle Protection",
     limit_amount: 680000,
-    limit_display_unit: 'THB / Vehicle',
+    limit_display_unit: "THB / Vehicle",
     display_order: 5,
   },
   {
-    id: 'row-6',
-    benefit_id: 'ben-006',
-    benefit_code: 'BEN-PA-DRIVER',
-    coverage_name: 'Personal Accident Coverage (Driver & 4 Passengers)',
-    group_name: 'Personal Accident & Medical Expense',
+    id: "row-6",
+    benefit_id: "ben-006",
+    benefit_code: "BEN-PA-DRIVER",
+    coverage_name: "Personal Accident Coverage (Driver & 4 Passengers)",
+    group_name: "Personal Accident & Medical Expense",
     limit_amount: 100000,
-    limit_display_unit: 'THB / Person',
+    limit_display_unit: "THB / Person",
     display_order: 6,
   },
   {
-    id: 'row-7',
-    benefit_id: 'ben-007',
-    benefit_code: 'BEN-MED-EXP',
-    coverage_name: 'Medical Expense for Driver & Passengers',
-    group_name: 'Personal Accident & Medical Expense',
+    id: "row-7",
+    benefit_id: "ben-007",
+    benefit_code: "BEN-MED-EXP",
+    coverage_name: "Medical Expense for Driver & Passengers",
+    group_name: "Personal Accident & Medical Expense",
     limit_amount: 100000,
-    limit_display_unit: 'THB / Person',
+    limit_display_unit: "THB / Person",
     display_order: 7,
   },
 ];
 
 export const BenefitsBuilderPage: React.FC = () => {
   const [benefits, setBenefits] = useState<PlanBenefitRow[]>(INITIAL_BENEFITS);
-  const [selectedGroupFilter, setSelectedGroupFilter] = useState<string>('ALL');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedGroupFilter, setSelectedGroupFilter] = useState<string>("ALL");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [isSavedAlert, setIsSavedAlert] = useState<boolean>(false);
 
   const planInfo: PlanMetadata = {
-    product_id: 'PRD-MTR-V1',
-    product_name: 'Viriyah Motor Voluntary Type 1',
-    lob_code: 'MOTOR',
-    plan_id: 'PLN-GOLD-2026',
-    plan_name: 'Gold Comprehensive Plan',
-    plan_code: 'P00001-GOLD',
-    version: 'v2.1',
-    version_status: 'DRAFT',
+    product_id: "PRD-MTR-V1",
+    product_name: "Viriyah Motor Voluntary Type 1",
+    lob_code: "MOTOR",
+    plan_id: "PLN-GOLD-2026",
+    plan_name: "Gold Comprehensive Plan",
+    plan_code: "P00001-GOLD",
+    version: "v2.1",
+    version_status: "DRAFT",
     base_premium: 16500.0,
   };
 
@@ -174,19 +174,17 @@ export const BenefitsBuilderPage: React.FC = () => {
       id: newId,
       benefit_id: `ben-${Date.now().toString().slice(-4)}`,
       benefit_code: `BEN-NEW-${benefits.length + 1}`,
-      coverage_name: 'New Coverage Limit',
-      group_name: selectedGroupFilter !== 'ALL' ? selectedGroupFilter : BENEFIT_GROUPS[0],
+      coverage_name: "New Coverage Limit",
+      group_name: selectedGroupFilter !== "ALL" ? selectedGroupFilter : BENEFIT_GROUPS[0],
       limit_amount: 100000,
-      limit_display_unit: 'THB',
+      limit_display_unit: "THB",
       display_order: benefits.length + 1,
     };
     setBenefits([...benefits, newBenefit]);
   };
 
   const handleDeleteBenefit = (id: string) => {
-    const updated = benefits
-      .filter((b) => b.id !== id)
-      .map((b, idx) => ({ ...b, display_order: idx + 1 }));
+    const updated = benefits.filter((b) => b.id !== id).map((b, idx) => ({ ...b, display_order: idx + 1 }));
     setBenefits(updated);
   };
 
@@ -202,14 +200,8 @@ export const BenefitsBuilderPage: React.FC = () => {
     setBenefits([...benefits, duplicate]);
   };
 
-  const handleFieldChange = (
-    id: string,
-    field: keyof PlanBenefitRow,
-    value: string | number
-  ) => {
-    setBenefits((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
+  const handleFieldChange = (id: string, field: keyof PlanBenefitRow, value: string | number) => {
+    setBenefits((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
   };
 
   const handleSaveDraft = () => {
@@ -219,8 +211,7 @@ export const BenefitsBuilderPage: React.FC = () => {
 
   // Filtered dataset
   const filteredBenefits = benefits.filter((b) => {
-    const matchesGroup =
-      selectedGroupFilter === 'ALL' || b.group_name === selectedGroupFilter;
+    const matchesGroup = selectedGroupFilter === "ALL" || b.group_name === selectedGroupFilter;
     const matchesSearch =
       b.coverage_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       b.benefit_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -249,15 +240,14 @@ export const BenefitsBuilderPage: React.FC = () => {
             <span className="text-zinc-900 font-bold">Benefits Builder</span>
           </div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
-              Benefits Builder & Comparison Grid
-            </h1>
+            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Benefits Builder & Comparison Grid</h1>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
               {planInfo.version_status} ({planInfo.version})
             </span>
           </div>
           <p className="text-xs text-zinc-500 mt-1">
-            Configure coverage limits, benefit naming, groups, and drag handles to control the display order returned by the Sales Channel API.
+            Configure coverage limits, benefit naming, groups, and drag handles to control the display order returned by
+            the Sales Channel API.
           </p>
         </div>
 
@@ -305,9 +295,9 @@ export const BenefitsBuilderPage: React.FC = () => {
         <div>
           <span className="text-zinc-500 block mb-0.5 font-medium">Base Gross Premium</span>
           <span className="font-semibold text-zinc-900">
-            {planInfo.base_premium.toLocaleString('en-US', {
+            {planInfo.base_premium.toLocaleString("en-US", {
               minimumFractionDigits: 2,
-            })}{' '}
+            })}{" "}
             THB
           </span>
         </div>
@@ -401,7 +391,7 @@ export const BenefitsBuilderPage: React.FC = () => {
                       onDragOver={(e) => handleDragOver(e, index)}
                       onDragEnd={handleDragEnd}
                       className={`hover:bg-zinc-50/80 transition-colors group ${
-                        isDragging ? 'opacity-40 bg-zinc-100' : ''
+                        isDragging ? "opacity-40 bg-zinc-100" : ""
                       }`}
                     >
                       {/* Drag Handle */}
@@ -421,9 +411,7 @@ export const BenefitsBuilderPage: React.FC = () => {
                         <input
                           type="text"
                           value={item.benefit_code}
-                          onChange={(e) =>
-                            handleFieldChange(item.id, 'benefit_code', e.target.value)
-                          }
+                          onChange={(e) => handleFieldChange(item.id, "benefit_code", e.target.value)}
                           className="w-full font-mono text-zinc-800 bg-transparent hover:bg-white focus:bg-white border border-transparent hover:border-zinc-300 focus:border-zinc-400 rounded px-1.5 py-1 focus:outline-none"
                         />
                       </td>
@@ -433,9 +421,7 @@ export const BenefitsBuilderPage: React.FC = () => {
                         <input
                           type="text"
                           value={item.coverage_name}
-                          onChange={(e) =>
-                            handleFieldChange(item.id, 'coverage_name', e.target.value)
-                          }
+                          onChange={(e) => handleFieldChange(item.id, "coverage_name", e.target.value)}
                           className="w-full font-medium text-zinc-900 bg-transparent hover:bg-white focus:bg-white border border-transparent hover:border-zinc-300 focus:border-zinc-400 rounded px-2 py-1 focus:outline-none"
                         />
                       </td>
@@ -444,9 +430,7 @@ export const BenefitsBuilderPage: React.FC = () => {
                       <td className="py-2.5 px-4">
                         <select
                           value={item.group_name}
-                          onChange={(e) =>
-                            handleFieldChange(item.id, 'group_name', e.target.value)
-                          }
+                          onChange={(e) => handleFieldChange(item.id, "group_name", e.target.value)}
                           className="w-full text-xs text-zinc-700 bg-transparent hover:bg-white focus:bg-white border border-transparent hover:border-zinc-300 focus:border-zinc-400 rounded px-1.5 py-1 focus:outline-none"
                         >
                           {BENEFIT_GROUPS.map((grp) => (
@@ -463,13 +447,7 @@ export const BenefitsBuilderPage: React.FC = () => {
                           type="number"
                           step="1000"
                           value={item.limit_amount}
-                          onChange={(e) =>
-                            handleFieldChange(
-                              item.id,
-                              'limit_amount',
-                              parseFloat(e.target.value) || 0
-                            )
-                          }
+                          onChange={(e) => handleFieldChange(item.id, "limit_amount", parseFloat(e.target.value) || 0)}
                           className="w-full text-right font-mono font-medium text-zinc-900 bg-transparent hover:bg-white focus:bg-white border border-transparent hover:border-zinc-300 focus:border-zinc-400 rounded px-2 py-1 focus:outline-none"
                         />
                       </td>
@@ -479,9 +457,7 @@ export const BenefitsBuilderPage: React.FC = () => {
                         <input
                           type="text"
                           value={item.limit_display_unit}
-                          onChange={(e) =>
-                            handleFieldChange(item.id, 'limit_display_unit', e.target.value)
-                          }
+                          onChange={(e) => handleFieldChange(item.id, "limit_display_unit", e.target.value)}
                           className="w-full text-xs text-zinc-600 bg-transparent hover:bg-white focus:bg-white border border-transparent hover:border-zinc-300 focus:border-zinc-400 rounded px-1.5 py-1 focus:outline-none"
                         />
                       </td>
@@ -520,12 +496,14 @@ export const BenefitsBuilderPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
             <span>
-              SCD Type 2 Snapshot Protection active. Re-ordering or editing edits the{' '}
+              SCD Type 2 Snapshot Protection active. Re-ordering or editing edits the{" "}
               <strong className="text-zinc-700">DRAFT</strong> version only.
             </span>
           </div>
           <div className="flex items-center gap-4 text-zinc-600 font-medium">
-            <span>Showing {filteredBenefits.length} of {benefits.length} items</span>
+            <span>
+              Showing {filteredBenefits.length} of {benefits.length} items
+            </span>
             <button
               type="button"
               onClick={handleAddBenefit}
@@ -541,16 +519,12 @@ export const BenefitsBuilderPage: React.FC = () => {
       <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-4 flex items-start gap-3 text-xs text-blue-900">
         <AlertCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-semibold text-blue-950">
-            Governance & Approval Workflow (Maker-Checker Module)
-          </p>
+          <p className="font-semibold text-blue-950">Governance & Approval Workflow (Maker-Checker Module)</p>
           <p className="text-blue-800 leading-relaxed">
-            All modifications applied to this comparison matrix will update the table{' '}
-            <code className="bg-blue-100 text-blue-900 px-1 py-0.5 rounded font-mono">
-              plan_benefit_versions
-            </code>
-            . Once you save this draft, submit the parent Product draft to trigger the Unified Approver
-            Inbox. Live consumer APIs will continue serving the existing Active snapshot until signed off.
+            All modifications applied to this comparison matrix will update the table{" "}
+            <code className="bg-blue-100 text-blue-900 px-1 py-0.5 rounded font-mono">plan_benefit_versions</code>. Once
+            you save this draft, submit the parent Product draft to trigger the Unified Approver Inbox. Live consumer
+            APIs will continue serving the existing Active snapshot until signed off.
           </p>
         </div>
       </div>

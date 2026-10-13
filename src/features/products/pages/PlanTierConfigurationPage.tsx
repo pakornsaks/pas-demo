@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
 import {
-  Layers,
-  ShieldCheck,
-  CreditCard,
-  Plus,
-  Trash2,
   AlertCircle,
-  Copy,
-  CheckCircle2,
+  ArrowRight,
   Calendar,
-  Percent,
-  Sliders,
+  CheckCircle2,
+  Copy,
+  CreditCard,
   DollarSign,
   HelpCircle,
-  ArrowRight
-} from 'lucide-react';
+  Layers,
+  Percent,
+  Plus,
+  ShieldCheck,
+  Sliders,
+  Trash2,
+} from "lucide-react";
+import React, { useState } from "react";
 
 // ==========================================
 // TYPE DEFINITIONS & SCHEMAS (SDD Module 1 & Database 4.4)
 // ==========================================
 
-export type VersionStatus = 'DRAFT' | 'ACTIVE' | 'SCHEDULED' | 'ARCHIVED';
-export type PayeeType = 'BROKER' | 'INSURER' | 'THIRD_PARTY';
-export type PaymentTiming = 'BEFORE_ISSUANCE' | 'AFTER_ISSUANCE';
-export type DeductType = 'FIXED_AMOUNT' | 'PERCENTAGE' | 'PER_CLAIM' | 'PER_YEAR';
+export type VersionStatus = "DRAFT" | "ACTIVE" | "SCHEDULED" | "ARCHIVED";
+export type PayeeType = "BROKER" | "INSURER" | "THIRD_PARTY";
+export type PaymentTiming = "BEFORE_ISSUANCE" | "AFTER_ISSUANCE";
+export type DeductType = "FIXED_AMOUNT" | "PERCENTAGE" | "PER_CLAIM" | "PER_YEAR";
 
 export interface InstallmentConfig {
   duration_months: number;
@@ -36,8 +36,8 @@ export interface PaymentConfig {
   payee_type: PayeeType;
   third_party_id?: number | null;
   insurer_bank_account?: string;
-  allowed_payment_methods: ('CASH' | 'CREDIT_CARD')[];
-  allowed_payment_terms: ('SINGLE' | 'INSTALLMENT')[];
+  allowed_payment_methods: ("CASH" | "CREDIT_CARD")[];
+  allowed_payment_terms: ("SINGLE" | "INSTALLMENT")[];
   payment_timing: PaymentTiming;
   insurer_credit_term_id?: number;
   installment_config: InstallmentConfig;
@@ -54,13 +54,13 @@ export interface PlanBenefitVersion {
   benefit_code: string;
   coverage_group: string;
   coverage_name: string;
-  limit_type: 'FIXED_AMOUNT' | 'DYNAMIC_REDBOOK';
+  limit_type: "FIXED_AMOUNT" | "DYNAMIC_REDBOOK";
   limit_amount: number;
 }
 
 export interface ReferRequirementItem {
   field_id: string;
-  type: 'FILE_UPLOAD' | 'TEXT_INPUT' | 'BOOLEAN';
+  type: "FILE_UPLOAD" | "TEXT_INPUT" | "BOOLEAN";
   label: string;
   required: boolean;
 }
@@ -70,7 +70,7 @@ export interface PlanRuleOverride {
   target_field: string;
   operator: string;
   threshold_value: string;
-  enforcement_action: 'REJECT' | 'REFER' | 'LOADING';
+  enforcement_action: "REJECT" | "REFER" | "LOADING";
   loading_percent?: number;
 }
 
@@ -85,19 +85,19 @@ export interface PlanVersion {
   deduct_type: DeductType;
   mandatory_excess_amount: number;
   is_promo_code_eligible: boolean;
-  
+
   // Inheritance Overrides (NULL = Inherit from Product Level)
   inherit_settlement_rules: boolean;
   override_payee_type?: PayeeType;
   override_payment_timing?: PaymentTiming;
   override_base_commission_percent?: number;
-  
+
   payment_config: PaymentConfig;
   agent_flex_config: AgentFlexConfig;
   coverages: PlanBenefitVersion[];
   refer_template_requirements: ReferRequirementItem[];
   rule_overrides: PlanRuleOverride[];
-  
+
   effective_start_date: string;
   effective_end_date?: string;
 }
@@ -108,149 +108,149 @@ export interface PlanVersion {
 
 const INITIAL_PLANS: PlanVersion[] = [
   {
-    plan_id: 'pl-001',
-    version_id: 'ver-pl-001-v2',
-    plan_code: 'P00001-GOLD',
-    name: 'Gold Tier - Garage Repair',
-    status: 'ACTIVE',
+    plan_id: "pl-001",
+    version_id: "ver-pl-001-v2",
+    plan_code: "P00001-GOLD",
+    name: "Gold Tier - Garage Repair",
+    status: "ACTIVE",
     base_premium: 18500.0,
     deductible_amount: 3000.0,
-    deduct_type: 'FIXED_AMOUNT',
+    deduct_type: "FIXED_AMOUNT",
     mandatory_excess_amount: 0.0,
     is_promo_code_eligible: true,
     inherit_settlement_rules: false,
-    override_payee_type: 'INSURER',
-    override_payment_timing: 'AFTER_ISSUANCE',
+    override_payee_type: "INSURER",
+    override_payment_timing: "AFTER_ISSUANCE",
     override_base_commission_percent: 18.0,
     payment_config: {
-      payee_type: 'INSURER',
+      payee_type: "INSURER",
       third_party_id: null,
-      insurer_bank_account: 'Viriyah Insurance (KBANK 012-3-45678-9)',
-      allowed_payment_methods: ['CASH', 'CREDIT_CARD'],
-      allowed_payment_terms: ['SINGLE', 'INSTALLMENT'],
-      payment_timing: 'AFTER_ISSUANCE',
+      insurer_bank_account: "Viriyah Insurance (KBANK 012-3-45678-9)",
+      allowed_payment_methods: ["CASH", "CREDIT_CARD"],
+      allowed_payment_terms: ["SINGLE", "INSTALLMENT"],
+      payment_timing: "AFTER_ISSUANCE",
       insurer_credit_term_id: 8,
       installment_config: {
         duration_months: 10,
         interest_rate_percent: 0.0,
         first_month_percent: 35.0,
-        supported_banks: ['KBANK', 'SCB', 'KTC', 'BBL']
-      }
+        supported_banks: ["KBANK", "SCB", "KTC", "BBL"],
+      },
     },
     agent_flex_config: {
       base_insurer_commission_percent: 18.0,
       is_flex_allowed: true,
-      max_commission_sacrifice_percent: 5.0
+      max_commission_sacrifice_percent: 5.0,
     },
     coverages: [
       {
-        benefit_id: 'ben-01',
-        benefit_code: 'TP_BODILY_INJURY',
-        coverage_group: 'Third Party Liability',
-        coverage_name: 'Third Party Bodily Injury / Death',
-        limit_type: 'FIXED_AMOUNT',
-        limit_amount: 1000000.0
+        benefit_id: "ben-01",
+        benefit_code: "TP_BODILY_INJURY",
+        coverage_group: "Third Party Liability",
+        coverage_name: "Third Party Bodily Injury / Death",
+        limit_type: "FIXED_AMOUNT",
+        limit_amount: 1000000.0,
       },
       {
-        benefit_id: 'ben-02',
-        benefit_code: 'TP_PROP_DAMAGE',
-        coverage_group: 'Third Party Liability',
-        coverage_name: 'Third Party Property Damage',
-        limit_type: 'FIXED_AMOUNT',
-        limit_amount: 2500000.0
+        benefit_id: "ben-02",
+        benefit_code: "TP_PROP_DAMAGE",
+        coverage_group: "Third Party Liability",
+        coverage_name: "Third Party Property Damage",
+        limit_type: "FIXED_AMOUNT",
+        limit_amount: 2500000.0,
       },
       {
-        benefit_id: 'ben-03',
-        benefit_code: 'OWN_DAMAGE',
-        coverage_group: 'Vehicle Protection',
-        coverage_name: 'Own Damage (Vehicle Market Value)',
-        limit_type: 'DYNAMIC_REDBOOK',
-        limit_amount: 0.0
+        benefit_id: "ben-03",
+        benefit_code: "OWN_DAMAGE",
+        coverage_group: "Vehicle Protection",
+        coverage_name: "Own Damage (Vehicle Market Value)",
+        limit_type: "DYNAMIC_REDBOOK",
+        limit_amount: 0.0,
       },
       {
-        benefit_id: 'ben-04',
-        benefit_code: 'PA_DRIVER_PASSENGER',
-        coverage_group: 'Personal Accident & Medical',
-        coverage_name: 'Personal Accident (Driver & 5 Passengers)',
-        limit_type: 'FIXED_AMOUNT',
-        limit_amount: 100000.0
-      }
+        benefit_id: "ben-04",
+        benefit_code: "PA_DRIVER_PASSENGER",
+        coverage_group: "Personal Accident & Medical",
+        coverage_name: "Personal Accident (Driver & 5 Passengers)",
+        limit_type: "FIXED_AMOUNT",
+        limit_amount: 100000.0,
+      },
     ],
     refer_template_requirements: [
       {
-        field_id: 'photo_4_corners',
-        type: 'FILE_UPLOAD',
-        label: 'Inspection: 4-Corner Vehicle Photos',
-        required: true
+        field_id: "photo_4_corners",
+        type: "FILE_UPLOAD",
+        label: "Inspection: 4-Corner Vehicle Photos",
+        required: true,
       },
       {
-        field_id: 'modified_engine_declaration',
-        type: 'TEXT_INPUT',
-        label: 'Engine Modification & Boost Details',
-        required: false
-      }
+        field_id: "modified_engine_declaration",
+        type: "TEXT_INPUT",
+        label: "Engine Modification & Boost Details",
+        required: false,
+      },
     ],
     rule_overrides: [
       {
-        rule_id: 'rule-ov-01',
-        target_field: 'vehicle_age_years',
-        operator: '>',
-        threshold_value: '10',
-        enforcement_action: 'REFER'
-      }
+        rule_id: "rule-ov-01",
+        target_field: "vehicle_age_years",
+        operator: ">",
+        threshold_value: "10",
+        enforcement_action: "REFER",
+      },
     ],
-    effective_start_date: '2026-01-01T00:00:00Z',
-    effective_end_date: '2026-12-31T23:59:59Z'
+    effective_start_date: "2026-01-01T00:00:00Z",
+    effective_end_date: "2026-12-31T23:59:59Z",
   },
   {
-    plan_id: 'pl-002',
-    version_id: 'ver-pl-002-v1',
-    plan_code: 'P00001-SILVER',
-    name: 'Silver Tier - Economy Repair',
-    status: 'ACTIVE',
+    plan_id: "pl-002",
+    version_id: "ver-pl-002-v1",
+    plan_code: "P00001-SILVER",
+    name: "Silver Tier - Economy Repair",
+    status: "ACTIVE",
     base_premium: 14200.0,
     deductible_amount: 5000.0,
-    deduct_type: 'FIXED_AMOUNT',
+    deduct_type: "FIXED_AMOUNT",
     mandatory_excess_amount: 1000.0,
     is_promo_code_eligible: true,
     inherit_settlement_rules: true,
     payment_config: {
-      payee_type: 'BROKER',
-      allowed_payment_methods: ['CASH', 'CREDIT_CARD'],
-      allowed_payment_terms: ['SINGLE'],
-      payment_timing: 'BEFORE_ISSUANCE',
+      payee_type: "BROKER",
+      allowed_payment_methods: ["CASH", "CREDIT_CARD"],
+      allowed_payment_terms: ["SINGLE"],
+      payment_timing: "BEFORE_ISSUANCE",
       installment_config: {
         duration_months: 3,
         interest_rate_percent: 0.0,
         first_month_percent: 34.0,
-        supported_banks: ['KBANK', 'BBL']
-      }
+        supported_banks: ["KBANK", "BBL"],
+      },
     },
     agent_flex_config: {
       base_insurer_commission_percent: 15.0,
       is_flex_allowed: false,
-      max_commission_sacrifice_percent: 0.0
+      max_commission_sacrifice_percent: 0.0,
     },
     coverages: [
       {
-        benefit_id: 'ben-05',
-        benefit_code: 'TP_BODILY_INJURY',
-        coverage_group: 'Third Party Liability',
-        coverage_name: 'Third Party Bodily Injury / Death',
-        limit_type: 'FIXED_AMOUNT',
-        limit_amount: 500000.0
-      }
+        benefit_id: "ben-05",
+        benefit_code: "TP_BODILY_INJURY",
+        coverage_group: "Third Party Liability",
+        coverage_name: "Third Party Bodily Injury / Death",
+        limit_type: "FIXED_AMOUNT",
+        limit_amount: 500000.0,
+      },
     ],
     refer_template_requirements: [],
     rule_overrides: [],
-    effective_start_date: '2026-01-01T00:00:00Z'
-  }
+    effective_start_date: "2026-01-01T00:00:00Z",
+  },
 ];
 
 export const PlanTierConfigurationPage: React.FC = () => {
   const [plans, setPlans] = useState<PlanVersion[]>(INITIAL_PLANS);
-  const [selectedPlanId, setSelectedPlanId] = useState<string>('pl-001');
-  const [activeTab, setActiveTab] = useState<'BASICS' | 'SETTLEMENT' | 'BENEFITS' | 'RULES'>('BASICS');
+  const [selectedPlanId, setSelectedPlanId] = useState<string>("pl-001");
+  const [activeTab, setActiveTab] = useState<"BASICS" | "SETTLEMENT" | "BENEFITS" | "RULES">("BASICS");
   const [saveSuccessNotice, setSaveSuccessNotice] = useState<string | null>(null);
 
   const currentPlan = plans.find((p) => p.plan_id === selectedPlanId) || plans[0];
@@ -264,10 +264,10 @@ export const PlanTierConfigurationPage: React.FC = () => {
               ...plan,
               ...updatedFields,
               // If an active record is touched, flag as DRAFT for Copy-On-Write (BRD PROD-01)
-              status: plan.status === 'ACTIVE' ? 'DRAFT' : plan.status
+              status: plan.status === "ACTIVE" ? "DRAFT" : plan.status,
             }
-          : plan
-      )
+          : plan,
+      ),
     );
   };
 
@@ -275,28 +275,28 @@ export const PlanTierConfigurationPage: React.FC = () => {
   const handleAddCoverageRow = () => {
     const newCoverage: PlanBenefitVersion = {
       benefit_id: `ben-${Date.now()}`,
-      benefit_code: 'NEW_COVERAGE',
-      coverage_group: 'Custom Add-on',
-      coverage_name: 'Supplemental Medical / Bail Bond',
-      limit_type: 'FIXED_AMOUNT',
-      limit_amount: 100000
+      benefit_code: "NEW_COVERAGE",
+      coverage_group: "Custom Add-on",
+      coverage_name: "Supplemental Medical / Bail Bond",
+      limit_type: "FIXED_AMOUNT",
+      limit_amount: 100000,
     };
     handleUpdateCurrentPlan({
-      coverages: [...currentPlan.coverages, newCoverage]
+      coverages: [...currentPlan.coverages, newCoverage],
     });
   };
 
   // Remove coverage row
   const handleRemoveCoverage = (benefitId: string) => {
     handleUpdateCurrentPlan({
-      coverages: currentPlan.coverages.filter((c) => c.benefit_id !== benefitId)
+      coverages: currentPlan.coverages.filter((c) => c.benefit_id !== benefitId),
     });
   };
 
   // Maker-Checker Submission trigger (BRD 7.9)
   const handleSubmitMakerChecker = () => {
     setSaveSuccessNotice(
-      `Ticket generated for Plan [${currentPlan.plan_code}]. Cloned as DRAFT version for Checker review.`
+      `Ticket generated for Plan [${currentPlan.plan_code}]. Cloned as DRAFT version for Checker review.`,
     );
     setTimeout(() => setSaveSuccessNotice(null), 5000);
   };
@@ -315,9 +315,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
             <ArrowRight className="w-3.5 h-3.5" />
             <span className="text-blue-600">Plans & Tiers</span>
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
-            Plan & Tier Configuration
-          </h1>
+          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Plan & Tier Configuration</h1>
           <p className="text-xs text-zinc-500 mt-0.5">
             Configure coverage packages, settlement overrides, pricing deductibles, and comparison grids.
           </p>
@@ -333,8 +331,8 @@ export const PlanTierConfigurationPage: React.FC = () => {
                 plan_id: newPlanId,
                 plan_code: `${currentPlan.plan_code}-COPY`,
                 name: `${currentPlan.name} (Copy)`,
-                status: 'DRAFT',
-                version_id: `ver-${newPlanId}-v1`
+                status: "DRAFT",
+                version_id: `ver-${newPlanId}-v1`,
               };
               setPlans([...plans, cloned]);
               setSelectedPlanId(newPlanId);
@@ -369,23 +367,19 @@ export const PlanTierConfigurationPage: React.FC = () => {
         <div className="flex items-start gap-2.5">
           <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
           <div>
-            <span className="font-semibold text-amber-950">
-              Snapshot Versioning Immutability (SCD Type 2 Enabled):
-            </span>{' '}
-            Active plan configurations are locked. Saving modifications creates a localized{' '}
-            <span className="font-mono bg-amber-100/80 px-1 py-0.5 rounded text-amber-950">DRAFT</span>{' '}
-            version, safeguarding current live sales and quotation endpoints until explicit Checker sign-off.
+            <span className="font-semibold text-amber-950">Snapshot Versioning Immutability (SCD Type 2 Enabled):</span>{" "}
+            Active plan configurations are locked. Saving modifications creates a localized{" "}
+            <span className="font-mono bg-amber-100/80 px-1 py-0.5 rounded text-amber-950">DRAFT</span> version,
+            safeguarding current live sales and quotation endpoints until explicit Checker sign-off.
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-zinc-500 text-[11px] font-mono">
-            Version ID: {currentPlan.version_id}
-          </span>
+          <span className="text-zinc-500 text-[11px] font-mono">Version ID: {currentPlan.version_id}</span>
           <span
             className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-              currentPlan.status === 'ACTIVE'
-                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                : 'bg-amber-100 text-amber-800 border border-amber-200'
+              currentPlan.status === "ACTIVE"
+                ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                : "bg-amber-100 text-amber-800 border border-amber-200"
             }`}
           >
             {currentPlan.status}
@@ -407,15 +401,15 @@ export const PlanTierConfigurationPage: React.FC = () => {
                 onClick={() => setSelectedPlanId(p.plan_id)}
                 className={`flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-md transition-all ${
                   isSelected
-                    ? 'bg-zinc-900 text-white shadow-sm'
-                    : 'bg-white text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 border border-zinc-200'
+                    ? "bg-zinc-900 text-white shadow-sm"
+                    : "bg-white text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 border border-zinc-200"
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
                 <span>{p.name}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                    isSelected ? 'bg-zinc-800 text-zinc-300' : 'bg-zinc-100 text-zinc-500'
+                    isSelected ? "bg-zinc-800 text-zinc-300" : "bg-zinc-100 text-zinc-500"
                   }`}
                 >
                   {p.plan_code}
@@ -433,34 +427,34 @@ export const PlanTierConfigurationPage: React.FC = () => {
                 version_id: `ver-${newId}-v1`,
                 plan_code: `P00001-TIER${plans.length + 1}`,
                 name: `New Tier ${plans.length + 1}`,
-                status: 'DRAFT',
+                status: "DRAFT",
                 base_premium: 10000,
                 deductible_amount: 0,
-                deduct_type: 'FIXED_AMOUNT',
+                deduct_type: "FIXED_AMOUNT",
                 mandatory_excess_amount: 0,
                 is_promo_code_eligible: false,
                 inherit_settlement_rules: true,
                 payment_config: {
-                  payee_type: 'BROKER',
-                  allowed_payment_methods: ['CASH', 'CREDIT_CARD'],
-                  allowed_payment_terms: ['SINGLE'],
-                  payment_timing: 'BEFORE_ISSUANCE',
+                  payee_type: "BROKER",
+                  allowed_payment_methods: ["CASH", "CREDIT_CARD"],
+                  allowed_payment_terms: ["SINGLE"],
+                  payment_timing: "BEFORE_ISSUANCE",
                   installment_config: {
                     duration_months: 3,
                     interest_rate_percent: 0,
                     first_month_percent: 34,
-                    supported_banks: []
-                  }
+                    supported_banks: [],
+                  },
                 },
                 agent_flex_config: {
                   base_insurer_commission_percent: 15,
                   is_flex_allowed: false,
-                  max_commission_sacrifice_percent: 0
+                  max_commission_sacrifice_percent: 0,
                 },
                 coverages: [],
                 refer_template_requirements: [],
                 rule_overrides: [],
-                effective_start_date: new Date().toISOString()
+                effective_start_date: new Date().toISOString(),
               };
               setPlans([...plans, brandNewPlan]);
               setSelectedPlanId(newId);
@@ -480,11 +474,11 @@ export const PlanTierConfigurationPage: React.FC = () => {
         <div className="flex border-b border-zinc-200 bg-zinc-50/60 px-4 pt-2">
           <button
             type="button"
-            onClick={() => setActiveTab('BASICS')}
+            onClick={() => setActiveTab("BASICS")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium border-b-2 transition-colors ${
-              activeTab === 'BASICS'
-                ? 'border-blue-600 text-blue-600 bg-white rounded-t-md'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "BASICS"
+                ? "border-blue-600 text-blue-600 bg-white rounded-t-md"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <Sliders className="w-3.5 h-3.5" />
@@ -493,11 +487,11 @@ export const PlanTierConfigurationPage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setActiveTab('SETTLEMENT')}
+            onClick={() => setActiveTab("SETTLEMENT")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium border-b-2 transition-colors ${
-              activeTab === 'SETTLEMENT'
-                ? 'border-blue-600 text-blue-600 bg-white rounded-t-md'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "SETTLEMENT"
+                ? "border-blue-600 text-blue-600 bg-white rounded-t-md"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <CreditCard className="w-3.5 h-3.5" />
@@ -509,11 +503,11 @@ export const PlanTierConfigurationPage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setActiveTab('BENEFITS')}
+            onClick={() => setActiveTab("BENEFITS")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium border-b-2 transition-colors ${
-              activeTab === 'BENEFITS'
-                ? 'border-blue-600 text-blue-600 bg-white rounded-t-md'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "BENEFITS"
+                ? "border-blue-600 text-blue-600 bg-white rounded-t-md"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
@@ -522,11 +516,11 @@ export const PlanTierConfigurationPage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setActiveTab('RULES')}
+            onClick={() => setActiveTab("RULES")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium border-b-2 transition-colors ${
-              activeTab === 'RULES'
-                ? 'border-blue-600 text-blue-600 bg-white rounded-t-md'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "RULES"
+                ? "border-blue-600 text-blue-600 bg-white rounded-t-md"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <AlertCircle className="w-3.5 h-3.5" />
@@ -538,7 +532,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
           {/* ==================================================== */}
           {/* TAB 1: TIER BASICS & PRICING                         */}
           {/* ==================================================== */}
-          {activeTab === 'BASICS' && (
+          {activeTab === "BASICS" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
@@ -572,9 +566,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     Base Gross Premium (THB)
                   </label>
                   <div className="relative">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400 text-xs">
-                      ฿
-                    </span>
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-400 text-xs">฿</span>
                     <input
                       type="number"
                       value={currentPlan.base_premium}
@@ -593,9 +585,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1.5">
-                      Deductible Type
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1.5">Deductible Type</label>
                     <select
                       value={currentPlan.deduct_type}
                       onChange={(e) => handleUpdateCurrentPlan({ deduct_type: e.target.value as DeductType })}
@@ -609,15 +599,11 @@ export const PlanTierConfigurationPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1.5">
-                      Deductible Amount (THB)
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1.5">Deductible Amount (THB)</label>
                     <input
                       type="number"
                       value={currentPlan.deductible_amount}
-                      onChange={(e) =>
-                        handleUpdateCurrentPlan({ deductible_amount: parseFloat(e.target.value) || 0 })
-                      }
+                      onChange={(e) => handleUpdateCurrentPlan({ deductible_amount: parseFloat(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <p className="text-[11px] text-zinc-500 mt-1">Voluntary excess agreed by customer</p>
@@ -648,15 +634,13 @@ export const PlanTierConfigurationPage: React.FC = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1.5">
-                      Effective Start Date (UTC)
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1.5">Effective Start Date (UTC)</label>
                     <input
                       type="datetime-local"
                       value={currentPlan.effective_start_date.substring(0, 16)}
                       onChange={(e) =>
                         handleUpdateCurrentPlan({
-                          effective_start_date: new Date(e.target.value).toISOString()
+                          effective_start_date: new Date(e.target.value).toISOString(),
                         })
                       }
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -669,12 +653,10 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     </label>
                     <input
                       type="datetime-local"
-                      value={currentPlan.effective_end_date ? currentPlan.effective_end_date.substring(0, 16) : ''}
+                      value={currentPlan.effective_end_date ? currentPlan.effective_end_date.substring(0, 16) : ""}
                       onChange={(e) =>
                         handleUpdateCurrentPlan({
-                          effective_end_date: e.target.value
-                            ? new Date(e.target.value).toISOString()
-                            : undefined
+                          effective_end_date: e.target.value ? new Date(e.target.value).toISOString() : undefined,
                         })
                       }
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -686,14 +668,10 @@ export const PlanTierConfigurationPage: React.FC = () => {
                       <input
                         type="checkbox"
                         checked={currentPlan.is_promo_code_eligible}
-                        onChange={(e) =>
-                          handleUpdateCurrentPlan({ is_promo_code_eligible: e.target.checked })
-                        }
+                        onChange={(e) => handleUpdateCurrentPlan({ is_promo_code_eligible: e.target.checked })}
                         className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-xs font-medium text-zinc-800">
-                        Eligible for Campaign Promo Codes
-                      </span>
+                      <span className="text-xs font-medium text-zinc-800">Eligible for Campaign Promo Codes</span>
                     </label>
                     <p className="text-[11px] text-zinc-500 mt-1 pl-6">
                       Allows frontend checkout to evaluate active discount codes on this tier.
@@ -707,14 +685,12 @@ export const PlanTierConfigurationPage: React.FC = () => {
           {/* ==================================================== */}
           {/* TAB 2: SETTLEMENT & COMMISSION ROUTING               */}
           {/* ==================================================== */}
-          {activeTab === 'SETTLEMENT' && (
+          {activeTab === "SETTLEMENT" && (
             <div className="space-y-6">
               {/* Inheritance Master Toggle */}
               <div
                 className={`p-4 rounded-lg border transition-colors ${
-                  currentPlan.inherit_settlement_rules
-                    ? 'bg-zinc-50 border-zinc-200'
-                    : 'bg-blue-50/70 border-blue-200'
+                  currentPlan.inherit_settlement_rules ? "bg-zinc-50 border-zinc-200" : "bg-blue-50/70 border-blue-200"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -724,27 +700,28 @@ export const PlanTierConfigurationPage: React.FC = () => {
                       Configuration Inheritance Directive (BRD PROD-12 & PROD-15)
                     </h3>
                     <p className="text-xs text-zinc-600 mt-0.5">
-                      By default, tiers inherit Payee routing, payment timing, credit rounds, and commissions from the parent product.
+                      By default, tiers inherit Payee routing, payment timing, credit rounds, and commissions from the
+                      parent product.
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-zinc-700">
-                      {currentPlan.inherit_settlement_rules ? 'Inherited from Product' : 'Tier Override Active'}
+                      {currentPlan.inherit_settlement_rules ? "Inherited from Product" : "Tier Override Active"}
                     </span>
                     <button
                       type="button"
                       onClick={() =>
                         handleUpdateCurrentPlan({
-                          inherit_settlement_rules: !currentPlan.inherit_settlement_rules
+                          inherit_settlement_rules: !currentPlan.inherit_settlement_rules,
                         })
                       }
                       className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        !currentPlan.inherit_settlement_rules ? 'bg-blue-600' : 'bg-zinc-300'
+                        !currentPlan.inherit_settlement_rules ? "bg-blue-600" : "bg-zinc-300"
                       }`}
                     >
                       <span
                         className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                          !currentPlan.inherit_settlement_rules ? 'translate-x-4' : 'translate-x-0'
+                          !currentPlan.inherit_settlement_rules ? "translate-x-4" : "translate-x-0"
                         }`}
                       />
                     </button>
@@ -767,7 +744,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     }
                     onChange={(e) =>
                       handleUpdateCurrentPlan({
-                        override_payee_type: e.target.value as PayeeType
+                        override_payee_type: e.target.value as PayeeType,
                       })
                     }
                     className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white disabled:bg-zinc-100 disabled:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -792,7 +769,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     }
                     onChange={(e) =>
                       handleUpdateCurrentPlan({
-                        override_payment_timing: e.target.value as PaymentTiming
+                        override_payment_timing: e.target.value as PaymentTiming,
                       })
                     }
                     className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white disabled:bg-zinc-100 disabled:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -800,7 +777,9 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     <option value="BEFORE_ISSUANCE">Before Issuance (STP Straight Through)</option>
                     <option value="AFTER_ISSUANCE">After Issuance (Credit Round Settlement)</option>
                   </select>
-                  <p className="text-[11px] text-zinc-500 mt-1">Governs whether payment is required to activate policy</p>
+                  <p className="text-[11px] text-zinc-500 mt-1">
+                    Governs whether payment is required to activate policy
+                  </p>
                 </div>
 
                 <div>
@@ -818,8 +797,8 @@ export const PlanTierConfigurationPage: React.FC = () => {
               </div>
 
               {/* Insurer Direct Cash Bank Details */}
-              {(currentPlan.override_payee_type === 'INSURER' ||
-                (currentPlan.inherit_settlement_rules && currentPlan.payment_config.payee_type === 'INSURER')) && (
+              {(currentPlan.override_payee_type === "INSURER" ||
+                (currentPlan.inherit_settlement_rules && currentPlan.payment_config.payee_type === "INSURER")) && (
                 <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-md">
                   <label className="block text-xs font-semibold text-zinc-700 uppercase tracking-wider mb-1">
                     Insurer Bank Account (Mandatory for Direct Cash)
@@ -827,7 +806,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                   <input
                     type="text"
                     disabled={currentPlan.inherit_settlement_rules}
-                    value={currentPlan.payment_config.insurer_bank_account || ''}
+                    value={currentPlan.payment_config.insurer_bank_account || ""}
                     placeholder="E.g., Bank Name, Branch, Account No."
                     className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white disabled:bg-zinc-100 disabled:text-zinc-500 focus:outline-none"
                   />
@@ -845,9 +824,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 bg-zinc-50/70 p-4 rounded-lg border border-zinc-200">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1">
-                      Duration (Months)
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1">Duration (Months)</label>
                     <input
                       type="number"
                       value={currentPlan.payment_config.installment_config.duration_months}
@@ -858,9 +835,9 @@ export const PlanTierConfigurationPage: React.FC = () => {
                             ...currentPlan.payment_config,
                             installment_config: {
                               ...currentPlan.payment_config.installment_config,
-                              duration_months: val
-                            }
-                          }
+                              duration_months: val,
+                            },
+                          },
                         });
                       }}
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white"
@@ -869,9 +846,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1">
-                      Interest Rate (%)
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1">Interest Rate (%)</label>
                     <input
                       type="number"
                       step="0.1"
@@ -883,9 +858,9 @@ export const PlanTierConfigurationPage: React.FC = () => {
                             ...currentPlan.payment_config,
                             installment_config: {
                               ...currentPlan.payment_config.installment_config,
-                              interest_rate_percent: val
-                            }
-                          }
+                              interest_rate_percent: val,
+                            },
+                          },
                         });
                       }}
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white"
@@ -894,9 +869,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1">
-                      1st Cycle Allocation (%)
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1">1st Cycle Allocation (%)</label>
                     <input
                       type="number"
                       value={currentPlan.payment_config.installment_config.first_month_percent}
@@ -907,9 +880,9 @@ export const PlanTierConfigurationPage: React.FC = () => {
                             ...currentPlan.payment_config,
                             installment_config: {
                               ...currentPlan.payment_config.installment_config,
-                              first_month_percent: val
-                            }
-                          }
+                              first_month_percent: val,
+                            },
+                          },
                         });
                       }}
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white"
@@ -920,11 +893,9 @@ export const PlanTierConfigurationPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-700 mb-1">
-                      Supported Gateway Banks
-                    </label>
+                    <label className="block text-xs font-medium text-zinc-700 mb-1">Supported Gateway Banks</label>
                     <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      {['KBANK', 'SCB', 'KTC', 'BBL', 'BAY'].map((bank) => (
+                      {["KBANK", "SCB", "KTC", "BBL", "BAY"].map((bank) => (
                         <span
                           key={bank}
                           className="px-2 py-0.5 rounded text-[10px] font-mono bg-white border border-zinc-200 text-zinc-700"
@@ -961,14 +932,12 @@ export const PlanTierConfigurationPage: React.FC = () => {
                         }
                         onChange={(e) =>
                           handleUpdateCurrentPlan({
-                            override_base_commission_percent: parseFloat(e.target.value) || 0
+                            override_base_commission_percent: parseFloat(e.target.value) || 0,
                           })
                         }
                         className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white disabled:bg-zinc-100 disabled:text-zinc-500 focus:outline-none"
                       />
-                      <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 text-xs">
-                        %
-                      </span>
+                      <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 text-xs">%</span>
                     </div>
                     <p className="text-[11px] text-zinc-500 mt-1">Carried to downstream financial ledger</p>
                   </div>
@@ -978,13 +947,13 @@ export const PlanTierConfigurationPage: React.FC = () => {
                       Allow Agent Commission "Flex"
                     </label>
                     <select
-                      value={currentPlan.agent_flex_config.is_flex_allowed ? 'YES' : 'NO'}
+                      value={currentPlan.agent_flex_config.is_flex_allowed ? "YES" : "NO"}
                       onChange={(e) =>
                         handleUpdateCurrentPlan({
                           agent_flex_config: {
                             ...currentPlan.agent_flex_config,
-                            is_flex_allowed: e.target.value === 'YES'
-                          }
+                            is_flex_allowed: e.target.value === "YES",
+                          },
                         })
                       }
                       className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white focus:outline-none"
@@ -1007,15 +976,13 @@ export const PlanTierConfigurationPage: React.FC = () => {
                           handleUpdateCurrentPlan({
                             agent_flex_config: {
                               ...currentPlan.agent_flex_config,
-                              max_commission_sacrifice_percent: parseFloat(e.target.value) || 0
-                            }
+                              max_commission_sacrifice_percent: parseFloat(e.target.value) || 0,
+                            },
                           })
                         }
                         className="w-full px-3 py-2 border border-zinc-300 rounded-md text-xs text-zinc-900 bg-white disabled:bg-zinc-100 disabled:text-zinc-400 focus:outline-none"
                       />
-                      <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 text-xs">
-                        %
-                      </span>
+                      <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 text-xs">%</span>
                     </div>
                     <p className="text-[11px] text-zinc-500 mt-1">Max discount agent can extend to client</p>
                   </div>
@@ -1027,7 +994,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
           {/* ==================================================== */}
           {/* TAB 3: BENEFITS & COMPARISON GRID (Screen 8.2.3)     */}
           {/* ==================================================== */}
-          {activeTab === 'BENEFITS' && (
+          {activeTab === "BENEFITS" && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -1035,7 +1002,9 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     Plan Benefits & Limits (Headless Comparison Grid Builder)
                   </h3>
                   <p className="text-xs text-zinc-500">
-                    Granular coverage rows served via <code className="font-mono text-zinc-700">GET /products/{'{id}'}/plans</code> to power customer-facing comparison tables.
+                    Granular coverage rows served via{" "}
+                    <code className="font-mono text-zinc-700">GET /products/{"{id}"}/plans</code> to power
+                    customer-facing comparison tables.
                   </p>
                 </div>
                 <button
@@ -1104,7 +1073,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                             value={cov.limit_type}
                             onChange={(e) => {
                               const updated = [...currentPlan.coverages];
-                              updated[index].limit_type = e.target.value as 'FIXED_AMOUNT' | 'DYNAMIC_REDBOOK';
+                              updated[index].limit_type = e.target.value as "FIXED_AMOUNT" | "DYNAMIC_REDBOOK";
                               handleUpdateCurrentPlan({ coverages: updated });
                             }}
                             className="w-full px-2 py-1 border border-zinc-200 rounded text-xs text-zinc-800 bg-white"
@@ -1114,7 +1083,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                           </select>
                         </td>
                         <td className="py-2.5 px-3 text-right">
-                          {cov.limit_type === 'DYNAMIC_REDBOOK' ? (
+                          {cov.limit_type === "DYNAMIC_REDBOOK" ? (
                             <span className="inline-block px-2 py-0.5 rounded text-[11px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
                               Redbook 80% Market Value
                             </span>
@@ -1146,7 +1115,8 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     {currentPlan.coverages.length === 0 && (
                       <tr>
                         <td colSpan={6} className="py-8 text-center text-zinc-400 text-xs">
-                          No benefit rows configured for this tier. Click "Add Coverage Row" to populate comparison grid.
+                          No benefit rows configured for this tier. Click "Add Coverage Row" to populate comparison
+                          grid.
                         </td>
                       </tr>
                     )}
@@ -1159,7 +1129,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
           {/* ==================================================== */}
           {/* TAB 4: UNDERWRITING & REFERRAL TEMPLATES             */}
           {/* ==================================================== */}
-          {activeTab === 'RULES' && (
+          {activeTab === "RULES" && (
             <div className="space-y-6">
               {/* Plan Level Underwriting Overrides (BRD PROD-05) */}
               <div>
@@ -1170,7 +1140,8 @@ export const PlanTierConfigurationPage: React.FC = () => {
                       Plan-Level Underwriting Rule Overrides (Child-First Logic)
                     </h3>
                     <p className="text-xs text-zinc-500">
-                      Evaluated first by URE. Overrides global product limits (e.g., allowing older vehicle age on Gold plan).
+                      Evaluated first by URE. Overrides global product limits (e.g., allowing older vehicle age on Gold
+                      plan).
                     </p>
                   </div>
                   <button
@@ -1178,14 +1149,14 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     onClick={() => {
                       const newRule: PlanRuleOverride = {
                         rule_id: `rule-ov-${Date.now()}`,
-                        target_field: 'driver_age',
-                        operator: '<',
-                        threshold_value: '25',
-                        enforcement_action: 'LOADING',
-                        loading_percent: 15.0
+                        target_field: "driver_age",
+                        operator: "<",
+                        threshold_value: "25",
+                        enforcement_action: "LOADING",
+                        loading_percent: 15.0,
                       };
                       handleUpdateCurrentPlan({
-                        rule_overrides: [...currentPlan.rule_overrides, newRule]
+                        rule_overrides: [...currentPlan.rule_overrides, newRule],
                       });
                     }}
                     className="inline-flex items-center gap-1 px-3 py-1.5 border border-zinc-300 rounded text-xs font-medium text-zinc-700 bg-white hover:bg-zinc-50"
@@ -1208,11 +1179,11 @@ export const PlanTierConfigurationPage: React.FC = () => {
                         <ArrowRight className="w-3.5 h-3.5 text-zinc-400" />
                         <span
                           className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
-                            rule.enforcement_action === 'REJECT'
-                              ? 'bg-red-100 text-red-700'
-                              : rule.enforcement_action === 'REFER'
-                              ? 'bg-amber-100 text-amber-700'
-                              : 'bg-indigo-100 text-indigo-700'
+                            rule.enforcement_action === "REJECT"
+                              ? "bg-red-100 text-red-700"
+                              : rule.enforcement_action === "REFER"
+                                ? "bg-amber-100 text-amber-700"
+                                : "bg-indigo-100 text-indigo-700"
                           }`}
                         >
                           THEN {rule.enforcement_action}
@@ -1252,7 +1223,8 @@ export const PlanTierConfigurationPage: React.FC = () => {
                       Referral Question & Document Requirements (refer_template)
                     </h3>
                     <p className="text-xs text-zinc-500">
-                      Returned to external Sales Channel when an application is tripped into <code className="font-mono text-zinc-700">PENDING_REVIEW</code> status (Yellow Channel).
+                      Returned to external Sales Channel when an application is tripped into{" "}
+                      <code className="font-mono text-zinc-700">PENDING_REVIEW</code> status (Yellow Channel).
                     </p>
                   </div>
                   <button
@@ -1260,12 +1232,12 @@ export const PlanTierConfigurationPage: React.FC = () => {
                     onClick={() => {
                       const newReq: ReferRequirementItem = {
                         field_id: `req_${Date.now()}`,
-                        type: 'FILE_UPLOAD',
-                        label: 'Additional Supporting Document',
-                        required: true
+                        type: "FILE_UPLOAD",
+                        label: "Additional Supporting Document",
+                        required: true,
                       };
                       handleUpdateCurrentPlan({
-                        refer_template_requirements: [...currentPlan.refer_template_requirements, newReq]
+                        refer_template_requirements: [...currentPlan.refer_template_requirements, newReq],
                       });
                     }}
                     className="inline-flex items-center gap-1 px-3 py-1.5 border border-zinc-300 rounded text-xs font-medium text-zinc-700 bg-white hover:bg-zinc-50"
@@ -1306,7 +1278,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                               value={req.type}
                               onChange={(e) => {
                                 const updated = [...currentPlan.refer_template_requirements];
-                                updated[idx].type = e.target.value as 'FILE_UPLOAD' | 'TEXT_INPUT' | 'BOOLEAN';
+                                updated[idx].type = e.target.value as "FILE_UPLOAD" | "TEXT_INPUT" | "BOOLEAN";
                                 handleUpdateCurrentPlan({ refer_template_requirements: updated });
                               }}
                               className="w-full px-2 py-1 border border-zinc-200 rounded text-xs text-zinc-800 bg-white"
@@ -1344,9 +1316,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => {
-                                const updated = currentPlan.refer_template_requirements.filter(
-                                  (_, i) => i !== idx
-                                );
+                                const updated = currentPlan.refer_template_requirements.filter((_, i) => i !== idx);
                                 handleUpdateCurrentPlan({ refer_template_requirements: updated });
                               }}
                               className="p-1 text-zinc-400 hover:text-red-600 transition-colors"
@@ -1359,7 +1329,8 @@ export const PlanTierConfigurationPage: React.FC = () => {
                       {currentPlan.refer_template_requirements.length === 0 && (
                         <tr>
                           <td colSpan={5} className="py-6 text-center text-zinc-400 text-xs">
-                            No referral questions configured. Clean applications auto-proceed to payment without Yellow Channel pause.
+                            No referral questions configured. Clean applications auto-proceed to payment without Yellow
+                            Channel pause.
                           </td>
                         </tr>
                       )}

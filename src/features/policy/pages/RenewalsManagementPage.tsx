@@ -1,33 +1,33 @@
-import React, { useState, useId } from 'react';
 import {
-  RefreshCw,
-  UploadCloud,
-  Search,
-  Filter,
+  AlertCircle,
+  Building,
+  Calendar,
+  Check,
   CheckCircle2,
   Clock,
-  AlertCircle,
-  FileText,
-  TrendingUp,
   Eye,
+  FileText,
+  Filter,
+  RefreshCw,
+  Search,
   Send,
-  Calendar,
-  Building,
-  Check,
-  X,
   ShieldAlert,
-} from 'lucide-react';
+  TrendingUp,
+  UploadCloud,
+  X,
+} from "lucide-react";
+import React, { useId, useState } from "react";
 
 // --- Type Definitions aligned with PAS Architecture & Data Dictionary ---
 
-export type PricingStrategy = 'ATTAINED_AGE' | 'ISSUE_AGE';
+export type PricingStrategy = "ATTAINED_AGE" | "ISSUE_AGE";
 
 export type RenewalStatus =
-  | 'RENEWAL_OFFER_READY'
-  | 'APPROVED_WAITING_PAYMENT'
-  | 'INFO_REQUIRED'
-  | 'CONVERTED_TO_POLICY'
-  | 'EXPIRED';
+  | "RENEWAL_OFFER_READY"
+  | "APPROVED_WAITING_PAYMENT"
+  | "INFO_REQUIRED"
+  | "CONVERTED_TO_POLICY"
+  | "EXPIRED";
 
 export interface RenewalItem {
   id: string;
@@ -36,7 +36,7 @@ export interface RenewalItem {
   referenceNumber?: string;
   customerName: string;
   customerMaskedId: string;
-  lob: 'MOTOR' | 'HEALTH' | 'TRAVEL' | 'PA' | 'LIFE' | 'FIRE';
+  lob: "MOTOR" | "HEALTH" | "TRAVEL" | "PA" | "LIFE" | "FIRE";
   insurerName: string;
   currentGrossPremium: number;
   renewalGrossPremium: number;
@@ -59,90 +59,90 @@ export interface RenewalMetrics {
 
 const INITIAL_RENEWALS: RenewalItem[] = [
   {
-    id: 'app-ren-2026-001',
-    policyId: 'pol-uuid-101',
-    policyNumber: 'V-102948-M',
-    customerName: 'Somchai Jaidee',
-    customerMaskedId: '1-1004-XXXX-88-9',
-    lob: 'MOTOR',
-    insurerName: 'Viriyah Insurance',
+    id: "app-ren-2026-001",
+    policyId: "pol-uuid-101",
+    policyNumber: "V-102948-M",
+    customerName: "Somchai Jaidee",
+    customerMaskedId: "1-1004-XXXX-88-9",
+    lob: "MOTOR",
+    insurerName: "Viriyah Insurance",
     currentGrossPremium: 18500.0,
     renewalGrossPremium: 17200.0, // NCD applied via ATTAINED_AGE
-    pricingStrategy: 'ATTAINED_AGE',
-    expiryDate: '2026-11-15',
+    pricingStrategy: "ATTAINED_AGE",
+    expiryDate: "2026-11-15",
     daysUntilExpiry: 33,
-    status: 'RENEWAL_OFFER_READY',
-    channelName: 'Direct Web',
+    status: "RENEWAL_OFFER_READY",
+    channelName: "Direct Web",
     autoBatchGenerated: true,
   },
   {
-    id: 'app-ren-2026-002',
-    policyId: 'pol-uuid-102',
-    policyNumber: 'AIA-L-99823',
-    customerName: 'Kanya Ratanawong',
-    customerMaskedId: '3-1020-XXXX-11-2',
-    lob: 'LIFE',
-    insurerName: 'AIA Thailand',
+    id: "app-ren-2026-002",
+    policyId: "pol-uuid-102",
+    policyNumber: "AIA-L-99823",
+    customerName: "Kanya Ratanawong",
+    customerMaskedId: "3-1020-XXXX-11-2",
+    lob: "LIFE",
+    insurerName: "AIA Thailand",
     currentGrossPremium: 42000.0,
     renewalGrossPremium: 42000.0, // Fixed premium via ISSUE_AGE
-    pricingStrategy: 'ISSUE_AGE',
-    expiryDate: '2026-11-28',
+    pricingStrategy: "ISSUE_AGE",
+    expiryDate: "2026-11-28",
     daysUntilExpiry: 46,
-    status: 'APPROVED_WAITING_PAYMENT',
-    channelName: 'Telesales',
+    status: "APPROVED_WAITING_PAYMENT",
+    channelName: "Telesales",
     autoBatchGenerated: true,
   },
   {
-    id: 'app-ren-2026-003',
-    policyId: 'pol-uuid-103',
-    policyNumber: 'MT-H-55421',
-    customerName: 'Arun Prasert',
-    customerMaskedId: '1-5099-XXXX-45-7',
-    lob: 'HEALTH',
-    insurerName: 'Muang Thai Insurance',
+    id: "app-ren-2026-003",
+    policyId: "pol-uuid-103",
+    policyNumber: "MT-H-55421",
+    customerName: "Arun Prasert",
+    customerMaskedId: "1-5099-XXXX-45-7",
+    lob: "HEALTH",
+    insurerName: "Muang Thai Insurance",
     currentGrossPremium: 28000.0,
     renewalGrossPremium: 31500.0,
-    pricingStrategy: 'ATTAINED_AGE',
-    expiryDate: '2026-12-05',
+    pricingStrategy: "ATTAINED_AGE",
+    expiryDate: "2026-12-05",
     daysUntilExpiry: 53,
-    status: 'INFO_REQUIRED',
-    channelName: 'Sub-agent',
+    status: "INFO_REQUIRED",
+    channelName: "Sub-agent",
     autoBatchGenerated: false,
   },
   {
-    id: 'app-ren-2026-004',
-    policyId: 'pol-uuid-104',
-    policyNumber: 'BKI-M-88310',
-    customerName: 'Thanaporn Srisuk',
-    customerMaskedId: '5-2001-XXXX-99-0',
-    lob: 'MOTOR',
-    insurerName: 'Bangkok Insurance',
+    id: "app-ren-2026-004",
+    policyId: "pol-uuid-104",
+    policyNumber: "BKI-M-88310",
+    customerName: "Thanaporn Srisuk",
+    customerMaskedId: "5-2001-XXXX-99-0",
+    lob: "MOTOR",
+    insurerName: "Bangkok Insurance",
     currentGrossPremium: 15400.0,
     renewalGrossPremium: 14800.0,
-    pricingStrategy: 'ATTAINED_AGE',
-    expiryDate: '2026-10-25',
+    pricingStrategy: "ATTAINED_AGE",
+    expiryDate: "2026-10-25",
     daysUntilExpiry: 12,
-    status: 'CONVERTED_TO_POLICY',
-    channelName: 'Direct Web',
+    status: "CONVERTED_TO_POLICY",
+    channelName: "Direct Web",
     autoBatchGenerated: true,
   },
 ];
 
 export const RenewalsManagementPage: React.FC = () => {
   const [renewals, setRenewals] = useState<RenewalItem[]>(INITIAL_RENEWALS);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLOB, setSelectedLOB] = useState<string>('ALL');
-  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLOB, setSelectedLOB] = useState<string>("ALL");
+  const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
   const [selectedPolicyForAction, setSelectedPolicyForAction] = useState<RenewalItem | null>(null);
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [notification, setNotification] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const searchInputId = useId();
   const lobFilterId = useId();
   const statusFilterId = useId();
 
-  const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
+  const showNotification = (message: string, type: "success" | "error" = "success") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 4000);
   };
@@ -153,18 +153,18 @@ export const RenewalsManagementPage: React.FC = () => {
       item.policyNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.insurerName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLOB = selectedLOB === 'ALL' || item.lob === selectedLOB;
-    const matchesStatus = selectedStatus === 'ALL' || item.status === selectedStatus;
+    const matchesLOB = selectedLOB === "ALL" || item.lob === selectedLOB;
+    const matchesStatus = selectedStatus === "ALL" || item.status === selectedStatus;
     return matchesSearch && matchesLOB && matchesStatus;
   });
 
   // Calculate Metrics
   const metrics: RenewalMetrics = {
     totalUpcoming: renewals.length,
-    offersReady: renewals.filter((r) => r.status === 'RENEWAL_OFFER_READY').length,
-    waitingPayment: renewals.filter((r) => r.status === 'APPROVED_WAITING_PAYMENT').length,
+    offersReady: renewals.filter((r) => r.status === "RENEWAL_OFFER_READY").length,
+    waitingPayment: renewals.filter((r) => r.status === "APPROVED_WAITING_PAYMENT").length,
     conversionRate: Math.round(
-      (renewals.filter((r) => r.status === 'CONVERTED_TO_POLICY').length / renewals.length) * 100
+      (renewals.filter((r) => r.status === "CONVERTED_TO_POLICY").length / renewals.length) * 100,
     ),
   };
 
@@ -174,12 +174,12 @@ export const RenewalsManagementPage: React.FC = () => {
         r.id === item.id
           ? {
               ...r,
-              status: 'RENEWAL_OFFER_READY',
+              status: "RENEWAL_OFFER_READY",
               renewalGrossPremium:
-                r.pricingStrategy === 'ATTAINED_AGE' ? r.currentGrossPremium * 0.95 : r.currentGrossPremium,
+                r.pricingStrategy === "ATTAINED_AGE" ? r.currentGrossPremium * 0.95 : r.currentGrossPremium,
             }
-          : r
-      )
+          : r,
+      ),
     );
     showNotification(`POST /policies/${item.policyId}/renew: Offer calculated and staged.`);
     setSelectedPolicyForAction(null);
@@ -197,12 +197,16 @@ export const RenewalsManagementPage: React.FC = () => {
           role="alert"
           aria-live="polite"
           className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-lg border shadow-lg text-sm transition-all ${
-            notification.type === 'success'
-              ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-              : 'bg-rose-50 border-rose-200 text-rose-800'
+            notification.type === "success"
+              ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+              : "bg-rose-50 border-rose-200 text-rose-800"
           }`}
         >
-          {notification.type === 'success' ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> : <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />}
+          {notification.type === "success" ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          ) : (
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+          )}
           <span>{notification.message}</span>
         </div>
       )}
@@ -213,9 +217,7 @@ export const RenewalsManagementPage: React.FC = () => {
           <div className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1">
             Policy Lifecycle Management (Stage 7)
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
-            Renewals Management
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Renewals Management</h1>
           <p className="text-sm text-zinc-500 mt-1">
             Monitor automated 90-day expiry triggers, pricing strategy recalculations, and bulk renewal lists.
           </p>
@@ -243,7 +245,9 @@ export const RenewalsManagementPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Policies in 90-Day Window</span>
+            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+              Policies in 90-Day Window
+            </span>
             <div className="text-2xl font-bold text-zinc-900 mt-1">{metrics.totalUpcoming}</div>
           </div>
           <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-600">
@@ -253,7 +257,9 @@ export const RenewalsManagementPage: React.FC = () => {
 
         <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Offers Ready (Calculated)</span>
+            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+              Offers Ready (Calculated)
+            </span>
             <div className="text-2xl font-bold text-blue-600 mt-1">{metrics.offersReady}</div>
           </div>
           <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
@@ -285,7 +291,9 @@ export const RenewalsManagementPage: React.FC = () => {
       {/* Filter and Control Bar */}
       <div className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
         <div className="relative w-full md:w-96">
-          <label htmlFor={searchInputId} className="sr-only">Search by Policy, Customer, or Insurer</label>
+          <label htmlFor={searchInputId} className="sr-only">
+            Search by Policy, Customer, or Insurer
+          </label>
           <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             id={searchInputId}
@@ -300,7 +308,9 @@ export const RenewalsManagementPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-zinc-400" />
-            <label htmlFor={lobFilterId} className="sr-only">Filter by Line of Business</label>
+            <label htmlFor={lobFilterId} className="sr-only">
+              Filter by Line of Business
+            </label>
             <select
               id={lobFilterId}
               value={selectedLOB}
@@ -316,7 +326,9 @@ export const RenewalsManagementPage: React.FC = () => {
             </select>
           </div>
 
-          <label htmlFor={statusFilterId} className="sr-only">Filter by Status</label>
+          <label htmlFor={statusFilterId} className="sr-only">
+            Filter by Status
+          </label>
           <select
             id={statusFilterId}
             value={selectedStatus}
@@ -381,27 +393,25 @@ export const RenewalsManagementPage: React.FC = () => {
                       <div className="inline-flex items-center gap-1">
                         <span
                           className={`text-xs px-2 py-0.5 rounded font-mono font-medium ${
-                            item.pricingStrategy === 'ATTAINED_AGE'
-                              ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                              : 'bg-purple-50 text-purple-700 border border-purple-200'
+                            item.pricingStrategy === "ATTAINED_AGE"
+                              ? "bg-blue-50 text-blue-700 border border-blue-200"
+                              : "bg-purple-50 text-purple-700 border border-purple-200"
                           }`}
                         >
                           {item.pricingStrategy}
                         </span>
                       </div>
                       <div className="text-[11px] text-zinc-400 mt-0.5">
-                        {item.pricingStrategy === 'ATTAINED_AGE'
-                          ? 'Recalculates via URE'
-                          : 'Fixed entry pricing'}
+                        {item.pricingStrategy === "ATTAINED_AGE" ? "Recalculates via URE" : "Fixed entry pricing"}
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 text-right">
                       <div className="text-xs text-zinc-400 line-through">
-                        ฿{item.currentGrossPremium.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                        ฿{item.currentGrossPremium.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                       </div>
                       <div className="font-semibold text-zinc-900">
-                        ฿{item.renewalGrossPremium.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                        ฿{item.renewalGrossPremium.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                       </div>
                     </td>
 
@@ -412,7 +422,7 @@ export const RenewalsManagementPage: React.FC = () => {
                       </div>
                       <span
                         className={`text-[11px] font-medium ${
-                          item.daysUntilExpiry <= 30 ? 'text-rose-600' : 'text-zinc-500'
+                          item.daysUntilExpiry <= 30 ? "text-rose-600" : "text-zinc-500"
                         }`}
                       >
                         {item.daysUntilExpiry} days remaining
@@ -422,25 +432,25 @@ export const RenewalsManagementPage: React.FC = () => {
                     <td className="py-3.5 px-4">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${
-                          item.status === 'RENEWAL_OFFER_READY'
-                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                            : item.status === 'APPROVED_WAITING_PAYMENT'
-                            ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                            : item.status === 'CONVERTED_TO_POLICY'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                          item.status === "RENEWAL_OFFER_READY"
+                            ? "bg-blue-50 text-blue-700 border border-blue-200"
+                            : item.status === "APPROVED_WAITING_PAYMENT"
+                              ? "bg-amber-50 text-amber-700 border border-amber-200"
+                              : item.status === "CONVERTED_TO_POLICY"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-zinc-100 text-zinc-700 border border-zinc-200"
                         }`}
                       >
-                        {item.status === 'RENEWAL_OFFER_READY' && <TrendingUp className="w-3 h-3" />}
-                        {item.status === 'APPROVED_WAITING_PAYMENT' && <Clock className="w-3 h-3" />}
-                        {item.status === 'CONVERTED_TO_POLICY' && <Check className="w-3 h-3" />}
+                        {item.status === "RENEWAL_OFFER_READY" && <TrendingUp className="w-3 h-3" />}
+                        {item.status === "APPROVED_WAITING_PAYMENT" && <Clock className="w-3 h-3" />}
+                        {item.status === "CONVERTED_TO_POLICY" && <Check className="w-3 h-3" />}
                         {item.status}
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4 text-right">
                       <div className="inline-flex items-center gap-1.5">
-                        {item.status === 'INFO_REQUIRED' && (
+                        {item.status === "INFO_REQUIRED" && (
                           <button
                             onClick={() => handleManualTriggerQuote(item)}
                             className="px-2.5 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-50 rounded border border-indigo-200 transition"
@@ -449,7 +459,7 @@ export const RenewalsManagementPage: React.FC = () => {
                             Recalculate
                           </button>
                         )}
-                        {item.status === 'RENEWAL_OFFER_READY' && (
+                        {item.status === "RENEWAL_OFFER_READY" && (
                           <button
                             onClick={() => handleFireWebhook(item)}
                             className="p-1.5 text-zinc-600 hover:text-indigo-600 hover:bg-zinc-100 rounded transition"
@@ -493,7 +503,8 @@ export const RenewalsManagementPage: React.FC = () => {
 
             <div className="p-6 space-y-4">
               <p className="text-xs text-zinc-500">
-                Upload external carrier spreadsheets for migrated or offline policies. The system parses rows, upserts Golden Record customers, creates historical master policies, and stages renewal applications.
+                Upload external carrier spreadsheets for migrated or offline policies. The system parses rows, upserts
+                Golden Record customers, creates historical master policies, and stages renewal applications.
               </p>
 
               <div>
@@ -513,9 +524,7 @@ export const RenewalsManagementPage: React.FC = () => {
                 <span className="text-xs font-medium text-zinc-700 block">
                   Click to select CSV/Excel template or drag and drop
                 </span>
-                <span className="text-[11px] text-zinc-400">
-                  Headers validated against PAS Migration Schema
-                </span>
+                <span className="text-[11px] text-zinc-400">Headers validated against PAS Migration Schema</span>
               </div>
             </div>
 
@@ -529,7 +538,7 @@ export const RenewalsManagementPage: React.FC = () => {
               <button
                 onClick={() => {
                   setIsUploadModalOpen(false);
-                  showNotification('Batch job staged: Workers assigned to legacy ingestion queue.');
+                  showNotification("Batch job staged: Workers assigned to legacy ingestion queue.");
                 }}
                 className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition"
               >
@@ -545,9 +554,7 @@ export const RenewalsManagementPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full border border-zinc-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
-              <h2 className="text-base font-bold text-zinc-900">
-                Trigger 90-Day Nightly Cron Scan
-              </h2>
+              <h2 className="text-base font-bold text-zinc-900">Trigger 90-Day Nightly Cron Scan</h2>
               <button
                 onClick={() => setIsTriggerModalOpen(false)}
                 className="text-zinc-400 hover:text-zinc-600 transition"
@@ -560,11 +567,15 @@ export const RenewalsManagementPage: React.FC = () => {
               <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div className="text-xs text-amber-800">
-                  <strong>Worker Simulation:</strong> Scans active contracts expiring within 90 days. Applies <code className="font-mono text-amber-900">ATTAINED_AGE</code> or <code className="font-mono text-amber-900">ISSUE_AGE</code> rules and broadcasts <code className="font-mono text-amber-900">EVENT_RENEWAL_READY</code>.
+                  <strong>Worker Simulation:</strong> Scans active contracts expiring within 90 days. Applies{" "}
+                  <code className="font-mono text-amber-900">ATTAINED_AGE</code> or{" "}
+                  <code className="font-mono text-amber-900">ISSUE_AGE</code> rules and broadcasts{" "}
+                  <code className="font-mono text-amber-900">EVENT_RENEWAL_READY</code>.
                 </div>
               </div>
               <p className="text-xs text-zinc-600">
-                Executing this manually verifies that the underwriting engine correctly parses vehicle depreciation, NCD steps, and age-bracket loadings.
+                Executing this manually verifies that the underwriting engine correctly parses vehicle depreciation, NCD
+                steps, and age-bracket loadings.
               </p>
             </div>
 
@@ -578,7 +589,7 @@ export const RenewalsManagementPage: React.FC = () => {
               <button
                 onClick={() => {
                   setIsTriggerModalOpen(false);
-                  showNotification('Batch complete: 14 policies processed, 14 draft applications staged.');
+                  showNotification("Batch complete: 14 policies processed, 14 draft applications staged.");
                 }}
                 className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition"
               >
@@ -595,12 +606,8 @@ export const RenewalsManagementPage: React.FC = () => {
           <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full border border-zinc-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
               <div>
-                <h2 className="text-base font-bold text-zinc-900">
-                  Renewal Lineage Details
-                </h2>
-                <span className="text-xs font-mono text-zinc-500">
-                  {selectedPolicyForAction.id}
-                </span>
+                <h2 className="text-base font-bold text-zinc-900">Renewal Lineage Details</h2>
+                <span className="text-xs font-mono text-zinc-500">{selectedPolicyForAction.id}</span>
               </div>
               <button
                 onClick={() => setSelectedPolicyForAction(null)}
@@ -638,7 +645,9 @@ export const RenewalsManagementPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-xs py-1">
                   <span className="text-zinc-500">Staged Renewal Premium</span>
-                  <span className="font-bold text-indigo-600">฿{selectedPolicyForAction.renewalGrossPremium.toFixed(2)}</span>
+                  <span className="font-bold text-indigo-600">
+                    ฿{selectedPolicyForAction.renewalGrossPremium.toFixed(2)}
+                  </span>
                 </div>
               </div>
             </div>

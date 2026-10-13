@@ -1,19 +1,19 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from "react";
 
 // ============================================================================
 // Types & Domain Schemas (Mapped to SDD 4.4 & BRD 7.1/7.9)
 // ============================================================================
 
-export type VersionStatus = 'ACTIVE' | 'DRAFT' | 'SCHEDULED' | 'ARCHIVED';
-export type PayeeType = 'BROKER' | 'INSURER' | 'THIRD_PARTY';
-export type PaymentTiming = 'BEFORE_ISSUANCE' | 'AFTER_ISSUANCE';
+export type VersionStatus = "ACTIVE" | "DRAFT" | "SCHEDULED" | "ARCHIVED";
+export type PayeeType = "BROKER" | "INSURER" | "THIRD_PARTY";
+export type PaymentTiming = "BEFORE_ISSUANCE" | "AFTER_ISSUANCE";
 
 export interface ProductVersionConfig {
   versionId: string;
   productId: string;
   productCode: string;
   name: string;
-  lobCode: 'MOTOR' | 'HEALTH' | 'TRAVEL' | 'FIRE' | 'PA' | 'LIFE' | 'CUSTOM';
+  lobCode: "MOTOR" | "HEALTH" | "TRAVEL" | "FIRE" | "PA" | "LIFE" | "CUSTOM";
   versionNumber: string;
   status: VersionStatus;
   payeeType: PayeeType;
@@ -47,87 +47,87 @@ export interface DiffField {
 
 const MOCK_VERSIONS: ProductVersionConfig[] = [
   {
-    versionId: 'ver-8899-motor-v2.1',
-    productId: 'prod-001',
-    productCode: 'VIRIYAH-MOTOR-T1-2026',
-    name: 'Viriyah Comprehensive Type 1 (EV & ICE)',
-    lobCode: 'MOTOR',
-    versionNumber: 'v2.1',
-    status: 'DRAFT',
-    payeeType: 'BROKER',
+    versionId: "ver-8899-motor-v2.1",
+    productId: "prod-001",
+    productCode: "VIRIYAH-MOTOR-T1-2026",
+    name: "Viriyah Comprehensive Type 1 (EV & ICE)",
+    lobCode: "MOTOR",
+    versionNumber: "v2.1",
+    status: "DRAFT",
+    payeeType: "BROKER",
     baseInsurerCommissionPercent: 18.5,
-    paymentTiming: 'BEFORE_ISSUANCE',
-    allowedPaymentMethods: ['CREDIT_CARD', 'PROMPTPAY', 'INSTALLMENT'],
-    allowedPaymentTerms: ['SINGLE', 'INSTALLMENT_3M', 'INSTALLMENT_6M'],
+    paymentTiming: "BEFORE_ISSUANCE",
+    allowedPaymentMethods: ["CREDIT_CARD", "PROMPTPAY", "INSTALLMENT"],
+    allowedPaymentTerms: ["SINGLE", "INSTALLMENT_3M", "INSTALLMENT_6M"],
     installmentConfig: { durationMonths: 6, firstMonthPercent: 30.0 },
-    effectiveStartDate: '2026-11-01T00:00:00Z',
+    effectiveStartDate: "2026-11-01T00:00:00Z",
     effectiveEndDate: null,
-    createdBy: 'usr-maker-operations@broker.com',
-    createdAt: '2026-10-12T09:30:00Z',
-    changeSummary: 'Updated commission rates for Q4 and activated 6-month installment schedules',
+    createdBy: "usr-maker-operations@broker.com",
+    createdAt: "2026-10-12T09:30:00Z",
+    changeSummary: "Updated commission rates for Q4 and activated 6-month installment schedules",
   },
   {
-    versionId: 'ver-7711-motor-v2.0',
-    productId: 'prod-001',
-    productCode: 'VIRIYAH-MOTOR-T1-2026',
-    name: 'Viriyah Comprehensive Type 1',
-    lobCode: 'MOTOR',
-    versionNumber: 'v2.0',
-    status: 'ACTIVE',
-    payeeType: 'BROKER',
+    versionId: "ver-7711-motor-v2.0",
+    productId: "prod-001",
+    productCode: "VIRIYAH-MOTOR-T1-2026",
+    name: "Viriyah Comprehensive Type 1",
+    lobCode: "MOTOR",
+    versionNumber: "v2.0",
+    status: "ACTIVE",
+    payeeType: "BROKER",
     baseInsurerCommissionPercent: 16.0,
-    paymentTiming: 'BEFORE_ISSUANCE',
-    allowedPaymentMethods: ['CREDIT_CARD', 'PROMPTPAY'],
-    allowedPaymentTerms: ['SINGLE', 'INSTALLMENT_3M'],
+    paymentTiming: "BEFORE_ISSUANCE",
+    allowedPaymentMethods: ["CREDIT_CARD", "PROMPTPAY"],
+    allowedPaymentTerms: ["SINGLE", "INSTALLMENT_3M"],
     installmentConfig: { durationMonths: 3, firstMonthPercent: 35.0 },
-    effectiveStartDate: '2026-01-01T00:00:00Z',
+    effectiveStartDate: "2026-01-01T00:00:00Z",
     effectiveEndDate: null,
-    createdBy: 'usr-admin-system@broker.com',
-    createdAt: '2025-12-15T14:20:00Z',
-    publishedBy: 'usr-checker-underwriting@broker.com',
-    changeSummary: 'Baseline fiscal product version for 2026',
+    createdBy: "usr-admin-system@broker.com",
+    createdAt: "2025-12-15T14:20:00Z",
+    publishedBy: "usr-checker-underwriting@broker.com",
+    changeSummary: "Baseline fiscal product version for 2026",
   },
   {
-    versionId: 'ver-5500-motor-v1.0',
-    productId: 'prod-001',
-    productCode: 'VIRIYAH-MOTOR-T1-2025',
-    name: 'Viriyah Comprehensive Type 1 Legacy',
-    lobCode: 'MOTOR',
-    versionNumber: 'v1.0',
-    status: 'ARCHIVED',
-    payeeType: 'INSURER',
+    versionId: "ver-5500-motor-v1.0",
+    productId: "prod-001",
+    productCode: "VIRIYAH-MOTOR-T1-2025",
+    name: "Viriyah Comprehensive Type 1 Legacy",
+    lobCode: "MOTOR",
+    versionNumber: "v1.0",
+    status: "ARCHIVED",
+    payeeType: "INSURER",
     baseInsurerCommissionPercent: 15.0,
-    paymentTiming: 'AFTER_ISSUANCE',
-    allowedPaymentMethods: ['CREDIT_CARD'],
-    allowedPaymentTerms: ['SINGLE'],
+    paymentTiming: "AFTER_ISSUANCE",
+    allowedPaymentMethods: ["CREDIT_CARD"],
+    allowedPaymentTerms: ["SINGLE"],
     installmentConfig: { durationMonths: 0, firstMonthPercent: 100.0 },
-    effectiveStartDate: '2025-01-01T00:00:00Z',
-    effectiveEndDate: '2025-12-31T23:59:59Z',
-    createdBy: 'usr-legacy-etl@broker.com',
-    createdAt: '2024-12-20T10:00:00Z',
-    publishedBy: 'usr-checker-compliance@broker.com',
-    changeSummary: 'Superseded by 2026 master rates',
+    effectiveStartDate: "2025-01-01T00:00:00Z",
+    effectiveEndDate: "2025-12-31T23:59:59Z",
+    createdBy: "usr-legacy-etl@broker.com",
+    createdAt: "2024-12-20T10:00:00Z",
+    publishedBy: "usr-checker-compliance@broker.com",
+    changeSummary: "Superseded by 2026 master rates",
   },
   {
-    versionId: 'ver-9901-health-v1.2',
-    productId: 'prod-002',
-    productCode: 'AIA-HEALTH-PRESTIGE-2026',
-    name: 'AIA Care First Ultra Health Package',
-    lobCode: 'HEALTH',
-    versionNumber: 'v1.2',
-    status: 'SCHEDULED',
-    payeeType: 'INSURER',
+    versionId: "ver-9901-health-v1.2",
+    productId: "prod-002",
+    productCode: "AIA-HEALTH-PRESTIGE-2026",
+    name: "AIA Care First Ultra Health Package",
+    lobCode: "HEALTH",
+    versionNumber: "v1.2",
+    status: "SCHEDULED",
+    payeeType: "INSURER",
     baseInsurerCommissionPercent: 22.0,
-    paymentTiming: 'BEFORE_ISSUANCE',
-    allowedPaymentMethods: ['CREDIT_CARD', 'DIRECT_DEBIT'],
-    allowedPaymentTerms: ['SINGLE', 'ANNUAL_RENEWAL'],
+    paymentTiming: "BEFORE_ISSUANCE",
+    allowedPaymentMethods: ["CREDIT_CARD", "DIRECT_DEBIT"],
+    allowedPaymentTerms: ["SINGLE", "ANNUAL_RENEWAL"],
     installmentConfig: { durationMonths: 12, firstMonthPercent: 8.33 },
-    effectiveStartDate: '2026-12-01T00:00:00Z',
+    effectiveStartDate: "2026-12-01T00:00:00Z",
     effectiveEndDate: null,
-    createdBy: 'usr-maker-actuary@broker.com',
-    createdAt: '2026-10-10T16:45:00Z',
-    publishedBy: 'usr-checker-governance@broker.com',
-    changeSummary: 'Scheduled Year-End Tax Deduction campaign edition',
+    createdBy: "usr-maker-actuary@broker.com",
+    createdAt: "2026-10-10T16:45:00Z",
+    publishedBy: "usr-checker-governance@broker.com",
+    changeSummary: "Scheduled Year-End Tax Deduction campaign edition",
   },
 ];
 
@@ -137,9 +137,9 @@ const MOCK_VERSIONS: ProductVersionConfig[] = [
 
 export const VersioningPublishingPage: React.FC = () => {
   const [versions, setVersions] = useState<ProductVersionConfig[]>(MOCK_VERSIONS);
-  const [selectedLob, setSelectedLob] = useState<string>('ALL');
-  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedLob, setSelectedLob] = useState<string>("ALL");
+  const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Modals & Panels State
   const [activeDiffModal, setActiveDiffModal] = useState<{
@@ -148,16 +148,16 @@ export const VersioningPublishingPage: React.FC = () => {
   } | null>(null);
 
   const [publishingModalDraft, setPublishingModalDraft] = useState<ProductVersionConfig | null>(null);
-  const [publishMode, setPublishMode] = useState<'IMMEDIATE' | 'SCHEDULED'>('IMMEDIATE');
-  const [scheduledDate, setScheduledDate] = useState<string>('2026-11-01');
-  const [submissionComments, setSubmissionComments] = useState<string>('');
+  const [publishMode, setPublishMode] = useState<"IMMEDIATE" | "SCHEDULED">("IMMEDIATE");
+  const [scheduledDate, setScheduledDate] = useState<string>("2026-11-01");
+  const [submissionComments, setSubmissionComments] = useState<string>("");
   const [actionSuccessMsg, setActionSuccessMsg] = useState<string | null>(null);
 
   // Filtered List
   const filteredVersions = useMemo(() => {
     return versions.filter((ver) => {
-      const matchLob = selectedLob === 'ALL' || ver.lobCode === selectedLob;
-      const matchStatus = selectedStatus === 'ALL' || ver.status === selectedStatus;
+      const matchLob = selectedLob === "ALL" || ver.lobCode === selectedLob;
+      const matchStatus = selectedStatus === "ALL" || ver.status === selectedStatus;
       const matchSearch =
         ver.productCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -168,25 +168,25 @@ export const VersioningPublishingPage: React.FC = () => {
 
   // Clone & Fork action (SCD Type 2 - Copy-on-Write)
   const handleCloneNewDraft = (activeVer: ProductVersionConfig) => {
-    const existingDraft = versions.find(
-      (v) => v.productId === activeVer.productId && v.status === 'DRAFT'
-    );
+    const existingDraft = versions.find((v) => v.productId === activeVer.productId && v.status === "DRAFT");
     if (existingDraft) {
-      alert(`A Draft version (${existingDraft.versionNumber}) already exists for ${activeVer.productCode}. Please review or delete the existing draft first.`);
+      alert(
+        `A Draft version (${existingDraft.versionNumber}) already exists for ${activeVer.productCode}. Please review or delete the existing draft first.`,
+      );
       return;
     }
 
-    const versionNumParts = activeVer.versionNumber.replace('v', '').split('.');
-    const nextSubVersion = `v${versionNumParts[0]}.${parseInt(versionNumParts[1] || '0', 10) + 1}`;
+    const versionNumParts = activeVer.versionNumber.replace("v", "").split(".");
+    const nextSubVersion = `v${versionNumParts[0]}.${parseInt(versionNumParts[1] || "0", 10) + 1}`;
 
     const newDraft: ProductVersionConfig = {
       ...activeVer,
       versionId: `ver-${Date.now().toString().slice(-4)}-${activeVer.lobCode.toLowerCase()}-${nextSubVersion}`,
       versionNumber: nextSubVersion,
-      status: 'DRAFT',
+      status: "DRAFT",
       effectiveStartDate: new Date().toISOString(),
       effectiveEndDate: null,
-      createdBy: 'current-admin-user@broker.com',
+      createdBy: "current-admin-user@broker.com",
       createdAt: new Date().toISOString(),
       publishedBy: undefined,
       changeSummary: `Cloned from ${activeVer.versionNumber} for tariff adjustment.`,
@@ -202,7 +202,7 @@ export const VersioningPublishingPage: React.FC = () => {
     if (!publishingModalDraft) return;
 
     if (!submissionComments.trim()) {
-      alert('Please provide justification notes for the Maker-Checker governance audit trail.');
+      alert("Please provide justification notes for the Maker-Checker governance audit trail.");
       return;
     }
 
@@ -212,98 +212,94 @@ export const VersioningPublishingPage: React.FC = () => {
         if (v.versionId === publishingModalDraft.versionId) {
           return {
             ...v,
-            status: publishMode === 'IMMEDIATE' ? 'ACTIVE' : 'SCHEDULED',
-            effectiveStartDate:
-              publishMode === 'IMMEDIATE'
-                ? new Date().toISOString()
-                : `${scheduledDate}T00:00:00Z`,
+            status: publishMode === "IMMEDIATE" ? "ACTIVE" : "SCHEDULED",
+            effectiveStartDate: publishMode === "IMMEDIATE" ? new Date().toISOString() : `${scheduledDate}T00:00:00Z`,
             changeSummary: submissionComments,
           };
         }
         // If immediate publish, retire previous active version
-        if (
-          publishMode === 'IMMEDIATE' &&
-          v.productId === publishingModalDraft.productId &&
-          v.status === 'ACTIVE'
-        ) {
+        if (publishMode === "IMMEDIATE" && v.productId === publishingModalDraft.productId && v.status === "ACTIVE") {
           return {
             ...v,
-            status: 'ARCHIVED',
+            status: "ARCHIVED",
             effectiveEndDate: new Date().toISOString(),
           };
         }
         return v;
-      })
+      }),
     );
 
     setActionSuccessMsg(
-      `Version ${publishingModalDraft.versionNumber} successfully submitted to Approval Inbox. (Maker-Checker Gatekeeper Enforced)`
+      `Version ${publishingModalDraft.versionNumber} successfully submitted to Approval Inbox. (Maker-Checker Gatekeeper Enforced)`,
     );
     setPublishingModalDraft(null);
-    setSubmissionComments('');
+    setSubmissionComments("");
     setTimeout(() => setActionSuccessMsg(null), 6000);
   };
 
   // Generate Field-by-Field Diff Comparison
-  const getDiffBreakdown = (
-    draft: ProductVersionConfig,
-    active: ProductVersionConfig | null
-  ): DiffField[] => {
+  const getDiffBreakdown = (draft: ProductVersionConfig, active: ProductVersionConfig | null): DiffField[] => {
     if (!active) {
       return [
-        { label: 'Code', key: 'productCode', oldVal: 'None', newVal: draft.productCode, isModified: true },
-        { label: 'Version', key: 'versionNumber', oldVal: 'None', newVal: draft.versionNumber, isModified: true },
-        { label: 'Commission %', key: 'baseInsurerCommissionPercent', oldVal: '0.00%', newVal: `${draft.baseInsurerCommissionPercent}%`, isModified: true },
-        { label: 'Payee Settlement', key: 'payeeType', oldVal: 'None', newVal: draft.payeeType, isModified: true },
+        { label: "Code", key: "productCode", oldVal: "None", newVal: draft.productCode, isModified: true },
+        { label: "Version", key: "versionNumber", oldVal: "None", newVal: draft.versionNumber, isModified: true },
+        {
+          label: "Commission %",
+          key: "baseInsurerCommissionPercent",
+          oldVal: "0.00%",
+          newVal: `${draft.baseInsurerCommissionPercent}%`,
+          isModified: true,
+        },
+        { label: "Payee Settlement", key: "payeeType", oldVal: "None", newVal: draft.payeeType, isModified: true },
       ];
     }
 
     return [
       {
-        label: 'Product Code',
-        key: 'productCode',
+        label: "Product Code",
+        key: "productCode",
         oldVal: active.productCode,
         newVal: draft.productCode,
         isModified: active.productCode !== draft.productCode,
       },
       {
-        label: 'Version Number',
-        key: 'versionNumber',
+        label: "Version Number",
+        key: "versionNumber",
         oldVal: active.versionNumber,
         newVal: draft.versionNumber,
         isModified: active.versionNumber !== draft.versionNumber,
       },
       {
-        label: 'Insurer Commission Rate',
-        key: 'baseInsurerCommissionPercent',
+        label: "Insurer Commission Rate",
+        key: "baseInsurerCommissionPercent",
         oldVal: `${active.baseInsurerCommissionPercent.toFixed(2)}%`,
         newVal: `${draft.baseInsurerCommissionPercent.toFixed(2)}%`,
         isModified: active.baseInsurerCommissionPercent !== draft.baseInsurerCommissionPercent,
       },
       {
-        label: 'Payee Type (Settlement)',
-        key: 'payeeType',
+        label: "Payee Type (Settlement)",
+        key: "payeeType",
         oldVal: active.payeeType,
         newVal: draft.payeeType,
         isModified: active.payeeType !== draft.payeeType,
       },
       {
-        label: 'Payment Timing Gate',
-        key: 'paymentTiming',
+        label: "Payment Timing Gate",
+        key: "paymentTiming",
         oldVal: active.paymentTiming,
         newVal: draft.paymentTiming,
         isModified: active.paymentTiming !== draft.paymentTiming,
       },
       {
-        label: 'Allowed Payment Methods',
-        key: 'allowedPaymentMethods',
-        oldVal: active.allowedPaymentMethods.join(', '),
-        newVal: draft.allowedPaymentMethods.join(', '),
-        isModified: active.allowedPaymentMethods.join(',') !== draft.allowedPaymentMethods.join(','),
+        label: "Allowed Payment Methods",
+        key: "allowedPaymentMethods",
+        oldVal: active.allowedPaymentMethods.join(", "),
+        newVal: draft.allowedPaymentMethods.join(", "),
+        isModified: active.allowedPaymentMethods.join(",") !== draft.allowedPaymentMethods.join(","),
       },
       {
-        label: 'Installment Terms',
-        key: 'installmentConfig',
+        label: "Installment Terms",
+        key: "installmentConfig",
         oldVal: `${active.installmentConfig.durationMonths} Mos (${active.installmentConfig.firstMonthPercent}% upfront)`,
         newVal: `${draft.installmentConfig.durationMonths} Mos (${draft.installmentConfig.firstMonthPercent}% upfront)`,
         isModified:
@@ -327,9 +323,7 @@ export const VersioningPublishingPage: React.FC = () => {
               </span>
               <span className="text-xs text-zinc-600">SCD Type 2 Snapshot Immutability</span>
             </div>
-            <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1">
-              Versioning &amp; Publishing Codes
-            </h1>
+            <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1">Versioning &amp; Publishing Codes</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
               Manage product codes, rate snapshots, tariff timelines, and Maker-Checker deployment gates.
             </p>
@@ -339,11 +333,11 @@ export const VersioningPublishingPage: React.FC = () => {
             <div className="flex items-center bg-zinc-100 rounded-lg p-1 border border-zinc-200 text-xs">
               <span className="px-2.5 py-1 font-medium text-zinc-600">Active Versions:</span>
               <span className="px-2 py-0.5 rounded bg-white text-zinc-900 font-semibold shadow-xs">
-                {versions.filter((v) => v.status === 'ACTIVE').length}
+                {versions.filter((v) => v.status === "ACTIVE").length}
               </span>
               <span className="px-2.5 py-1 font-medium text-amber-700 ml-1">Draft Staged:</span>
               <span className="px-2 py-0.5 rounded bg-white text-amber-800 font-semibold shadow-xs">
-                {versions.filter((v) => v.status === 'DRAFT').length}
+                {versions.filter((v) => v.status === "DRAFT").length}
               </span>
             </div>
           </div>
@@ -379,7 +373,12 @@ export const VersioningPublishingPage: React.FC = () => {
             <div className="relative flex-1">
               <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-600">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </span>
               <input
@@ -434,9 +433,7 @@ export const VersioningPublishingPage: React.FC = () => {
             <h2 className="text-xs font-bold text-zinc-700 uppercase tracking-wider">
               Snapshot Catalog Records ({filteredVersions.length})
             </h2>
-            <span className="text-xs text-zinc-500">
-              Double-Entry audit logging enabled for all mutations
-            </span>
+            <span className="text-xs text-zinc-500">Double-Entry audit logging enabled for all mutations</span>
           </div>
 
           <div className="overflow-x-auto">
@@ -461,19 +458,15 @@ export const VersioningPublishingPage: React.FC = () => {
                   </tr>
                 ) : (
                   filteredVersions.map((item) => {
-                    const isDraft = item.status === 'DRAFT';
-                    const isActive = item.status === 'ACTIVE';
-                    const parentActive = versions.find(
-                      (v) => v.productId === item.productId && v.status === 'ACTIVE'
-                    );
+                    const isDraft = item.status === "DRAFT";
+                    const isActive = item.status === "ACTIVE";
+                    const parentActive = versions.find((v) => v.productId === item.productId && v.status === "ACTIVE");
 
                     return (
                       <tr key={item.versionId} className="hover:bg-zinc-50/80 transition-colors">
                         <td className="py-3.5 px-4 font-medium text-zinc-900">
                           <div className="font-semibold text-zinc-900">{item.name}</div>
-                          <div className="font-mono text-[11px] text-zinc-500 mt-0.5">
-                            {item.productCode}
-                          </div>
+                          <div className="font-mono text-[11px] text-zinc-500 mt-0.5">{item.productCode}</div>
                         </td>
 
                         <td className="py-3.5 px-4">
@@ -489,25 +482,25 @@ export const VersioningPublishingPage: React.FC = () => {
                         </td>
 
                         <td className="py-3.5 px-4">
-                          {item.status === 'ACTIVE' && (
+                          {item.status === "ACTIVE" && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                               ACTIVE
                             </span>
                           )}
-                          {item.status === 'DRAFT' && (
+                          {item.status === "DRAFT" && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                               <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                               DRAFT
                             </span>
                           )}
-                          {item.status === 'SCHEDULED' && (
+                          {item.status === "SCHEDULED" && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
                               <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                               SCHEDULED
                             </span>
                           )}
-                          {item.status === 'ARCHIVED' && (
+                          {item.status === "ARCHIVED" && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-zinc-100 text-zinc-500 border border-zinc-200">
                               ARCHIVED
                             </span>
@@ -527,7 +520,7 @@ export const VersioningPublishingPage: React.FC = () => {
                             <span className="text-zinc-600">Until: </span>
                             {item.effectiveEndDate
                               ? new Date(item.effectiveEndDate).toLocaleDateString()
-                              : 'Open (Indefinite)'}
+                              : "Open (Indefinite)"}
                           </div>
                         </td>
 
@@ -565,7 +558,12 @@ export const VersioningPublishingPage: React.FC = () => {
                               >
                                 <span>Publish</span>
                                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                  />
                                 </svg>
                               </button>
                             )}
@@ -585,7 +583,12 @@ export const VersioningPublishingPage: React.FC = () => {
           <div className="flex items-start gap-4">
             <div className="p-2 bg-blue-100 rounded-lg text-blue-700 shrink-0">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
             <div>
@@ -593,10 +596,11 @@ export const VersioningPublishingPage: React.FC = () => {
                 Strict Segregation of Duties (Maker-Checker Directive)
               </h3>
               <p className="text-xs text-blue-900/80 mt-1 leading-relaxed">
-                Publishing any modified code, commission rate, or tariff creates a record in the{' '}
-                <code className="font-mono bg-blue-100/70 px-1 py-0.5 rounded text-blue-900">approval_requests</code>{' '}
+                Publishing any modified code, commission rate, or tariff creates a record in the{" "}
+                <code className="font-mono bg-blue-100/70 px-1 py-0.5 rounded text-blue-900">approval_requests</code>{" "}
                 staging ledger. The user UUID initiating the draft publication cannot execute the final checker
-                verification. Active product versions remain immutable under OIC Thailand auditing guidelines (SCD Type 2).
+                verification. Active product versions remain immutable under OIC Thailand auditing guidelines (SCD Type
+                2).
               </p>
             </div>
           </div>
@@ -611,9 +615,7 @@ export const VersioningPublishingPage: React.FC = () => {
           <div className="bg-white rounded-2xl border border-zinc-200 shadow-xl max-w-4xl w-full overflow-hidden flex flex-col max-h-[90vh]">
             <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Configuration Diff Viewer (Snapshot Comparison)
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Configuration Diff Viewer (Snapshot Comparison)</h3>
                 <p className="text-xs text-zinc-500 mt-0.5">
                   Inspecting differences for {activeDiffModal.draft.productCode}
                 </p>
@@ -637,7 +639,7 @@ export const VersioningPublishingPage: React.FC = () => {
                   <div className="text-xs font-semibold text-zinc-800 mt-1">
                     {activeDiffModal.active
                       ? `${activeDiffModal.active.versionNumber} (${activeDiffModal.active.status})`
-                      : 'None (Initial Release)'}
+                      : "None (Initial Release)"}
                   </div>
                 </div>
                 <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
@@ -656,7 +658,7 @@ export const VersioningPublishingPage: React.FC = () => {
                   <div
                     key={diff.key}
                     className={`p-3 text-xs flex items-center justify-between ${
-                      diff.isModified ? 'bg-amber-50/40' : 'bg-white'
+                      diff.isModified ? "bg-amber-50/40" : "bg-white"
                     }`}
                   >
                     <div className="w-1/3">
@@ -665,13 +667,17 @@ export const VersioningPublishingPage: React.FC = () => {
                     </div>
 
                     <div className="w-1/3 pr-2 font-mono text-zinc-600">
-                      <span className={diff.isModified ? 'bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded' : ''}>
+                      <span className={diff.isModified ? "bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded" : ""}>
                         {String(diff.oldVal)}
                       </span>
                     </div>
 
                     <div className="w-1/3 pl-2 font-mono text-zinc-900 font-medium">
-                      <span className={diff.isModified ? 'bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold' : ''}>
+                      <span
+                        className={
+                          diff.isModified ? "bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold" : ""
+                        }
+                      >
                         {String(diff.newVal)}
                       </span>
                     </div>
@@ -724,17 +730,15 @@ export const VersioningPublishingPage: React.FC = () => {
 
             <div className="p-6 space-y-4 text-xs">
               <div>
-                <label className="font-bold text-zinc-800 block mb-1">
-                  1. Select Effective Deployment Mode
-                </label>
+                <label className="font-bold text-zinc-800 block mb-1">1. Select Effective Deployment Mode</label>
                 <div className="grid grid-cols-2 gap-3 mt-1.5">
                   <button
                     type="button"
-                    onClick={() => setPublishMode('IMMEDIATE')}
+                    onClick={() => setPublishMode("IMMEDIATE")}
                     className={`p-3 rounded-lg border text-left transition-all ${
-                      publishMode === 'IMMEDIATE'
-                        ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-900'
-                        : 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
+                      publishMode === "IMMEDIATE"
+                        ? "bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-900"
+                        : "bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100"
                     }`}
                   >
                     <div className="font-bold">Case A: Immediate</div>
@@ -745,22 +749,20 @@ export const VersioningPublishingPage: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={() => setPublishMode('SCHEDULED')}
+                    onClick={() => setPublishMode("SCHEDULED")}
                     className={`p-3 rounded-lg border text-left transition-all ${
-                      publishMode === 'SCHEDULED'
-                        ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-900'
-                        : 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
+                      publishMode === "SCHEDULED"
+                        ? "bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-900"
+                        : "bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100"
                     }`}
                   >
                     <div className="font-bold">Case B: Scheduled</div>
-                    <div className="text-[11px] text-zinc-500 mt-0.5">
-                      Nightly batch job flips state on target date
-                    </div>
+                    <div className="text-[11px] text-zinc-500 mt-0.5">Nightly batch job flips state on target date</div>
                   </button>
                 </div>
               </div>
 
-              {publishMode === 'SCHEDULED' && (
+              {publishMode === "SCHEDULED" && (
                 <div>
                   <label className="font-semibold text-zinc-700 block mb-1">
                     Effective Target Date (OIC Filing Window)
@@ -788,9 +790,9 @@ export const VersioningPublishingPage: React.FC = () => {
               </div>
 
               <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 text-[11px] leading-relaxed">
-                <strong>Attention:</strong> This request will be routed to{' '}
-                <code className="font-mono bg-amber-100 px-1 rounded">approval_requests</code>.
-                In accordance with Segregation of Duties (BRD 7.9), you will not be able to approve your own submission.
+                <strong>Attention:</strong> This request will be routed to{" "}
+                <code className="font-mono bg-amber-100 px-1 rounded">approval_requests</code>. In accordance with
+                Segregation of Duties (BRD 7.9), you will not be able to approve your own submission.
               </div>
             </div>
 

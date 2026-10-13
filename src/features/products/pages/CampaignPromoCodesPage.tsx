@@ -1,30 +1,30 @@
-import React, { useState, useMemo } from 'react';
 import {
-  Tag,
+  AlertTriangle,
   Calendar,
-  Plus,
-  Search,
-  Filter,
+  Check,
   CheckCircle2,
   Clock,
-  AlertTriangle,
-  XCircle,
-  TrendingUp,
-  DollarSign,
   Copy,
-  Check,
+  DollarSign,
   Edit2,
-  Sparkles,
+  Filter,
   Info,
+  Plus,
+  Search,
+  Sparkles,
+  Tag,
+  TrendingUp,
   X,
-} from 'lucide-react';
+  XCircle,
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
 
 // ============================================================================
 // TypeScript Interfaces & Domain Models (BRD Module 6 & 8.5)
 // ============================================================================
 
-export type DiscountType = 'FIXED_AMOUNT' | 'PERCENTAGE';
-export type PromoStatus = 'ACTIVE' | 'SCHEDULED' | 'EXPIRED' | 'DEPLETED' | 'PAUSED';
+export type DiscountType = "FIXED_AMOUNT" | "PERCENTAGE";
+export type PromoStatus = "ACTIVE" | "SCHEDULED" | "EXPIRED" | "DEPLETED" | "PAUSED";
 
 export interface PromoCodeItem {
   id: string;
@@ -43,7 +43,7 @@ export interface PromoCodeItem {
   productScope: string[]; // ['MOTOR', 'TRAVEL', 'HEALTH', 'ALL']
   channelScope: string[]; // ['WEBSITE', 'TELESALES', 'DIRECT_SALE']
   budgetCode: string;
-  expenseModel: 'CORPORATE_ABSORBED' | 'AGENT_SACRIFICE';
+  expenseModel: "CORPORATE_ABSORBED" | "AGENT_SACRIFICE";
   createdAt: string;
 }
 
@@ -52,10 +52,10 @@ export interface SeasonalProduct {
   productCode: string;
   productName: string;
   insurerName: string;
-  lob: 'MOTOR' | 'TRAVEL' | 'HEALTH' | 'FIRE' | 'LIFE';
+  lob: "MOTOR" | "TRAVEL" | "HEALTH" | "FIRE" | "LIFE";
   salesStartDate: string;
   salesEndDate: string;
-  status: 'ACTIVE' | 'SCHEDULED' | 'EXPIRED';
+  status: "ACTIVE" | "SCHEDULED" | "EXPIRED";
   isPromoEligible: boolean;
 }
 
@@ -65,158 +65,158 @@ export interface SeasonalProduct {
 
 const INITIAL_PROMO_CODES: PromoCodeItem[] = [
   {
-    id: 'promo-001',
-    code: 'SUMMER2026',
-    campaignName: 'Songkran Festive Road-Trip Special',
-    description: 'Flat ฿500 discount for Motor Voluntary Type 1 & 2+ packages.',
-    discountType: 'FIXED_AMOUNT',
+    id: "promo-001",
+    code: "SUMMER2026",
+    campaignName: "Songkran Festive Road-Trip Special",
+    description: "Flat ฿500 discount for Motor Voluntary Type 1 & 2+ packages.",
+    discountType: "FIXED_AMOUNT",
     discountValue: 500,
     minPremium: 7500,
     maxRedemptions: 1500,
     currentRedemptions: 842,
-    startDate: '2026-03-15',
-    endDate: '2026-05-15',
-    status: 'ACTIVE',
-    productScope: ['MOTOR'],
-    channelScope: ['WEBSITE', 'TELESALES'],
-    budgetCode: 'MKT-2026-Q2-MOTOR',
-    expenseModel: 'CORPORATE_ABSORBED',
-    createdAt: '2026-03-01',
+    startDate: "2026-03-15",
+    endDate: "2026-05-15",
+    status: "ACTIVE",
+    productScope: ["MOTOR"],
+    channelScope: ["WEBSITE", "TELESALES"],
+    budgetCode: "MKT-2026-Q2-MOTOR",
+    expenseModel: "CORPORATE_ABSORBED",
+    createdAt: "2026-03-01",
   },
   {
-    id: 'promo-002',
-    code: 'TRAVELSAFE15',
-    campaignName: 'MSIG Global Travel 15% Kickoff',
-    description: '15% instant savings on MSIG Travel Easy single and annual policies.',
-    discountType: 'PERCENTAGE',
+    id: "promo-002",
+    code: "TRAVELSAFE15",
+    campaignName: "MSIG Global Travel 15% Kickoff",
+    description: "15% instant savings on MSIG Travel Easy single and annual policies.",
+    discountType: "PERCENTAGE",
     discountValue: 15,
     maxDiscountCap: 1200,
     minPremium: 1000,
     maxRedemptions: 3000,
     currentRedemptions: 1940,
-    startDate: '2026-01-01',
-    endDate: '2026-12-31',
-    status: 'ACTIVE',
-    productScope: ['TRAVEL'],
-    channelScope: ['WEBSITE'],
-    budgetCode: 'MKT-2026-ANNUAL-TRV',
-    expenseModel: 'CORPORATE_ABSORBED',
-    createdAt: '2025-12-20',
+    startDate: "2026-01-01",
+    endDate: "2026-12-31",
+    status: "ACTIVE",
+    productScope: ["TRAVEL"],
+    channelScope: ["WEBSITE"],
+    budgetCode: "MKT-2026-ANNUAL-TRV",
+    expenseModel: "CORPORATE_ABSORBED",
+    createdAt: "2025-12-20",
   },
   {
-    id: 'promo-003',
-    code: 'HEALTHBOOST',
-    campaignName: 'New Year Health Wellness Launch',
-    description: 'Special ฿1,000 corporate rebate on approved health insurance tiers.',
-    discountType: 'FIXED_AMOUNT',
+    id: "promo-003",
+    code: "HEALTHBOOST",
+    campaignName: "New Year Health Wellness Launch",
+    description: "Special ฿1,000 corporate rebate on approved health insurance tiers.",
+    discountType: "FIXED_AMOUNT",
     discountValue: 1000,
     minPremium: 15000,
     maxRedemptions: 500,
     currentRedemptions: 500,
-    startDate: '2026-01-01',
-    endDate: '2026-02-28',
-    status: 'DEPLETED',
-    productScope: ['HEALTH'],
-    channelScope: ['WEBSITE', 'TELESALES', 'DIRECT_SALE'],
-    budgetCode: 'MKT-2026-Q1-HLTH',
-    expenseModel: 'CORPORATE_ABSORBED',
-    createdAt: '2025-12-15',
+    startDate: "2026-01-01",
+    endDate: "2026-02-28",
+    status: "DEPLETED",
+    productScope: ["HEALTH"],
+    channelScope: ["WEBSITE", "TELESALES", "DIRECT_SALE"],
+    budgetCode: "MKT-2026-Q1-HLTH",
+    expenseModel: "CORPORATE_ABSORBED",
+    createdAt: "2025-12-15",
   },
   {
-    id: 'promo-004',
-    code: 'MIDYEAR2026',
-    campaignName: 'Mid-Year Flash Campaign',
-    description: '10% off across all consumer personal accident and fire policies.',
-    discountType: 'PERCENTAGE',
+    id: "promo-004",
+    code: "MIDYEAR2026",
+    campaignName: "Mid-Year Flash Campaign",
+    description: "10% off across all consumer personal accident and fire policies.",
+    discountType: "PERCENTAGE",
     discountValue: 10,
     maxDiscountCap: 2000,
     minPremium: 3000,
     maxRedemptions: 2000,
     currentRedemptions: 0,
-    startDate: '2026-06-01',
-    endDate: '2026-06-30',
-    status: 'SCHEDULED',
-    productScope: ['FIRE', 'TRAVEL'],
-    channelScope: ['WEBSITE', 'TELESALES'],
-    budgetCode: 'MKT-2026-Q2-MID',
-    expenseModel: 'CORPORATE_ABSORBED',
-    createdAt: '2026-04-10',
+    startDate: "2026-06-01",
+    endDate: "2026-06-30",
+    status: "SCHEDULED",
+    productScope: ["FIRE", "TRAVEL"],
+    channelScope: ["WEBSITE", "TELESALES"],
+    budgetCode: "MKT-2026-Q2-MID",
+    expenseModel: "CORPORATE_ABSORBED",
+    createdAt: "2026-04-10",
   },
   {
-    id: 'promo-005',
-    code: 'WELCOME200',
-    campaignName: 'First-time Buyer Onboarding Voucher',
-    description: '฿200 voucher for newly registered leads converting to policyholders.',
-    discountType: 'FIXED_AMOUNT',
+    id: "promo-005",
+    code: "WELCOME200",
+    campaignName: "First-time Buyer Onboarding Voucher",
+    description: "฿200 voucher for newly registered leads converting to policyholders.",
+    discountType: "FIXED_AMOUNT",
     discountValue: 200,
     minPremium: 2000,
     maxRedemptions: 5000,
     currentRedemptions: 4310,
-    startDate: '2026-01-01',
-    endDate: '2026-12-31',
-    status: 'ACTIVE',
-    productScope: ['ALL'],
-    channelScope: ['WEBSITE'],
-    budgetCode: 'MKT-2026-GROWTH',
-    expenseModel: 'CORPORATE_ABSORBED',
-    createdAt: '2026-01-01',
+    startDate: "2026-01-01",
+    endDate: "2026-12-31",
+    status: "ACTIVE",
+    productScope: ["ALL"],
+    channelScope: ["WEBSITE"],
+    budgetCode: "MKT-2026-GROWTH",
+    expenseModel: "CORPORATE_ABSORBED",
+    createdAt: "2026-01-01",
   },
 ];
 
 const INITIAL_SEASONAL_PRODUCTS: SeasonalProduct[] = [
   {
-    id: 'prod-001',
-    productCode: 'MSIG-TRV-2026',
-    productName: 'MSIG Travel Easy Worldwide',
-    insurerName: 'MSIG Insurance',
-    lob: 'TRAVEL',
-    salesStartDate: '2026-01-01',
-    salesEndDate: '2026-12-31',
-    status: 'ACTIVE',
+    id: "prod-001",
+    productCode: "MSIG-TRV-2026",
+    productName: "MSIG Travel Easy Worldwide",
+    insurerName: "MSIG Insurance",
+    lob: "TRAVEL",
+    salesStartDate: "2026-01-01",
+    salesEndDate: "2026-12-31",
+    status: "ACTIVE",
     isPromoEligible: true,
   },
   {
-    id: 'prod-002',
-    productCode: 'VIRIYAH-M1-GOLD',
-    productName: 'Viriyah Motor Type 1 Premium',
-    insurerName: 'Viriyah Insurance',
-    lob: 'MOTOR',
-    salesStartDate: '2026-01-01',
-    salesEndDate: '2026-10-31',
-    status: 'ACTIVE',
+    id: "prod-002",
+    productCode: "VIRIYAH-M1-GOLD",
+    productName: "Viriyah Motor Type 1 Premium",
+    insurerName: "Viriyah Insurance",
+    lob: "MOTOR",
+    salesStartDate: "2026-01-01",
+    salesEndDate: "2026-10-31",
+    status: "ACTIVE",
     isPromoEligible: true,
   },
   {
-    id: 'prod-003',
-    productCode: 'AIA-NY-SPECIAL',
-    productName: 'New Year Special Medical Cover',
-    insurerName: 'AIA Thailand',
-    lob: 'HEALTH',
-    salesStartDate: '2026-01-01',
-    salesEndDate: '2026-01-31',
-    status: 'EXPIRED',
+    id: "prod-003",
+    productCode: "AIA-NY-SPECIAL",
+    productName: "New Year Special Medical Cover",
+    insurerName: "AIA Thailand",
+    lob: "HEALTH",
+    salesStartDate: "2026-01-01",
+    salesEndDate: "2026-01-31",
+    status: "EXPIRED",
     isPromoEligible: false,
   },
   {
-    id: 'prod-004',
-    productCode: 'BKI-SONGKRAN-PA',
-    productName: 'Bangkok Insurance Safe Holiday PA',
-    insurerName: 'Bangkok Insurance',
-    lob: 'TRAVEL',
-    salesStartDate: '2026-04-01',
-    salesEndDate: '2026-05-15',
-    status: 'ACTIVE',
+    id: "prod-004",
+    productCode: "BKI-SONGKRAN-PA",
+    productName: "Bangkok Insurance Safe Holiday PA",
+    insurerName: "Bangkok Insurance",
+    lob: "TRAVEL",
+    salesStartDate: "2026-04-01",
+    salesEndDate: "2026-05-15",
+    status: "ACTIVE",
     isPromoEligible: true,
   },
   {
-    id: 'prod-005',
-    productCode: 'DIP-MIDYEAR-PROP',
-    productName: 'Dhipaya All Risks Residential Fire',
-    insurerName: 'Dhipaya Insurance',
-    lob: 'FIRE',
-    salesStartDate: '2026-06-01',
-    salesEndDate: '2026-08-31',
-    status: 'SCHEDULED',
+    id: "prod-005",
+    productCode: "DIP-MIDYEAR-PROP",
+    productName: "Dhipaya All Risks Residential Fire",
+    insurerName: "Dhipaya Insurance",
+    lob: "FIRE",
+    salesStartDate: "2026-06-01",
+    salesEndDate: "2026-08-31",
+    status: "SCHEDULED",
     isPromoEligible: true,
   },
 ];
@@ -227,27 +227,27 @@ const INITIAL_SEASONAL_PRODUCTS: SeasonalProduct[] = [
 
 export const CampaignPromoCodesPage: React.FC = () => {
   // Navigation & Sub-tab View State
-  const [activeTab, setActiveTab] = useState<'PROMO_CODES' | 'SEASONAL_GANTT' | 'SANDBOX_VALIDATE'>('PROMO_CODES');
+  const [activeTab, setActiveTab] = useState<"PROMO_CODES" | "SEASONAL_GANTT" | "SANDBOX_VALIDATE">("PROMO_CODES");
 
   // Promo Codes State
   const [promoCodes, setPromoCodes] = useState<PromoCodeItem[]>(INITIAL_PROMO_CODES);
   const [seasonalProducts] = useState<SeasonalProduct[]>(INITIAL_SEASONAL_PRODUCTS);
 
   // Search & Filters
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
-  const [selectedType, setSelectedType] = useState<string>('ALL');
-  const [selectedLob, setSelectedLob] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
+  const [selectedType, setSelectedType] = useState<string>("ALL");
+  const [selectedLob, setSelectedLob] = useState<string>("ALL");
 
   // Modal State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Validation Sandbox State (POST /quotes/validate-promo simulator)
-  const [testCodeInput, setTestCodeInput] = useState('SUMMER2026');
-  const [testPremiumInput, setTestPremiumInput] = useState('12000');
-  const [testLobInput, setTestLobInput] = useState('MOTOR');
-  const [testChannelInput, setTestChannelInput] = useState('WEBSITE');
+  const [testCodeInput, setTestCodeInput] = useState("SUMMER2026");
+  const [testPremiumInput, setTestPremiumInput] = useState("12000");
+  const [testLobInput, setTestLobInput] = useState("MOTOR");
+  const [testChannelInput, setTestChannelInput] = useState("WEBSITE");
   const [testValidationResult, setTestValidationResult] = useState<{
     isValid: boolean;
     discountAmount: number;
@@ -258,20 +258,20 @@ export const CampaignPromoCodesPage: React.FC = () => {
 
   // New Promo Code Form State
   const [newPromoForm, setNewPromoForm] = useState<Partial<PromoCodeItem>>({
-    code: '',
-    campaignName: '',
-    description: '',
-    discountType: 'FIXED_AMOUNT',
+    code: "",
+    campaignName: "",
+    description: "",
+    discountType: "FIXED_AMOUNT",
     discountValue: 500,
     minPremium: 3000,
     maxRedemptions: 1000,
     maxDiscountCap: 1500,
-    startDate: '2026-06-01',
-    endDate: '2026-08-31',
-    productScope: ['MOTOR'],
-    channelScope: ['WEBSITE', 'TELESALES'],
-    budgetCode: 'MKT-2026-Q3-PROMO',
-    expenseModel: 'CORPORATE_ABSORBED',
+    startDate: "2026-06-01",
+    endDate: "2026-08-31",
+    productScope: ["MOTOR"],
+    channelScope: ["WEBSITE", "TELESALES"],
+    budgetCode: "MKT-2026-Q3-PROMO",
+    expenseModel: "CORPORATE_ABSORBED",
   });
 
   // Copy Code Helper
@@ -289,12 +289,10 @@ export const CampaignPromoCodesPage: React.FC = () => {
         item.campaignName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.budgetCode.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesStatus = selectedStatus === 'ALL' || item.status === selectedStatus;
-      const matchesType = selectedType === 'ALL' || item.discountType === selectedType;
+      const matchesStatus = selectedStatus === "ALL" || item.status === selectedStatus;
+      const matchesType = selectedType === "ALL" || item.discountType === selectedType;
       const matchesLob =
-        selectedLob === 'ALL' ||
-        item.productScope.includes('ALL') ||
-        item.productScope.includes(selectedLob);
+        selectedLob === "ALL" || item.productScope.includes("ALL") || item.productScope.includes(selectedLob);
 
       return matchesSearch && matchesStatus && matchesType && matchesLob;
     });
@@ -302,15 +300,15 @@ export const CampaignPromoCodesPage: React.FC = () => {
 
   // Aggregate Metrics
   const metrics = useMemo(() => {
-    const totalActive = promoCodes.filter((c) => c.status === 'ACTIVE').length;
+    const totalActive = promoCodes.filter((c) => c.status === "ACTIVE").length;
     const totalRedemptions = promoCodes.reduce((acc, c) => acc + c.currentRedemptions, 0);
     const estimatedAbsorption = promoCodes.reduce((acc, c) => {
-      if (c.discountType === 'FIXED_AMOUNT') {
+      if (c.discountType === "FIXED_AMOUNT") {
         return acc + c.discountValue * c.currentRedemptions;
       }
       return acc + (c.maxDiscountCap || 800) * 0.7 * c.currentRedemptions;
     }, 0);
-    const scheduled = promoCodes.filter((c) => c.status === 'SCHEDULED').length;
+    const scheduled = promoCodes.filter((c) => c.status === "SCHEDULED").length;
 
     return { totalActive, totalRedemptions, estimatedAbsorption, scheduled };
   }, [promoCodes]);
@@ -324,37 +322,37 @@ export const CampaignPromoCodesPage: React.FC = () => {
       id: `promo-${Date.now()}`,
       code: newPromoForm.code.toUpperCase().trim(),
       campaignName: newPromoForm.campaignName,
-      description: newPromoForm.description || '',
-      discountType: newPromoForm.discountType || 'FIXED_AMOUNT',
+      description: newPromoForm.description || "",
+      discountType: newPromoForm.discountType || "FIXED_AMOUNT",
       discountValue: Number(newPromoForm.discountValue) || 0,
       maxDiscountCap: newPromoForm.maxDiscountCap ? Number(newPromoForm.maxDiscountCap) : undefined,
       minPremium: Number(newPromoForm.minPremium) || 0,
       maxRedemptions: Number(newPromoForm.maxRedemptions) || 100,
       currentRedemptions: 0,
-      startDate: newPromoForm.startDate || '2026-06-01',
-      endDate: newPromoForm.endDate || '2026-08-31',
-      status: 'ACTIVE',
-      productScope: newPromoForm.productScope || ['ALL'],
-      channelScope: newPromoForm.channelScope || ['WEBSITE'],
-      budgetCode: newPromoForm.budgetCode || 'MKT-GEN',
-      expenseModel: 'CORPORATE_ABSORBED',
-      createdAt: new Date().toISOString().split('T')[0],
+      startDate: newPromoForm.startDate || "2026-06-01",
+      endDate: newPromoForm.endDate || "2026-08-31",
+      status: "ACTIVE",
+      productScope: newPromoForm.productScope || ["ALL"],
+      channelScope: newPromoForm.channelScope || ["WEBSITE"],
+      budgetCode: newPromoForm.budgetCode || "MKT-GEN",
+      expenseModel: "CORPORATE_ABSORBED",
+      createdAt: new Date().toISOString().split("T")[0],
     };
 
     setPromoCodes([newCodeItem, ...promoCodes]);
     setIsCreateModalOpen(false);
     setNewPromoForm({
-      code: '',
-      campaignName: '',
-      description: '',
-      discountType: 'FIXED_AMOUNT',
+      code: "",
+      campaignName: "",
+      description: "",
+      discountType: "FIXED_AMOUNT",
       discountValue: 500,
       minPremium: 3000,
       maxRedemptions: 1000,
-      startDate: '2026-06-01',
-      endDate: '2026-08-31',
-      productScope: ['MOTOR'],
-      channelScope: ['WEBSITE'],
+      startDate: "2026-06-01",
+      endDate: "2026-08-31",
+      productScope: ["MOTOR"],
+      channelScope: ["WEBSITE"],
     });
   };
 
@@ -368,12 +366,12 @@ export const CampaignPromoCodesPage: React.FC = () => {
         isValid: false,
         discountAmount: 0,
         finalPremium: premium,
-        message: 'ERR_INVALID_CODE: Promo code does not exist in master catalog.',
+        message: "ERR_INVALID_CODE: Promo code does not exist in master catalog.",
       });
       return;
     }
 
-    if (codeObj.status !== 'ACTIVE') {
+    if (codeObj.status !== "ACTIVE") {
       setTestValidationResult({
         isValid: false,
         discountAmount: 0,
@@ -393,12 +391,12 @@ export const CampaignPromoCodesPage: React.FC = () => {
       return;
     }
 
-    if (!codeObj.productScope.includes('ALL') && !codeObj.productScope.includes(testLobInput)) {
+    if (!codeObj.productScope.includes("ALL") && !codeObj.productScope.includes(testLobInput)) {
       setTestValidationResult({
         isValid: false,
         discountAmount: 0,
         finalPremium: premium,
-        message: `ERR_PRODUCT_SCOPE_MISMATCH: Code is restricted to [${codeObj.productScope.join(', ')}]. Selected LOB is [${testLobInput}].`,
+        message: `ERR_PRODUCT_SCOPE_MISMATCH: Code is restricted to [${codeObj.productScope.join(", ")}]. Selected LOB is [${testLobInput}].`,
       });
       return;
     }
@@ -408,7 +406,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
         isValid: false,
         discountAmount: 0,
         finalPremium: premium,
-        message: `ERR_CHANNEL_UNAUTHORIZED: Code is not applicable to [${testChannelInput}] channel. Allowed: [${codeObj.channelScope.join(', ')}].`,
+        message: `ERR_CHANNEL_UNAUTHORIZED: Code is not applicable to [${testChannelInput}] channel. Allowed: [${codeObj.channelScope.join(", ")}].`,
       });
       return;
     }
@@ -418,14 +416,14 @@ export const CampaignPromoCodesPage: React.FC = () => {
         isValid: false,
         discountAmount: 0,
         finalPremium: premium,
-        message: 'ERR_REDEMPTION_LIMIT_EXCEEDED: Global redemption threshold has been depleted.',
+        message: "ERR_REDEMPTION_LIMIT_EXCEEDED: Global redemption threshold has been depleted.",
       });
       return;
     }
 
     // Success calculation
     let calculatedDiscount = 0;
-    if (codeObj.discountType === 'FIXED_AMOUNT') {
+    if (codeObj.discountType === "FIXED_AMOUNT") {
       calculatedDiscount = Math.min(codeObj.discountValue, premium);
     } else {
       calculatedDiscount = (premium * codeObj.discountValue) / 100;
@@ -440,13 +438,16 @@ export const CampaignPromoCodesPage: React.FC = () => {
       isValid: true,
       discountAmount: calculatedDiscount,
       finalPremium: netPayable,
-      message: 'SUCCESS: Promo code successfully applied. Broker marketing ledger will absorb discount.',
+      message: "SUCCESS: Promo code successfully applied. Broker marketing ledger will absorb discount.",
       details: {
         code: codeObj.code,
         discountType: codeObj.discountType,
-        ruleTriggered: codeObj.discountType === 'FIXED_AMOUNT' ? `Fixed ฿${codeObj.discountValue}` : `${codeObj.discountValue}% (Capped ฿${codeObj.maxDiscountCap || 'N/A'})`,
+        ruleTriggered:
+          codeObj.discountType === "FIXED_AMOUNT"
+            ? `Fixed ฿${codeObj.discountValue}`
+            : `${codeObj.discountValue}% (Capped ฿${codeObj.maxDiscountCap || "N/A"})`,
         brokerExpenseAbsorbed: calculatedDiscount,
-        agentCommissionBasis: 'FULL_PREMIUM_PROTECTED (Before discount)',
+        agentCommissionBasis: "FULL_PREMIUM_PROTECTED (Before discount)",
       },
     });
   };
@@ -464,12 +465,10 @@ export const CampaignPromoCodesPage: React.FC = () => {
               <Sparkles className="w-4 h-4" />
               Module 6.3 • Campaign & Discount Governance
             </div>
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
-              Campaigns & Promo Codes
-            </h1>
+            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Campaigns & Promo Codes</h1>
             <p className="text-sm text-zinc-500 mt-1 max-w-2xl">
-              Configure corporate discount codes (Type A marketing expenses), enforce redemption caps,
-              and coordinate time-boxed seasonal visibility across external sales channels.
+              Configure corporate discount codes (Type A marketing expenses), enforce redemption caps, and coordinate
+              time-boxed seasonal visibility across external sales channels.
             </p>
           </div>
 
@@ -487,11 +486,11 @@ export const CampaignPromoCodesPage: React.FC = () => {
         {/* Tab Selection */}
         <div className="max-w-7xl mx-auto flex items-center gap-2 mt-6 border-b border-zinc-200">
           <button
-            onClick={() => setActiveTab('PROMO_CODES')}
+            onClick={() => setActiveTab("PROMO_CODES")}
             className={`flex items-center gap-2 pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${
-              activeTab === 'PROMO_CODES'
-                ? 'border-indigo-600 text-indigo-600 font-semibold'
-                : 'border-transparent text-zinc-500 hover:text-zinc-800'
+              activeTab === "PROMO_CODES"
+                ? "border-indigo-600 text-indigo-600 font-semibold"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <Tag className="w-4 h-4" />
@@ -502,11 +501,11 @@ export const CampaignPromoCodesPage: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('SEASONAL_GANTT')}
+            onClick={() => setActiveTab("SEASONAL_GANTT")}
             className={`flex items-center gap-2 pb-3 px-3 text-sm font-medium border-b-2 transition-colors ${
-              activeTab === 'SEASONAL_GANTT'
-                ? 'border-indigo-600 text-indigo-600 font-semibold'
-                : 'border-transparent text-zinc-500 hover:text-zinc-800'
+              activeTab === "SEASONAL_GANTT"
+                ? "border-indigo-600 text-indigo-600 font-semibold"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <Calendar className="w-4 h-4" />
@@ -517,11 +516,11 @@ export const CampaignPromoCodesPage: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('SANDBOX_VALIDATE')}
+            onClick={() => setActiveTab("SANDBOX_VALIDATE")}
             className={`flex items-center gap-2 pb-3 px-3 text-sm font-medium border-b-2 transition-colors ${
-              activeTab === 'SANDBOX_VALIDATE'
-                ? 'border-indigo-600 text-indigo-600 font-semibold'
-                : 'border-transparent text-zinc-500 hover:text-zinc-800'
+              activeTab === "SANDBOX_VALIDATE"
+                ? "border-indigo-600 text-indigo-600 font-semibold"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />
@@ -563,7 +562,9 @@ export const CampaignPromoCodesPage: React.FC = () => {
 
           <div className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">Broker Expense Absorbed</span>
+              <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                Broker Expense Absorbed
+              </span>
               <div className="p-2 rounded-lg bg-amber-50 text-amber-600">
                 <DollarSign className="w-4 h-4" />
               </div>
@@ -596,8 +597,11 @@ export const CampaignPromoCodesPage: React.FC = () => {
               Architecture Notice: Corporate Promo Codes (Type A) vs. Sub-Agent Flex (Type B)
             </p>
             <p className="text-amber-800">
-              Per <strong>BRD Section 7.1.2 &amp; 7.4.5</strong>, public promo codes listed here apply strictly to <strong>Online STP (Website)</strong> and <strong>Telesales</strong> channels. 
-              The broker absorbs the discount as a marketing expense, and agent commissions are protected against the full gross price. External Sub-Agents <em>cannot</em> redeem corporate promo codes; they must instead utilize <strong>Commission Sacrifice (Agent Flex)</strong> to discount client quotations.
+              Per <strong>BRD Section 7.1.2 &amp; 7.4.5</strong>, public promo codes listed here apply strictly to{" "}
+              <strong>Online STP (Website)</strong> and <strong>Telesales</strong> channels. The broker absorbs the
+              discount as a marketing expense, and agent commissions are protected against the full gross price.
+              External Sub-Agents <em>cannot</em> redeem corporate promo codes; they must instead utilize{" "}
+              <strong>Commission Sacrifice (Agent Flex)</strong> to discount client quotations.
             </p>
           </div>
         </div>
@@ -605,7 +609,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
         {/* ================================================================== */}
         {/* TAB 1: PROMO CODES LIST VIEW (SCREEN 8.5.1) */}
         {/* ================================================================== */}
-        {activeTab === 'PROMO_CODES' && (
+        {activeTab === "PROMO_CODES" && (
           <div className="space-y-4">
             {/* Filter Bar */}
             <div className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
@@ -662,10 +666,10 @@ export const CampaignPromoCodesPage: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    setSearchQuery('');
-                    setSelectedStatus('ALL');
-                    setSelectedType('ALL');
-                    setSelectedLob('ALL');
+                    setSearchQuery("");
+                    setSelectedStatus("ALL");
+                    setSelectedType("ALL");
+                    setSelectedLob("ALL");
                   }}
                   className="px-3 py-1.5 text-xs text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 rounded-lg transition-colors"
                 >
@@ -728,7 +732,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                             {/* Discount Type & Value */}
                             <td className="py-3.5 px-4">
                               <div className="flex items-center gap-1.5 font-semibold text-zinc-900">
-                                {item.discountType === 'FIXED_AMOUNT' ? (
+                                {item.discountType === "FIXED_AMOUNT" ? (
                                   <>
                                     <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-xs font-bold">
                                       -฿{item.discountValue.toLocaleString()}
@@ -741,15 +745,17 @@ export const CampaignPromoCodesPage: React.FC = () => {
                                       -{item.discountValue}%
                                     </span>
                                     <span className="text-[11px] text-zinc-500">
-                                      {item.maxDiscountCap ? `Cap: ฿${item.maxDiscountCap.toLocaleString()}` : 'Uncapped'}
+                                      {item.maxDiscountCap
+                                        ? `Cap: ฿${item.maxDiscountCap.toLocaleString()}`
+                                        : "Uncapped"}
                                     </span>
                                   </>
                                 )}
                               </div>
                               <div className="text-[11px] text-zinc-500 mt-1">
-                                {item.expenseModel === 'CORPORATE_ABSORBED'
-                                  ? 'Corporate Marketing Expense'
-                                  : 'Agent Flex'}
+                                {item.expenseModel === "CORPORATE_ABSORBED"
+                                  ? "Corporate Marketing Expense"
+                                  : "Agent Flex"}
                               </div>
                             </td>
 
@@ -768,9 +774,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                                   </span>
                                 ))}
                               </div>
-                              <div className="text-[10px] text-zinc-400">
-                                Channels: {item.channelScope.join(', ')}
-                              </div>
+                              <div className="text-[10px] text-zinc-400">Channels: {item.channelScope.join(", ")}</div>
                             </td>
 
                             {/* Redemptions Progress Bar */}
@@ -783,10 +787,10 @@ export const CampaignPromoCodesPage: React.FC = () => {
                                 <div
                                   className={`h-full rounded-full transition-all ${
                                     usageRatio >= 100
-                                      ? 'bg-rose-500'
+                                      ? "bg-rose-500"
                                       : usageRatio > 75
-                                      ? 'bg-amber-500'
-                                      : 'bg-indigo-600'
+                                        ? "bg-amber-500"
+                                        : "bg-indigo-600"
                                   }`}
                                   style={{ width: `${Math.min(100, usageRatio)}%` }}
                                 />
@@ -809,19 +813,19 @@ export const CampaignPromoCodesPage: React.FC = () => {
                             <td className="py-3.5 px-4 text-center">
                               <span
                                 className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
-                                  item.status === 'ACTIVE'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                    : item.status === 'SCHEDULED'
-                                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                    : item.status === 'DEPLETED'
-                                    ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                    : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
+                                  item.status === "ACTIVE"
+                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                    : item.status === "SCHEDULED"
+                                      ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                      : item.status === "DEPLETED"
+                                        ? "bg-amber-50 text-amber-700 border border-amber-200"
+                                        : "bg-zinc-100 text-zinc-600 border border-zinc-200"
                                 }`}
                               >
-                                {item.status === 'ACTIVE' && <CheckCircle2 className="w-3 h-3" />}
-                                {item.status === 'SCHEDULED' && <Clock className="w-3 h-3" />}
-                                {item.status === 'DEPLETED' && <AlertTriangle className="w-3 h-3" />}
-                                {item.status === 'EXPIRED' && <XCircle className="w-3 h-3" />}
+                                {item.status === "ACTIVE" && <CheckCircle2 className="w-3 h-3" />}
+                                {item.status === "SCHEDULED" && <Clock className="w-3 h-3" />}
+                                {item.status === "DEPLETED" && <AlertTriangle className="w-3 h-3" />}
+                                {item.status === "EXPIRED" && <XCircle className="w-3 h-3" />}
                                 {item.status}
                               </span>
                             </td>
@@ -841,9 +845,9 @@ export const CampaignPromoCodesPage: React.FC = () => {
                                     setPromoCodes(
                                       promoCodes.map((p) =>
                                         p.id === item.id
-                                          ? { ...p, status: p.status === 'ACTIVE' ? 'PAUSED' : 'ACTIVE' }
-                                          : p
-                                      )
+                                          ? { ...p, status: p.status === "ACTIVE" ? "PAUSED" : "ACTIVE" }
+                                          : p,
+                                      ),
                                     );
                                   }}
                                   className="p-1 text-zinc-400 hover:text-amber-600 hover:bg-zinc-100 rounded transition-colors"
@@ -876,7 +880,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
         {/* ================================================================== */}
         {/* TAB 2: SEASONAL VISIBILITY SCHEDULER (SCREEN 8.5.2) */}
         {/* ================================================================== */}
-        {activeTab === 'SEASONAL_GANTT' && (
+        {activeTab === "SEASONAL_GANTT" && (
           <div className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-200">
               <div>
@@ -885,7 +889,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                   Product Catalog Seasonal Visibility Engine (Screen 8.5.2)
                 </h3>
                 <p className="text-xs text-zinc-500 mt-0.5">
-                  Visualizes <code>sales_start_date</code> and <code>sales_end_date</code> bounds stored in 
+                  Visualizes <code>sales_start_date</code> and <code>sales_end_date</code> bounds stored in
                   <code>product_versions</code> and <code>plan_versions</code>. Live storefront APIs automatically hide
                   products when expired without manual DB deletion.
                 </p>
@@ -920,8 +924,8 @@ export const CampaignPromoCodesPage: React.FC = () => {
               <div className="space-y-3">
                 {seasonalProducts.map((prod) => {
                   // Approximate month index from dates (for visualization)
-                  const startMonth = parseInt(prod.salesStartDate.split('-')[1], 10) - 1;
-                  const endMonth = parseInt(prod.salesEndDate.split('-')[1], 10) - 1;
+                  const startMonth = parseInt(prod.salesStartDate.split("-")[1], 10) - 1;
+                  const endMonth = parseInt(prod.salesEndDate.split("-")[1], 10) - 1;
                   const span = Math.max(1, endMonth - startMonth + 1);
 
                   return (
@@ -938,17 +942,19 @@ export const CampaignPromoCodesPage: React.FC = () => {
                           </span>
                         </div>
                         <div className="flex items-center gap-3 text-zinc-500 text-[11px]">
-                          <span>Carrier: <strong>{prod.insurerName}</strong></span>
+                          <span>
+                            Carrier: <strong>{prod.insurerName}</strong>
+                          </span>
                           <span>
                             Window: {prod.salesStartDate} &rarr; {prod.salesEndDate}
                           </span>
                           <span
                             className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                              prod.status === 'ACTIVE'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : prod.status === 'SCHEDULED'
-                                ? 'bg-blue-100 text-blue-800'
-                                : 'bg-zinc-200 text-zinc-600'
+                              prod.status === "ACTIVE"
+                                ? "bg-emerald-100 text-emerald-800"
+                                : prod.status === "SCHEDULED"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-zinc-200 text-zinc-600"
                             }`}
                           >
                             {prod.status}
@@ -960,11 +966,11 @@ export const CampaignPromoCodesPage: React.FC = () => {
                       <div className="grid grid-cols-12 gap-1 h-6 bg-white border border-zinc-200 rounded p-0.5 relative">
                         <div
                           className={`h-full rounded text-[10px] font-medium flex items-center px-2 text-white shadow-xs ${
-                            prod.status === 'ACTIVE'
-                              ? 'bg-gradient-to-r from-emerald-500 to-teal-600'
-                              : prod.status === 'SCHEDULED'
-                              ? 'bg-gradient-to-r from-blue-500 to-indigo-600'
-                              : 'bg-zinc-400'
+                            prod.status === "ACTIVE"
+                              ? "bg-gradient-to-r from-emerald-500 to-teal-600"
+                              : prod.status === "SCHEDULED"
+                                ? "bg-gradient-to-r from-blue-500 to-indigo-600"
+                                : "bg-zinc-400"
                           }`}
                           style={{
                             gridColumnStart: startMonth + 1,
@@ -972,7 +978,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                           }}
                         >
                           <span className="truncate">
-                            {prod.isPromoEligible ? 'Promo Eligible ✓' : 'Standard Pricing'}
+                            {prod.isPromoEligible ? "Promo Eligible ✓" : "Standard Pricing"}
                           </span>
                         </div>
                       </div>
@@ -987,8 +993,9 @@ export const CampaignPromoCodesPage: React.FC = () => {
               <Clock className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold text-zinc-900">Automation Rule (BRD 7.1.1): </span>
-                When a seasonal product’s <code>effective_end_date</code> passes midnight Bangkok time (+07:00),
-                the core API automatically stops returning the product version to the frontend, eliminating the risk of selling out-of-season coverage.
+                When a seasonal product’s <code>effective_end_date</code> passes midnight Bangkok time (+07:00), the
+                core API automatically stops returning the product version to the frontend, eliminating the risk of
+                selling out-of-season coverage.
               </div>
             </div>
           </div>
@@ -997,7 +1004,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
         {/* ================================================================== */}
         {/* TAB 3: PRE-CALCULATION & VALIDATION SANDBOX (BRD 3.3.3) */}
         {/* ================================================================== */}
-        {activeTab === 'SANDBOX_VALIDATE' && (
+        {activeTab === "SANDBOX_VALIDATE" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Form Input Box */}
             <div className="lg:col-span-6 bg-white border border-zinc-200 rounded-xl p-6 shadow-sm space-y-4">
@@ -1090,8 +1097,8 @@ export const CampaignPromoCodesPage: React.FC = () => {
                     <div
                       className={`p-4 rounded-xl border flex items-start gap-3 ${
                         testValidationResult.isValid
-                          ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                          : 'bg-rose-50 border-rose-200 text-rose-900'
+                          ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                          : "bg-rose-50 border-rose-200 text-rose-900"
                       }`}
                     >
                       {testValidationResult.isValid ? (
@@ -1101,7 +1108,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                       )}
                       <div className="text-xs">
                         <div className="font-bold text-sm">
-                          {testValidationResult.isValid ? 'Validation Succeeded' : 'Validation Breached'}
+                          {testValidationResult.isValid ? "Validation Succeeded" : "Validation Breached"}
                         </div>
                         <p className="mt-0.5 opacity-90">{testValidationResult.message}</p>
                       </div>
@@ -1112,7 +1119,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                         <div className="flex justify-between py-1 border-b border-zinc-200">
                           <span className="text-zinc-500">Gross Initial Premium:</span>
                           <span className="font-semibold text-zinc-800">
-                            ฿{parseFloat(testPremiumInput || '0').toLocaleString()}
+                            ฿{parseFloat(testPremiumInput || "0").toLocaleString()}
                           </span>
                         </div>
                         <div className="flex justify-between py-1 border-b border-zinc-200 text-emerald-700">
@@ -1175,14 +1182,12 @@ export const CampaignPromoCodesPage: React.FC = () => {
               {/* Row 1: Code and Campaign Name */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-zinc-700 mb-1">
-                    Promo Code (Uppercase)*
-                  </label>
+                  <label className="block font-semibold text-zinc-700 mb-1">Promo Code (Uppercase)*</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. AUTUMN500"
-                    value={newPromoForm.code || ''}
+                    value={newPromoForm.code || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, code: e.target.value.toUpperCase() })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg font-mono font-bold text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase"
                   />
@@ -1193,7 +1198,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                     type="text"
                     required
                     placeholder="e.g. Autumn Road Trip Discount"
-                    value={newPromoForm.campaignName || ''}
+                    value={newPromoForm.campaignName || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, campaignName: e.target.value })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg font-medium text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -1206,7 +1211,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Terms summary displayed to customer / agents..."
-                  value={newPromoForm.description || ''}
+                  value={newPromoForm.description || ""}
                   onChange={(e) => setNewPromoForm({ ...newPromoForm, description: e.target.value })}
                   className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-zinc-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
@@ -1232,25 +1237,25 @@ export const CampaignPromoCodesPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block font-semibold text-zinc-700 mb-1">
-                    Value {newPromoForm.discountType === 'FIXED_AMOUNT' ? '(THB)' : '(%)'}*
+                    Value {newPromoForm.discountType === "FIXED_AMOUNT" ? "(THB)" : "(%)"}*
                   </label>
                   <input
                     type="number"
                     required
                     min={1}
-                    value={newPromoForm.discountValue || ''}
+                    value={newPromoForm.discountValue || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, discountValue: Number(e.target.value) })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg font-bold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
                   <label className="block font-semibold text-zinc-700 mb-1">
-                    Max Cap (THB) {newPromoForm.discountType === 'PERCENTAGE' ? '*' : '(Optional)'}
+                    Max Cap (THB) {newPromoForm.discountType === "PERCENTAGE" ? "*" : "(Optional)"}
                   </label>
                   <input
                     type="number"
                     placeholder="e.g. 1500"
-                    value={newPromoForm.maxDiscountCap || ''}
+                    value={newPromoForm.maxDiscountCap || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, maxDiscountCap: Number(e.target.value) })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -1264,7 +1269,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                   <input
                     type="number"
                     min={0}
-                    value={newPromoForm.minPremium || ''}
+                    value={newPromoForm.minPremium || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, minPremium: Number(e.target.value) })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg font-medium text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -1275,7 +1280,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                     type="number"
                     min={1}
                     required
-                    value={newPromoForm.maxRedemptions || ''}
+                    value={newPromoForm.maxRedemptions || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, maxRedemptions: Number(e.target.value) })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg font-medium text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -1289,7 +1294,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                   <input
                     type="date"
                     required
-                    value={newPromoForm.startDate || ''}
+                    value={newPromoForm.startDate || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, startDate: e.target.value })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -1299,7 +1304,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                   <input
                     type="date"
                     required
-                    value={newPromoForm.endDate || ''}
+                    value={newPromoForm.endDate || ""}
                     onChange={(e) => setNewPromoForm({ ...newPromoForm, endDate: e.target.value })}
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
@@ -1311,25 +1316,25 @@ export const CampaignPromoCodesPage: React.FC = () => {
                 <div>
                   <label className="block font-semibold text-zinc-700 mb-1">Applicable Product Scope</label>
                   <div className="flex flex-wrap gap-2 pt-1">
-                    {['MOTOR', 'TRAVEL', 'HEALTH', 'FIRE', 'ALL'].map((lob) => {
+                    {["MOTOR", "TRAVEL", "HEALTH", "FIRE", "ALL"].map((lob) => {
                       const isSelected = newPromoForm.productScope?.includes(lob);
                       return (
                         <button
                           key={lob}
                           type="button"
                           onClick={() => {
-                            if (lob === 'ALL') {
-                              setNewPromoForm({ ...newPromoForm, productScope: ['ALL'] });
+                            if (lob === "ALL") {
+                              setNewPromoForm({ ...newPromoForm, productScope: ["ALL"] });
                             } else {
-                              const current = (newPromoForm.productScope || []).filter((x) => x !== 'ALL');
+                              const current = (newPromoForm.productScope || []).filter((x) => x !== "ALL");
                               const next = isSelected ? current.filter((x) => x !== lob) : [...current, lob];
-                              setNewPromoForm({ ...newPromoForm, productScope: next.length ? next : ['ALL'] });
+                              setNewPromoForm({ ...newPromoForm, productScope: next.length ? next : ["ALL"] });
                             }
                           }}
                           className={`px-2.5 py-1 rounded text-xs font-semibold border transition-colors ${
                             isSelected
-                              ? 'bg-indigo-600 text-white border-indigo-600'
-                              : 'bg-zinc-50 text-zinc-600 border-zinc-200 hover:bg-zinc-100'
+                              ? "bg-indigo-600 text-white border-indigo-600"
+                              : "bg-zinc-50 text-zinc-600 border-zinc-200 hover:bg-zinc-100"
                           }`}
                         >
                           {lob}
@@ -1342,7 +1347,7 @@ export const CampaignPromoCodesPage: React.FC = () => {
                 <div>
                   <label className="block font-semibold text-zinc-700 mb-1">Allowed Sales Channels</label>
                   <div className="flex flex-wrap gap-2 pt-1">
-                    {['WEBSITE', 'TELESALES', 'DIRECT_SALE'].map((ch) => {
+                    {["WEBSITE", "TELESALES", "DIRECT_SALE"].map((ch) => {
                       const isSelected = newPromoForm.channelScope?.includes(ch);
                       return (
                         <button
@@ -1355,8 +1360,8 @@ export const CampaignPromoCodesPage: React.FC = () => {
                           }}
                           className={`px-2.5 py-1 rounded text-xs font-semibold border transition-colors ${
                             isSelected
-                              ? 'bg-emerald-600 text-white border-emerald-600'
-                              : 'bg-zinc-50 text-zinc-600 border-zinc-200 hover:bg-zinc-100'
+                              ? "bg-emerald-600 text-white border-emerald-600"
+                              : "bg-zinc-50 text-zinc-600 border-zinc-200 hover:bg-zinc-100"
                           }`}
                         >
                           {ch}
@@ -1369,7 +1374,9 @@ export const CampaignPromoCodesPage: React.FC = () => {
 
               {/* Marketing Budget Attribution Note */}
               <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-200 text-zinc-600 text-[11px] flex items-center justify-between">
-                <span>Expense Classification: <strong>Corporate Marketing Overhead (Type A)</strong></span>
+                <span>
+                  Expense Classification: <strong>Corporate Marketing Overhead (Type A)</strong>
+                </span>
                 <span className="text-zinc-400">Agent Commission Basis: 100% Protected</span>
               </div>
 

@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from "react";
 
 // ============================================================================
 // 1. DATA CONTRACTS & TYPE DEFINITIONS (Aligned with PAS SDD & BRD)
 // ============================================================================
 
-export type EndorsementType = 'TYPE_A' | 'TYPE_B' | 'TYPE_C';
+export type EndorsementType = "TYPE_A" | "TYPE_B" | "TYPE_C";
 
 export interface CustomerData {
   customer_id: string;
@@ -24,7 +24,7 @@ export interface PolicyVersionRecord {
   version_id: string;
   policy_id: string;
   version_number: number;
-  status: 'ACTIVE' | 'ARCHIVED' | 'DRAFT';
+  status: "ACTIVE" | "ARCHIVED" | "DRAFT";
   endorsement_type?: EndorsementType;
   endorsement_reason?: string;
   pro_rata_premium_delta: number;
@@ -39,7 +39,7 @@ export interface PolicyVersionRecord {
 export interface PolicyMasterHeader {
   policy_id: string;
   policy_number: string;
-  status: 'ACTIVE' | 'CANCELLED' | 'SUSPENDED';
+  status: "ACTIVE" | "CANCELLED" | "SUSPENDED";
   channel_id: number;
   channel_name: string;
   insurer_name: string;
@@ -62,9 +62,9 @@ export interface EndorsementDraftPayload {
 export interface EndorsementResponse {
   policy_id: string;
   version_id: string;
-  status: 'ACTIVE' | 'APPROVED_WAITING_PAYMENT';
+  status: "ACTIVE" | "APPROVED_WAITING_PAYMENT";
   financial_impact: {
-    type: 'ADDITIONAL_PREMIUM' | 'RETURN_PREMIUM' | 'NONE';
+    type: "ADDITIONAL_PREMIUM" | "RETURN_PREMIUM" | "NONE";
     amount_thb: number;
   };
 }
@@ -74,35 +74,35 @@ export interface EndorsementResponse {
 // ============================================================================
 
 const INITIAL_POLICY: PolicyMasterHeader = {
-  policy_id: 'pol-550e8400-e29b-41d4-a716-446655440001',
-  policy_number: 'VRY-MTR-2026-00892',
-  status: 'ACTIVE',
+  policy_id: "pol-550e8400-e29b-41d4-a716-446655440001",
+  policy_number: "VRY-MTR-2026-00892",
+  status: "ACTIVE",
   channel_id: 1,
-  channel_name: 'Telesales',
-  insurer_name: 'Viriyah Insurance',
-  product_name: 'Motor Type 1 Comprehensive',
+  channel_name: "Telesales",
+  insurer_name: "Viriyah Insurance",
+  product_name: "Motor Type 1 Comprehensive",
   customer: {
-    customer_id: 'cust-uuid-1001',
-    legal_name: 'Somchai Prasertying',
-    phone_number: '081-XXX-4921',
-    id_card_number: '1-1004-XXXXX-88-9',
-    email: 'somchai.p@example.com',
+    customer_id: "cust-uuid-1001",
+    legal_name: "Somchai Prasertying",
+    phone_number: "081-XXX-4921",
+    id_card_number: "1-1004-XXXXX-88-9",
+    email: "somchai.p@example.com",
   },
   active_version: {
-    version_id: 'ver-uuid-0001',
-    policy_id: 'pol-550e8400-e29b-41d4-a716-446655440001',
+    version_id: "ver-uuid-0001",
+    policy_id: "pol-550e8400-e29b-41d4-a716-446655440001",
     version_number: 1,
-    status: 'ACTIVE',
-    endorsement_reason: 'ORIGINAL_ISSUANCE',
+    status: "ACTIVE",
+    endorsement_reason: "ORIGINAL_ISSUANCE",
     pro_rata_premium_delta: 0,
     base_premium: 18500.0,
-    effective_start_date: '2026-01-01T00:00:00Z',
+    effective_start_date: "2026-01-01T00:00:00Z",
     effective_end_date: null,
-    created_by: 'system-issuance-job',
-    created_at: '2026-01-01T00:00:00Z',
+    created_by: "system-issuance-job",
+    created_at: "2026-01-01T00:00:00Z",
     motor_data: {
-      license_plate_number: '3ขข-8921 กทม.',
-      chassis_number: 'MRH-FC1-8892104-TH',
+      license_plate_number: "3ขข-8921 กทม.",
+      chassis_number: "MRH-FC1-8892104-TH",
       sum_insured: 650000.0,
     },
   },
@@ -114,58 +114,48 @@ const INITIAL_POLICY: PolicyMasterHeader = {
 
 export const PolicyEndorsementPage: React.FC = () => {
   const [policy, setPolicy] = useState<PolicyMasterHeader>(INITIAL_POLICY);
-  const [versionHistory, setVersionHistory] = useState<PolicyVersionRecord[]>([
-    INITIAL_POLICY.active_version,
-  ]);
+  const [versionHistory, setVersionHistory] = useState<PolicyVersionRecord[]>([INITIAL_POLICY.active_version]);
 
   // Form State
-  const [endorsementType, setEndorsementType] = useState<EndorsementType>('TYPE_B');
-  const [effectiveDate, setEffectiveDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
-  const [reason, setReason] = useState<string>('CORRECT_LICENSE_PLATE');
+  const [endorsementType, setEndorsementType] = useState<EndorsementType>("TYPE_B");
+  const [effectiveDate, setEffectiveDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [reason, setReason] = useState<string>("CORRECT_LICENSE_PLATE");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [stagedResponse, setStagedResponse] = useState<EndorsementResponse | null>(null);
 
   // Editable Form Inputs
   const [formCustomerName, setFormCustomerName] = useState(policy.customer.legal_name);
   const [formCustomerEmail, setFormCustomerEmail] = useState(policy.customer.email);
-  const [formLicensePlate, setFormLicensePlate] = useState(
-    policy.active_version.motor_data.license_plate_number
-  );
-  const [formChassisNumber, setFormChassisNumber] = useState(
-    policy.active_version.motor_data.chassis_number
-  );
-  const [formSumInsured, setFormSumInsured] = useState<number>(
-    policy.active_version.motor_data.sum_insured
-  );
+  const [formLicensePlate, setFormLicensePlate] = useState(policy.active_version.motor_data.license_plate_number);
+  const [formChassisNumber, setFormChassisNumber] = useState(policy.active_version.motor_data.chassis_number);
+  const [formSumInsured, setFormSumInsured] = useState<number>(policy.active_version.motor_data.sum_insured);
 
   // Pro-rata premium calculator simulation
   const calculatedProRata = useMemo(() => {
-    if (endorsementType !== 'TYPE_C') {
-      return { delta: 0, type: 'NONE' as const };
+    if (endorsementType !== "TYPE_C") {
+      return { delta: 0, type: "NONE" as const };
     }
     const currentSum = policy.active_version.motor_data.sum_insured;
     const diffSum = formSumInsured - currentSum;
-    if (diffSum === 0) return { delta: 0, type: 'NONE' as const };
+    if (diffSum === 0) return { delta: 0, type: "NONE" as const };
 
     // Standard actuary calculation simulation (approx. 1.2% rate prorated over 180 days)
     const annualPremiumDelta = diffSum * 0.018;
-    const proRataAmount = Math.round((annualPremiumDelta * (180 / 365)) * 100) / 100;
+    const proRataAmount = Math.round(annualPremiumDelta * (180 / 365) * 100) / 100;
 
     if (proRataAmount > 0) {
-      return { delta: proRataAmount, type: 'ADDITIONAL_PREMIUM' as const };
+      return { delta: proRataAmount, type: "ADDITIONAL_PREMIUM" as const };
     } else {
-      return { delta: Math.abs(proRataAmount), type: 'RETURN_PREMIUM' as const };
+      return { delta: Math.abs(proRataAmount), type: "RETURN_PREMIUM" as const };
     }
   }, [endorsementType, formSumInsured, policy.active_version.motor_data.sum_insured]);
 
   // Handle Endorsement Type Change & defaults
   const handleTypeSelect = (type: EndorsementType) => {
     setEndorsementType(type);
-    if (type === 'TYPE_A') setReason('CUSTOMER_REQUEST_ADDRESS_UPDATE');
-    if (type === 'TYPE_B') setReason('CORRECT_TYPO_LICENSE_PLATE');
-    if (type === 'TYPE_C') setReason('SUM_INSURED_INCREASE');
+    if (type === "TYPE_A") setReason("CUSTOMER_REQUEST_ADDRESS_UPDATE");
+    if (type === "TYPE_B") setReason("CORRECT_TYPO_LICENSE_PLATE");
+    if (type === "TYPE_C") setReason("SUM_INSURED_INCREASE");
   };
 
   // Submit MTA Request (POST /policies/{id}/endorse)
@@ -177,15 +167,15 @@ export const PolicyEndorsementPage: React.FC = () => {
       endorsement_type: endorsementType,
       effective_date: `${effectiveDate}T00:00:00Z`,
       endorsement_reason: reason,
-      is_premium_impacted: endorsementType === 'TYPE_C',
+      is_premium_impacted: endorsementType === "TYPE_C",
       modified_data: {
-        ...(endorsementType === 'TYPE_A' && {
+        ...(endorsementType === "TYPE_A" && {
           customer: {
             legal_name: formCustomerName,
             email: formCustomerEmail,
           },
         }),
-        ...((endorsementType === 'TYPE_B' || endorsementType === 'TYPE_C') && {
+        ...((endorsementType === "TYPE_B" || endorsementType === "TYPE_C") && {
           motor: {
             license_plate_number: formLicensePlate,
             chassis_number: formChassisNumber,
@@ -197,11 +187,11 @@ export const PolicyEndorsementPage: React.FC = () => {
 
     // Simulated API call (POST /policies/{policy_id}/endorse)
     setTimeout(() => {
-      const isAP = calculatedProRata.type === 'ADDITIONAL_PREMIUM';
+      const isAP = calculatedProRata.type === "ADDITIONAL_PREMIUM";
       const mockResult: EndorsementResponse = {
         policy_id: policy.policy_id,
         version_id: `ver-uuid-000${versionHistory.length + 1}`,
-        status: isAP ? 'APPROVED_WAITING_PAYMENT' : 'ACTIVE',
+        status: isAP ? "APPROVED_WAITING_PAYMENT" : "ACTIVE",
         financial_impact: {
           type: calculatedProRata.type,
           amount_thb: calculatedProRata.delta,
@@ -223,7 +213,7 @@ export const PolicyEndorsementPage: React.FC = () => {
   const executeCloneAndSwapActivation = (
     newVersionId: string,
     payload: EndorsementDraftPayload,
-    premiumDelta: number
+    premiumDelta: number,
   ) => {
     const timestamp = new Date().toISOString();
     const newVersionNumber = policy.active_version.version_number + 1;
@@ -231,7 +221,7 @@ export const PolicyEndorsementPage: React.FC = () => {
     // 1. Cap old active version
     const cappedOldVersion: PolicyVersionRecord = {
       ...policy.active_version,
-      status: 'ARCHIVED',
+      status: "ARCHIVED",
       effective_end_date: timestamp,
     };
 
@@ -240,17 +230,18 @@ export const PolicyEndorsementPage: React.FC = () => {
       version_id: newVersionId,
       policy_id: policy.policy_id,
       version_number: newVersionNumber,
-      status: 'ACTIVE',
+      status: "ACTIVE",
       endorsement_type: payload.endorsement_type,
       endorsement_reason: payload.endorsement_reason,
       pro_rata_premium_delta: premiumDelta,
-      base_premium: policy.active_version.base_premium + (payload.endorsement_type === 'TYPE_C' ? premiumDelta : 0),
+      base_premium: policy.active_version.base_premium + (payload.endorsement_type === "TYPE_C" ? premiumDelta : 0),
       effective_start_date: timestamp,
       effective_end_date: null,
-      created_by: 'ops-maker-uuid-889',
+      created_by: "ops-maker-uuid-889",
       created_at: timestamp,
       motor_data: {
-        license_plate_number: payload.modified_data.motor?.license_plate_number ?? policy.active_version.motor_data.license_plate_number,
+        license_plate_number:
+          payload.modified_data.motor?.license_plate_number ?? policy.active_version.motor_data.license_plate_number,
         chassis_number: payload.modified_data.motor?.chassis_number ?? policy.active_version.motor_data.chassis_number,
         sum_insured: payload.modified_data.motor?.sum_insured ?? policy.active_version.motor_data.sum_insured,
       },
@@ -296,7 +287,7 @@ export const PolicyEndorsementPage: React.FC = () => {
             },
           },
         },
-        stagedResponse.financial_impact.amount_thb
+        stagedResponse.financial_impact.amount_thb,
       );
       setStagedResponse(null);
       setIsSubmitting(false);
@@ -306,7 +297,6 @@ export const PolicyEndorsementPage: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 text-slate-900">
       <div className="max-w-7xl mx-auto space-y-8">
-        
         {/* ==================================================================== */}
         {/* HEADER SECTION                                                       */}
         {/* ==================================================================== */}
@@ -380,11 +370,15 @@ export const PolicyEndorsementPage: React.FC = () => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-500">License Plate:</span>
-                <span className="font-semibold text-slate-800">{policy.active_version.motor_data.license_plate_number}</span>
+                <span className="font-semibold text-slate-800">
+                  {policy.active_version.motor_data.license_plate_number}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Chassis No:</span>
-                <span className="font-mono text-xs text-slate-700">{policy.active_version.motor_data.chassis_number}</span>
+                <span className="font-mono text-xs text-slate-700">
+                  {policy.active_version.motor_data.chassis_number}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Sum Insured:</span>
@@ -409,7 +403,9 @@ export const PolicyEndorsementPage: React.FC = () => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-500">Sales Channel:</span>
-                <span className="font-medium text-slate-800">{policy.channel_name} (ID: {policy.channel_id})</span>
+                <span className="font-medium text-slate-800">
+                  {policy.channel_name} (ID: {policy.channel_id})
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Underwriting Carrier:</span>
@@ -433,25 +429,22 @@ export const PolicyEndorsementPage: React.FC = () => {
         {/* MTA MAKER FORM & DIFF ENGINE                                          */}
         {/* ==================================================================== */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
           {/* Left Form: MTA Parameter Specification (7 Cols) */}
           <div className="lg:col-span-7 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
             <div>
               <h2 className="text-lg font-bold text-slate-900">Stage Endorsement (Clone & Modify)</h2>
-              <p className="text-xs text-slate-500">
-                Choose modification class per OIC regulatory guidelines.
-              </p>
+              <p className="text-xs text-slate-500">Choose modification class per OIC regulatory guidelines.</p>
             </div>
 
             {/* Endorsement Class Selection */}
             <div className="grid grid-cols-3 gap-3">
               <button
                 type="button"
-                onClick={() => handleTypeSelect('TYPE_A')}
+                onClick={() => handleTypeSelect("TYPE_A")}
                 className={`p-3 text-left rounded-lg border transition-all ${
-                  endorsementType === 'TYPE_A'
-                    ? 'border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600'
-                    : 'border-slate-200 hover:bg-slate-50'
+                  endorsementType === "TYPE_A"
+                    ? "border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600"
+                    : "border-slate-200 hover:bg-slate-50"
                 }`}
               >
                 <div className="text-xs font-bold text-indigo-900">Type A</div>
@@ -461,11 +454,11 @@ export const PolicyEndorsementPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleTypeSelect('TYPE_B')}
+                onClick={() => handleTypeSelect("TYPE_B")}
                 className={`p-3 text-left rounded-lg border transition-all ${
-                  endorsementType === 'TYPE_B'
-                    ? 'border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600'
-                    : 'border-slate-200 hover:bg-slate-50'
+                  endorsementType === "TYPE_B"
+                    ? "border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600"
+                    : "border-slate-200 hover:bg-slate-50"
                 }`}
               >
                 <div className="text-xs font-bold text-indigo-900">Type B</div>
@@ -475,11 +468,11 @@ export const PolicyEndorsementPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleTypeSelect('TYPE_C')}
+                onClick={() => handleTypeSelect("TYPE_C")}
                 className={`p-3 text-left rounded-lg border transition-all ${
-                  endorsementType === 'TYPE_C'
-                    ? 'border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600'
-                    : 'border-slate-200 hover:bg-slate-50'
+                  endorsementType === "TYPE_C"
+                    ? "border-indigo-600 bg-indigo-50/60 ring-1 ring-indigo-600"
+                    : "border-slate-200 hover:bg-slate-50"
                 }`}
               >
                 <div className="text-xs font-bold text-indigo-900">Type C</div>
@@ -491,9 +484,7 @@ export const PolicyEndorsementPage: React.FC = () => {
             <form onSubmit={handleSubmitEndorsement} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">
-                    Effective Date (ISO-8601)
-                  </label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Effective Date (ISO-8601)</label>
                   <input
                     type="date"
                     value={effectiveDate}
@@ -503,27 +494,25 @@ export const PolicyEndorsementPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">
-                    Endorsement Reason
-                  </label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Endorsement Reason</label>
                   <select
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     className="w-full text-sm border border-slate-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
-                    {endorsementType === 'TYPE_A' && (
+                    {endorsementType === "TYPE_A" && (
                       <>
                         <option value="CUSTOMER_REQUEST_ADDRESS_UPDATE">Customer Relocation</option>
                         <option value="NAME_CHANGE_LEGAL">Legal Name Change</option>
                       </>
                     )}
-                    {endorsementType === 'TYPE_B' && (
+                    {endorsementType === "TYPE_B" && (
                       <>
                         <option value="CORRECT_TYPO_LICENSE_PLATE">Typo Correction: License Plate</option>
                         <option value="CORRECT_TYPO_CHASSIS">Typo Correction: Chassis Number</option>
                       </>
                     )}
-                    {endorsementType === 'TYPE_C' && (
+                    {endorsementType === "TYPE_C" && (
                       <>
                         <option value="SUM_INSURED_INCREASE">Sum Insured Upgrade</option>
                         <option value="SUM_INSURED_DECREASE">Sum Insured Downscale</option>
@@ -540,12 +529,10 @@ export const PolicyEndorsementPage: React.FC = () => {
                   Target Field Modifications
                 </h3>
 
-                {endorsementType === 'TYPE_A' && (
+                {endorsementType === "TYPE_A" && (
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-600 mb-1">
-                        Insured Legal Name
-                      </label>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Insured Legal Name</label>
                       <input
                         type="text"
                         value={formCustomerName}
@@ -554,9 +541,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-600 mb-1">
-                        Insured Email
-                      </label>
+                      <label className="block text-xs font-medium text-slate-600 mb-1">Insured Email</label>
                       <input
                         type="email"
                         value={formCustomerEmail}
@@ -567,13 +552,11 @@ export const PolicyEndorsementPage: React.FC = () => {
                   </div>
                 )}
 
-                {(endorsementType === 'TYPE_B' || endorsementType === 'TYPE_C') && (
+                {(endorsementType === "TYPE_B" || endorsementType === "TYPE_C") && (
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-medium text-slate-600 mb-1">
-                          License Plate Number
-                        </label>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">License Plate Number</label>
                         <input
                           type="text"
                           value={formLicensePlate}
@@ -582,9 +565,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-600 mb-1">
-                          Chassis Number
-                        </label>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Chassis Number</label>
                         <input
                           type="text"
                           value={formChassisNumber}
@@ -594,7 +575,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {endorsementType === 'TYPE_C' && (
+                    {endorsementType === "TYPE_C" && (
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1">
                           Coverage Sum Insured (THB)
@@ -622,7 +603,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                   disabled={isSubmitting}
                   className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 disabled:opacity-50 transition shadow-sm"
                 >
-                  {isSubmitting ? 'Staging MTA...' : 'Preview & Submit MTA'}
+                  {isSubmitting ? "Staging MTA..." : "Preview & Submit MTA"}
                 </button>
               </div>
             </form>
@@ -630,13 +611,10 @@ export const PolicyEndorsementPage: React.FC = () => {
 
           {/* Right Panel: Side-by-Side Diff Viewer & AP Handshake (5 Cols) */}
           <div className="lg:col-span-5 space-y-6">
-            
             {/* Diff Viewer Card */}
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 className="text-sm font-bold text-slate-800">
-                  Pre-Execution Diff Inspector
-                </h3>
+                <h3 className="text-sm font-bold text-slate-800">Pre-Execution Diff Inspector</h3>
                 <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">
                   v{policy.active_version.version_number} &rarr; v{policy.active_version.version_number + 1} (Draft)
                 </span>
@@ -657,7 +635,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                 </div>
 
                 {/* Diff Item 2: Sum Insured */}
-                {endorsementType === 'TYPE_C' && (
+                {endorsementType === "TYPE_C" && (
                   <div className="p-2.5 rounded bg-slate-50 border border-slate-200">
                     <span className="font-semibold text-slate-500 block mb-1">Sum Insured:</span>
                     <div className="grid grid-cols-2 gap-2">
@@ -678,36 +656,33 @@ export const PolicyEndorsementPage: React.FC = () => {
                   <span className="text-slate-600 font-medium">Calculated Financial Delta:</span>
                   <span
                     className={`font-bold font-mono ${
-                      calculatedProRata.type === 'ADDITIONAL_PREMIUM'
-                        ? 'text-amber-600'
-                        : calculatedProRata.type === 'RETURN_PREMIUM'
-                        ? 'text-blue-600'
-                        : 'text-slate-700'
+                      calculatedProRata.type === "ADDITIONAL_PREMIUM"
+                        ? "text-amber-600"
+                        : calculatedProRata.type === "RETURN_PREMIUM"
+                          ? "text-blue-600"
+                          : "text-slate-700"
                     }`}
                   >
-                    {calculatedProRata.type === 'ADDITIONAL_PREMIUM' && '+'}
-                    {calculatedProRata.type === 'RETURN_PREMIUM' && '-'}
+                    {calculatedProRata.type === "ADDITIONAL_PREMIUM" && "+"}
+                    {calculatedProRata.type === "RETURN_PREMIUM" && "-"}
                     THB {calculatedProRata.delta.toLocaleString()}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Accounting Event: {calculatedProRata.type}
-                </p>
+                <p className="text-[11px] text-slate-400 mt-1">Accounting Event: {calculatedProRata.type}</p>
               </div>
             </div>
 
             {/* Handshake Card (If Waiting Payment) */}
-            {stagedResponse && stagedResponse.status === 'APPROVED_WAITING_PAYMENT' && (
+            {stagedResponse && stagedResponse.status === "APPROVED_WAITING_PAYMENT" && (
               <div className="bg-amber-50 border border-amber-200 p-5 rounded-xl space-y-4">
                 <div>
                   <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-200 text-amber-800 mb-1">
                     Payment Gateway Lock
                   </span>
-                  <h4 className="text-sm font-bold text-amber-900">
-                    Additional Premium (AP) Requires Settlement
-                  </h4>
+                  <h4 className="text-sm font-bold text-amber-900">Additional Premium (AP) Requires Settlement</h4>
                   <p className="text-xs text-amber-700 mt-1">
-                    Under SDD Rule 5.7, Type C adjustments with Additional Premium cannot execute the version activation swap until payment is settled.
+                    Under SDD Rule 5.7, Type C adjustments with Additional Premium cannot execute the version activation
+                    swap until payment is settled.
                   </p>
                 </div>
 
@@ -724,7 +699,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                   disabled={isSubmitting}
                   className="w-full py-2.5 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition shadow-sm"
                 >
-                  {isSubmitting ? 'Confirming Ledger...' : 'Confirm Gateway Settlement & Swap Version'}
+                  {isSubmitting ? "Confirming Ledger..." : "Confirm Gateway Settlement & Swap Version"}
                 </button>
               </div>
             )}
@@ -741,12 +716,11 @@ export const PolicyEndorsementPage: React.FC = () => {
                 SCD Type 2 Historical Version Timeline (Audit Trail)
               </h2>
               <p className="text-xs text-slate-500">
-                Chained historical records fetched from GET /policies/{'{policy_id}'}/versions. Active records are never overwritten.
+                Chained historical records fetched from GET /policies/{"{policy_id}"}/versions. Active records are never
+                overwritten.
               </p>
             </div>
-            <span className="text-xs text-slate-400 font-mono">
-              Total Versions: {versionHistory.length}
-            </span>
+            <span className="text-xs text-slate-400 font-mono">Total Versions: {versionHistory.length}</span>
           </div>
 
           <div className="overflow-x-auto">
@@ -765,12 +739,10 @@ export const PolicyEndorsementPage: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {versionHistory.map((ver) => (
-                  <tr key={ver.version_id} className={ver.status === 'ACTIVE' ? 'bg-blue-50/40' : 'bg-white'}>
-                    <td className="px-6 py-4 font-mono font-bold text-slate-800">
-                      v{ver.version_number}
-                    </td>
+                  <tr key={ver.version_id} className={ver.status === "ACTIVE" ? "bg-blue-50/40" : "bg-white"}>
+                    <td className="px-6 py-4 font-mono font-bold text-slate-800">v{ver.version_number}</td>
                     <td className="px-6 py-4">
-                      {ver.status === 'ACTIVE' ? (
+                      {ver.status === "ACTIVE" ? (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">
                           ACTIVE
                         </span>
@@ -782,13 +754,11 @@ export const PolicyEndorsementPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-slate-800">
-                        {ver.endorsement_type ? `[${ver.endorsement_type}] ` : ''}
+                        {ver.endorsement_type ? `[${ver.endorsement_type}] ` : ""}
                         {ver.endorsement_reason}
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-mono text-slate-700">
-                      {ver.motor_data.license_plate_number}
-                    </td>
+                    <td className="px-6 py-4 font-mono text-slate-700">{ver.motor_data.license_plate_number}</td>
                     <td className="px-6 py-4 font-mono text-slate-700">
                       THB {ver.motor_data.sum_insured.toLocaleString()}
                     </td>
@@ -804,7 +774,7 @@ export const PolicyEndorsementPage: React.FC = () => {
                     <td className="px-6 py-4 text-xs font-mono text-slate-600">
                       <div>From: {new Date(ver.effective_start_date).toLocaleString()}</div>
                       <div>
-                        To:{' '}
+                        To:{" "}
                         {ver.effective_end_date ? (
                           new Date(ver.effective_end_date).toLocaleString()
                         ) : (
@@ -812,16 +782,13 @@ export const PolicyEndorsementPage: React.FC = () => {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500 font-mono">
-                      {ver.created_by}
-                    </td>
+                    <td className="px-6 py-4 text-xs text-slate-500 font-mono">{ver.created_by}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-
       </div>
     </div>
   );
