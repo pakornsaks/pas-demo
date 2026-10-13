@@ -1,13 +1,13 @@
 import {
-  LayoutDashboard,
-  ShieldAlert,
-  Cpu,
-  Receipt,
-  Users2,
-  FileSpreadsheet,
   CheckCheck,
-  Workflow,
+  Cpu,
   Database,
+  FileSpreadsheet,
+  LayoutDashboard,
+  Receipt,
+  ShieldAlert,
+  Users2,
+  Workflow,
 } from 'lucide-react';
 import type { NavSection } from '../types/navigation';
 
@@ -50,7 +50,7 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
           },
           {
             id: 'policy-directory',
-            title: 'Unified Policy Directory',
+            title: 'Policy Directory',
             href: '/policies/directory1',
           },
           {

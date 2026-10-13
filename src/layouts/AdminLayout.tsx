@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom';
-import { Sidebar } from '../components/layout/Sidebar';
-import { BACKOFFICE_NAVIGATION } from '../config/navigation';
+import { Outlet } from "react-router-dom";
+import { Sidebar } from "../components/layout/Sidebar";
+import { BACKOFFICE_NAVIGATION } from "../config/navigation";
 
 export const AdminLayout = () => {
   return (

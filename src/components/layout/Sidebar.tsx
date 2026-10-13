@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
-import type { NavItem, NavSection, SubNavItem } from '../../types/navigation';
+import { ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import type { NavItem, NavSection, SubNavItem } from "../../types/navigation";
 
 interface SidebarProps {
   sections: NavSection[];
@@ -16,9 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
     sections.forEach((section) => {
       section.items.forEach((item) => {
         if (item.children) {
-          const isChildActive = item.children.some((child) =>
-            location.pathname.startsWith(child.href)
-          );
+          const isChildActive = item.children.some((child) => location.pathname.startsWith(child.href));
           initialState[item.id] = isChildActive;
         }
       });
@@ -44,12 +42,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
     return (
       <li key={item.id}>
         <NavLink
-          to={item.href || '#'}
+          to={item.href || "#"}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
               isActive
-                ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
-                : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
+                ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
             }`
           }
         >
@@ -68,8 +66,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
         className={({ isActive }) =>
           `flex items-center justify-between px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
             isActive
-              ? 'text-zinc-950 font-semibold dark:text-white bg-zinc-100/70 dark:bg-zinc-800/60'
-              : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800'
+              ? "text-zinc-950 font-semibold dark:text-white bg-zinc-100/70 dark:bg-zinc-800/60"
+              : "text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800"
           }`
         }
       >
@@ -97,18 +95,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
           <span className="flex-1 text-left truncate">{item.title}</span>
           {renderBadge(item.badge)}
           <ChevronRight
-            className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${
-              isOpen ? 'rotate-90' : ''
-            }`}
+            className={`w-4 h-4 text-zinc-400 transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}
             aria-hidden="true"
           />
         </button>
 
         {isOpen && (
-          <ul
-            id={submenuId}
-            className="pl-4 ml-4 border-l border-zinc-200 dark:border-zinc-800 space-y-1"
-          >
+          <ul id={submenuId} className="pl-4 ml-4 border-l border-zinc-200 dark:border-zinc-800 space-y-1">
             {item.children?.map(renderSubmenuItem)}
           </ul>
         )}
@@ -118,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
 
   return (
     <aside
-      className="w-64 h-screen border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col shrink-0"
+      className="w-72 h-screen border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col shrink-0"
       aria-label="Backoffice Sidebar"
     >
       {/* Brand Header */}
@@ -127,9 +120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
           <div className="w-6 h-6 rounded bg-zinc-900 dark:bg-white flex items-center justify-center text-white dark:text-zinc-950 font-bold text-xs">
             ▲
           </div>
-          <span className="font-semibold text-sm tracking-tight text-zinc-950 dark:text-white">
-            PAS Demo
-          </span>
+          <span className="font-semibold text-sm tracking-tight text-zinc-950 dark:text-white">PAS Demo</span>
         </div>
       </div>
 
@@ -143,9 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
               </h2>
             )}
             <ul className="space-y-0.5">
-              {section.items.map((item) =>
-                item.children ? renderCollapsibleMenu(item) : renderSingleLink(item)
-              )}
+              {section.items.map((item) => (item.children ? renderCollapsibleMenu(item) : renderSingleLink(item)))}
             </ul>
           </div>
         ))}
@@ -157,9 +146,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
           AD
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">
-            Admin User
-          </p>
+          <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">Admin User</p>
           <p className="text-[11px] text-zinc-500 truncate">admin@company.com</p>
         </div>
       </div>

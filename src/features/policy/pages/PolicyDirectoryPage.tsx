@@ -373,7 +373,7 @@ const StatusBadge: React.FC<{ status: PolicyStatus }> = ({ status }) => {
 };
 
 // ============================================================================
-// Main Unified Policy Directory Page
+// Main Policy Directory Page
 // ============================================================================
 
 export const PolicyDirectoryPage: React.FC = () => {
@@ -456,7 +456,7 @@ export const PolicyDirectoryPage: React.FC = () => {
       {/* 1. Header & Summary Stats */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Unified Policy Directory</h1>
+          <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Policy Directory</h1>
           <p className="text-xs text-zinc-500 mt-0.5">
             System of record for cross-LOB insurance contracts, fulfillment checklists, and PDPA-governed customer
             records.
