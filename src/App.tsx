@@ -36,6 +36,9 @@ import CustomerDirectoryPage from './features/crm/pages/CustomerDirectoryPage';
 import DataPrivacyCenterPage from './features/crm/pages/DataPrivacyCenterPage';
 import AgentSalesForceDirectoryPage from './features/crm/pages/AgentSalesForceDirectoryPage';
 import PartnerChannelHierarchyPage from './features/crm/pages/PartnerChannelHierarchyPage';
+import ApprovalsPage from './features/governance/pages/ApprovalsPage';
+import DiffViewerPage from './features/governance/pages/DiffViewerPage';
+import AuditTrailPage from './features/governance/pages/AuditTrailPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -99,9 +102,9 @@ export default function App() {
               Compliance & Governance
           ===================================================================== */}
           {/* Governance & Approvals */}
-          <Route path="/governance/approvals" element={<PlaceholderView title="governance approvals" />} />
-          <Route path="/governance/diff-viewer" element={<PlaceholderView title="governance diff viewer" />} />
-          <Route path="/governance/audit-trail" element={<PlaceholderView title="governance audit trail" />} />
+          <Route path="/governance/approvals" element={<ApprovalsPage />} />
+          <Route path="/governance/diff-viewer" element={<DiffViewerPage />} />
+          <Route path="/governance/audit-trail" element={<AuditTrailPage />} />
 
           {/* Reports & Compliance */}
           <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
