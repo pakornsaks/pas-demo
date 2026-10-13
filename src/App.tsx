@@ -12,6 +12,10 @@ import PolicyEndorsementPage from './features/policy/pages/PolicyEndorsementPage
 import TelesalesCockpitPage from './features/dashboards/pages/TelesalesCockpitPage';
 import UnderwriterWorkbenchPage from './features/dashboards/pages/UnderwriterWorkbenchPage';
 import CollectionInstallmentsPage from './features/dashboards/pages/CollectionInstallmentsPage';
+import PolicyDirectoryPage from './features/policy/pages/PolicyDirectoryPage';
+import RenewalsManagementPage from './features/policy/pages/RenewalsManagementPage';
+import CancellationsRefundsPage from './features/policy/pages/CancellationsRefundsPage';
+import BulkIngestionPage from './features/policy/pages/BulkIngestionPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -35,7 +39,11 @@ export default function App() {
           <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
 
           <Route path="/policies/search" element={<ApplicationSearchPage />} />
+          <Route path="/policies/directory1" element={<PolicyDirectoryPage />} />
           <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
+          <Route path="/policies/renewals" element={<RenewalsManagementPage />} />
+          <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
+          <Route path="/policies/bulk-ingestion" element={<BulkIngestionPage />} />
 
           <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
           <Route path="/master-data/geography" element={<GeographyPage />} />

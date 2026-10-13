@@ -77,7 +77,7 @@ const MOCK_API_DATA: GeoRiskRecord[] = [
 
 // ฟังก์ชันจำลองการยิง Network Request (หน่วงเวลา 800ms)
 const fetchGeoRiskApi = (): Promise<GeoRiskRecord[]> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       // จำลอง Success (เปลี่ยนเป็น reject(new Error(...)) ได้หากต้องการทดสอบ Error)
       resolve(MOCK_API_DATA);

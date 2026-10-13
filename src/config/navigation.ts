@@ -51,7 +51,7 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
           {
             id: 'policy-directory',
             title: 'Unified Policy Directory',
-            href: '/policies/directory',
+            href: '/policies/directory1',
           },
           {
             id: 'endorsements',
