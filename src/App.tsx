@@ -46,15 +46,6 @@ import IntegrationHubPage from './features/admin/pages/IntegrationHubPage';
 import DocumentTemplateRegistryPage from './features/admin/pages/DocumentTemplateRegistryPage';
 import OperationalSettingsSLAsPage from './features/admin/pages/OperationalSettingsSLAsPage';
 
-function PlaceholderView({ title }: { title: string }) {
-  return (
-    <div className="p-6 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm">
-      <h1 className="text-lg font-semibold">{title}</h1>
-      <p className="text-sm text-zinc-500 mt-1">This route is rendered via react-router-dom.</p>
-    </div>
-  );
-}
-
 export default function App() {
   return (
     <BrowserRouter>
