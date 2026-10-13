@@ -25,7 +25,7 @@ import AnalyticsPerformancePage from './features/reports/pages/AnalyticsPerforma
 import OperationalAccountingPage from './features/reports/pages/OperationalAccountingPage';
 import VersioningPublishingPage from './features/products/pages/VersioningPublishingPage';
 import CampaignPromoCodesPage from './features/products/pages/CampaignPromoCodesPage';
-import TransactionsGeneralLedgerPage from './features/finance/pages/TransactionsGeneralLedgerPage';
+import TransactionsLedgerPage from './features/finance/pages/TransactionsLedgerPage';
 import InsurerSettlementsPage from './features/finance/pages/InsurerSettlementsPage';
 import CommissionReceivablesPage from './features/finance/pages/CommissionReceivablesPage';
 import AgentWalletsPayoutsPage from './features/finance/pages/AgentWalletsPayoutsPage';
@@ -82,7 +82,7 @@ export default function App() {
               Finance & Distribution
           ===================================================================== */}
           {/* Financial Ledger */}
-          <Route path="/finance/ledger" element={<TransactionsGeneralLedgerPage />} />
+          <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
           <Route path="/finance/bordereau" element={<InsurerSettlementsPage />} />
           <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
           <Route path="/finance/wallets" element={<AgentWalletsPayoutsPage />} />
