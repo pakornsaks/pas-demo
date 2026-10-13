@@ -15,7 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import React, { useState } from "react";
-import BenefitsBuilder from "../components/BenefitsComparisonGrid";
+import BenefitsBuilder from "../components/BenefitsBuilder";
 
 // ==========================================
 // TYPE DEFINITIONS & SCHEMAS (SDD Module 1 & Database 4.4)

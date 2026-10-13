@@ -74,14 +74,10 @@ const DEFAULT_BENEFITS: PlanBenefitRow[] = [
   },
 ];
 
-export const BenefitsComparisonGrid: React.FC<BenefitsComparisonGridProps> = ({
-  planVersionId,
-  planCode,
+export const BenefitsBuilder: React.FC<BenefitsComparisonGridProps> = ({
   initialData = DEFAULT_BENEFITS,
   isReadOnly = false,
   onChange,
-  onExportSchema,
-  onImportCsv,
 }) => {
   const [benefits, setBenefits] = useState<PlanBenefitRow[]>(initialData);
   const [selectedGroupFilter, setSelectedGroupFilter] = useState<string>("ALL");
@@ -404,4 +400,4 @@ export const BenefitsComparisonGrid: React.FC<BenefitsComparisonGridProps> = ({
   );
 };
 
-export default BenefitsComparisonGrid;
+export default BenefitsBuilder;
