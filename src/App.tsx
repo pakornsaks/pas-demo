@@ -22,7 +22,7 @@ import LedgerPeriodManagementPage from "./features/finance/pages/LedgerPeriodMan
 import SuspenseReconciliationPage from "./features/finance/pages/SuspenseReconciliationPage";
 import TaxDocumentCenterPage from "./features/finance/pages/TaxDocumentCenterPage";
 import TransactionsLedgerPage from "./features/finance/pages/TransactionsLedgerPage";
-import ApprovalsPage from "./features/governance/pages/ApprovalsPage";
+import ApprovalInboxPage from "./features/governance/pages/ApprovalInboxPage";
 import AuditTrailPage from "./features/governance/pages/AuditTrailPage";
 import DiffViewerPage from "./features/governance/pages/DiffViewerPage";
 import BrokerSettingsPage from "./features/master/pages/BrokerSettingsPage";
@@ -104,7 +104,7 @@ export default function App() {
               Compliance & Governance
           ===================================================================== */}
           {/* Governance & Approvals */}
-          <Route path="/governance/approvals" element={<ApprovalsPage />} />
+          <Route path="/governance/approvals" element={<ApprovalInboxPage />} />
           <Route path="/governance/diff-viewer" element={<DiffViewerPage />} />
           <Route path="/governance/audit-trail" element={<AuditTrailPage />} />
 
