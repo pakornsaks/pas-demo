@@ -27,7 +27,7 @@ import AuditTrailPage from "./features/governance/pages/AuditTrailPage";
 import DiffViewerPage from "./features/governance/pages/DiffViewerPage";
 import BrokerSettingsPage from "./features/master/pages/BrokerSettingsPage";
 import GeographyPage from "./features/master/pages/GeographyPage";
-import IssuerPage from "./features/master/pages/IssuerPage";
+import InsurerCarrierDirectoryPage from "./features/master/pages/InsurerCarrierDirectoryPage";
 import NetworkProvidersDirectoryPage from "./features/master/pages/NetworkProvidersDirectoryPage";
 import OccupancyUWClassesPage from "./features/master/pages/OccupancyUWClassesPage";
 import VehicleHierarchyPage from "./features/master/pages/VehicleHierarchyPage";
@@ -126,7 +126,7 @@ export default function App() {
           <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
 
           {/* Master Data Management */}
-          <Route path="/master-data/insurers" element={<IssuerPage />} />
+          <Route path="/master-data/insurers" element={<InsurerCarrierDirectoryPage />} />
           <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
           <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
           <Route path="/master-data/geography" element={<GeographyPage />} />
