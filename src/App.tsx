@@ -17,6 +17,8 @@ import RenewalsManagementPage from './features/policy/pages/RenewalsManagementPa
 import CancellationsRefundsPage from './features/policy/pages/CancellationsRefundsPage';
 import BulkIngestionPage from './features/policy/pages/BulkIngestionPage';
 import PlanTierConfigurationPage from './features/products/pages/PlanTierConfigurationPage';
+import BenefitsBuilderPage from './features/products/pages/BenefitsBuilderPage';
+import PricingUWRulesCanvasPage from './features/products/pages/PricingUWRulesCanvasPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -33,7 +35,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
-
+          {/* =====================================================================
+              Operations & Execution
+          ===================================================================== */}
            {/* Dashboards */}
           <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
           <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
@@ -50,8 +54,8 @@ export default function App() {
           {/* Product Factory & Rules */}
           <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
           <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
-          <Route path="/products/benefits" element={<PlaceholderView title="products benefits" />} />
-          <Route path="/products/schemas" element={<PlaceholderView title="products schemas" />} />
+          <Route path="/products/benefits" element={<BenefitsBuilderPage />} />
+          <Route path="/products/schemas" element={<PricingUWRulesCanvasPage />} />
           <Route path="/products/rules" element={<PlaceholderView title="products rules" />} />
           <Route path="/products/promos" element={<PlaceholderView title="products promos" />} />
           <Route path="/products/versioning" element={<PlaceholderView title="products versioning" />} />
@@ -98,6 +102,8 @@ export default function App() {
           <Route path="/admin/settings" element={<PlaceholderView title="admin settings" />} />
           <Route path="/admin/integrations" element={<PlaceholderView title="admin integrations" />} />
           <Route path="/admin/templates" element={<PlaceholderView title="admin templates" />} />
+
+          {/* Master Data Management */}
           <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
           <Route path="/master-data/geography" element={<GeographyPage />} />
           <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
