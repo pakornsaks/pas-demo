@@ -271,7 +271,6 @@ export const AuditTrailPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEntity, setSelectedEntity] = useState<string>("ALL");
   const [selectedAction, setSelectedAction] = useState<string>("ALL");
-  const [selectedDateFilter, setSelectedDateFilter] = useState<string>("ALL");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Inspector Modal State

@@ -27,6 +27,26 @@ const RISK_BADGES: Record<RiskZoneType, { label: string; badgeClass: string; imp
     badgeClass: "bg-orange-100 text-orange-800 dark:bg-orange-950/60 dark:text-orange-300",
     impact: "Industrial Survey Mandatory",
   },
+  LANDSLIDE_RISK: {
+    label: "Landslide Risk",
+    badgeClass: "bg-stone-100 text-stone-800 dark:bg-stone-950/60 dark:text-stone-300",
+    impact: "Slope & Geotechnical Survey",
+  },
+  COASTAL_STORM_RISK: {
+    label: "Coastal Storm Risk",
+    badgeClass: "bg-cyan-100 text-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-300",
+    impact: "Windstorm Deductible / +10% Loading",
+  },
+  FLASH_FLOOD_RISK: {
+    label: "Flash Flood Risk",
+    badgeClass: "bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300",
+    impact: "Referral / Natural Disaster Loading",
+  },
+  INDUSTRIAL_HAZARD_ZONE: {
+    label: "Industrial Hazard Zone",
+    badgeClass: "bg-slate-100 text-slate-800 dark:bg-slate-950/60 dark:text-slate-300",
+    impact: "Environmental Audit & Exclusion Review",
+  },
 };
 
 // ==========================================

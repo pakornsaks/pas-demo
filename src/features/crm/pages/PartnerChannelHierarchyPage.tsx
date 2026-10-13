@@ -311,8 +311,8 @@ export const PartnerChannelHierarchyPage: React.FC = () => {
     "agt-201": true,
   });
   const [selectedAgent, setSelectedAgent] = useState<AgentNode | null>(HIERARCHY_TREE_DATA);
-  const [channelSettings, setChannelSettings] = useState<BrokerChannelSetting[]>(INITIAL_CHANNEL_SETTINGS);
-  const [insurerSettings, setInsurerSettings] = useState<BrokerInsurerSetting[]>(INITIAL_INSURER_SETTINGS);
+  const [channelSettings, _setChannelSettings] = useState<BrokerChannelSetting[]>(INITIAL_CHANNEL_SETTINGS);
+  const [insurerSettings, _setInsurerSettings] = useState<BrokerInsurerSetting[]>(INITIAL_INSURER_SETTINGS);
   const [isMakerCheckerNoticeOpen, setIsMakerCheckerNoticeOpen] = useState(false);
   const [editingTier, setEditingTier] = useState<string>("GOLD");
 
@@ -361,11 +361,11 @@ export const PartnerChannelHierarchyPage: React.FC = () => {
     const hasChildren = node.children && node.children.length > 0;
     const isSelected = selectedAgent?.agentId === node.agentId;
 
-    // Filter match test
-    const matchesSearch =
-      !searchQuery ||
-      node.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      node.agentCode.toLowerCase().includes(searchQuery.toLowerCase());
+    // // Filter match test
+    // const matchesSearch =
+    //   !searchQuery ||
+    //   node.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //   node.agentCode.toLowerCase().includes(searchQuery.toLowerCase());
 
     return (
       <div key={node.agentId} className="select-none">

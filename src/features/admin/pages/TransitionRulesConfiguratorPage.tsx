@@ -729,7 +729,7 @@ export const TransitionRulesConfigurator: React.FC = () => {
               ) : (
                 filteredTransitions.map((trans) => {
                   const isSelected = trans.transition_id === activeTransitionId;
-                  const roleCount = trans.permissions.length;
+                  // const roleCount = trans.permissions.length;
                   const hasConditions = trans.permissions.some((p) => p.condition_logic !== null);
 
                   return (
