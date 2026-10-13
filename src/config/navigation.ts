@@ -157,11 +157,11 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             title: 'Tax Document Center',
             href: '/finance/tax-documents',
           },
-          {
-            id: 'ledger-period-mgmt',
-            title: 'Ledger Period Management',
-            href: '/finance/period-close',
-          },
+          // {
+          //   id: 'ledger-period-mgmt',
+          //   title: 'Ledger Period Management',
+          //   href: '/finance/period-close',
+          // },
         ],
       },
       {
