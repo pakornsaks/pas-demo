@@ -16,6 +16,7 @@ import PolicyDirectoryPage from './features/policy/pages/PolicyDirectoryPage';
 import RenewalsManagementPage from './features/policy/pages/RenewalsManagementPage';
 import CancellationsRefundsPage from './features/policy/pages/CancellationsRefundsPage';
 import BulkIngestionPage from './features/policy/pages/BulkIngestionPage';
+import PlanTierConfigurationPage from './features/products/pages/PlanTierConfigurationPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -32,12 +33,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="/products/plans" element={<ProductPlanConfigPage />} />
-          
+
+           {/* Dashboards */}
           <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
           <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
           <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
 
+          {/* Policy Lifecycle */}
           <Route path="/policies/search" element={<ApplicationSearchPage />} />
           <Route path="/policies/directory1" element={<PolicyDirectoryPage />} />
           <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
@@ -45,20 +47,62 @@ export default function App() {
           <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
           <Route path="/policies/bulk-ingestion" element={<BulkIngestionPage />} />
 
+          {/* Product Factory & Rules */}
+          <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
+          <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
+          <Route path="/products/benefits" element={<PlaceholderView title="products benefits" />} />
+          <Route path="/products/schemas" element={<PlaceholderView title="products schemas" />} />
+          <Route path="/products/rules" element={<PlaceholderView title="products rules" />} />
+          <Route path="/products/promos" element={<PlaceholderView title="products promos" />} />
+          <Route path="/products/versioning" element={<PlaceholderView title="products versioning" />} />
+
+          {/* =====================================================================
+              Finance & Distribution
+          ===================================================================== */}
+          {/* Financial Ledger */}
+          <Route path="/finance/ledger" element={<PlaceholderView title="finance ledger" />} />
+          <Route path="/finance/bordereau" element={<PlaceholderView title="finance bordereau" />} />
+          <Route path="/finance/commission-receivables" element={<PlaceholderView title="finance commission receivables" />} />
+          <Route path="/finance/wallets" element={<PlaceholderView title="finance wallets" />} />
+          <Route path="/finance/reconciliation" element={<PlaceholderView title="finance reconciliation" />} />
+          <Route path="/finance/tax-documents" element={<PlaceholderView title="finance tax documents" />} />
+          <Route path="/finance/period-close" element={<PlaceholderView title="finance period close" />} />
+
+          {/* CRM & Sales Hierarchy */}
+          <Route path="/crm/customers" element={<PlaceholderView title="crm customers" />} />
+          <Route path="/crm/pdpa" element={<PlaceholderView title="crm pdpa" />} />
+          <Route path="/crm/agents" element={<PlaceholderView title="crm agents" />} />
+          <Route path="/crm/channels" element={<PlaceholderView title="crm channels" />} />
+
+          {/* =====================================================================
+              Compliance & Governance
+          ===================================================================== */}
+          {/* Governance & Approvals */}
+          <Route path="/governance/approvals" element={<PlaceholderView title="governance approvals" />} />
+          <Route path="/governance/diff-viewer" element={<PlaceholderView title="governance diff viewer" />} />
+          <Route path="/governance/audit-trail" element={<PlaceholderView title="governance audit trail" />} />
+
+          {/* Reports & Compliance */}
+          <Route path="/reports/oic" element={<PlaceholderView title="reports oic" />} />
+          <Route path="/reports/tax" element={<PlaceholderView title="reports tax" />} />
+          <Route path="/reports/accounting" element={<PlaceholderView title="reports accounting" />} />
+          <Route path="/reports/analytics" element={<PlaceholderView title="reports analytics" />} />
+
+          {/* =====================================================================
+              Platform & Foundation
+          ===================================================================== */}
+          {/* Workflow & Administration */}
+          <Route path="/admin/workflows" element={<PlaceholderView title="admin workflows" />} />
+          <Route path="/admin/transition-rules" element={<PlaceholderView title="admin transition rules" />} />
+          <Route path="/admin/rbac" element={<PlaceholderView title="admin rbac" />} />
+          <Route path="/admin/settings" element={<PlaceholderView title="admin settings" />} />
+          <Route path="/admin/integrations" element={<PlaceholderView title="admin integrations" />} />
+          <Route path="/admin/templates" element={<PlaceholderView title="admin templates" />} />
           <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
           <Route path="/master-data/geography" element={<GeographyPage />} />
           <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
           <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
 
-          <Route path="dashboard" element={<PlaceholderView title="Dashboard" />} />
-          <Route path="analytics" element={<PlaceholderView title="Analytics" />} />
-          <Route path="users" element={<PlaceholderView title="All Users" />} />
-          <Route path="users/roles" element={<PlaceholderView title="Roles & Permissions" />} />
-          <Route path="users/audit" element={<PlaceholderView title="Audit Trail" />} />
-          <Route path="orders" element={<PlaceholderView title="Orders" />} />
-          <Route path="transactions" element={<PlaceholderView title="Transactions" />} />
-          <Route path="security" element={<PlaceholderView title="Security" />} />
-          <Route path="settings" element={<PlaceholderView title="Settings" />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Routes>
