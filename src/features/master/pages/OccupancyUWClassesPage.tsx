@@ -1,30 +1,13 @@
 import React, { useMemo, useState } from "react";
-
-// ============================================================================
-// Types & Enums (Mapped to BRD 6.1, 7.1 and SDD 4.2 DDL)
-// ============================================================================
-
-export type RiskClassLevel = 1 | 2 | 3 | 4;
-
-export interface OccupancyGroup {
-  group_id: RiskClassLevel;
-  name_en: string;
-  name_th: string;
-  description: string;
-  default_enforcement_action: "STANDARD" | "LOADED" | "REFER" | "DECLINE";
-}
-
-export interface OccupancyRecord {
-  id: number;
-  group_id: RiskClassLevel;
-  name_en: string;
-  name_th: string;
-  created_at: string;
-  created_by?: string;
-}
+import {
+  INITIAL_OCCUPANCIES,
+  type OccupancyGroup,
+  type OccupancyRecord,
+  type RiskClassLevel,
+} from "../constants/occupancy";
 
 // Initial Metadata Seed matching SDD 4.2 occupancy_groups DDL
-const INITIAL_GROUPS: OccupancyGroup[] = [
+export const INITIAL_GROUPS: OccupancyGroup[] = [
   {
     group_id: 1,
     name_en: "Class 1 - Professional & Administrative",
@@ -52,27 +35,6 @@ const INITIAL_GROUPS: OccupancyGroup[] = [
     name_th: "กลุ่ม 4 - งานความเสี่ยงสูง",
     description: "Heavy manual labor, highly hazardous environments, or dangerous machinery. Triggers hard decline.",
     default_enforcement_action: "DECLINE",
-  },
-];
-
-const INITIAL_OCCUPANCIES: OccupancyRecord[] = [
-  { id: 1, group_id: 1, name_en: "Software Engineer", name_th: "วิศวกรซอฟต์แวร์", created_at: "2026-01-15T09:30:00Z" },
-  { id: 2, group_id: 1, name_en: "Accountant", name_th: "พนักงานบัญชี", created_at: "2026-01-15T10:00:00Z" },
-  { id: 3, group_id: 2, name_en: "Site Supervisor", name_th: "หัวหน้าคุมไซต์งาน", created_at: "2026-02-01T14:20:00Z" },
-  {
-    id: 4,
-    group_id: 3,
-    name_en: "Automotive Mechanic",
-    name_th: "ช่างซ่อมบำรุงรถยนต์",
-    created_at: "2026-02-10T11:15:00Z",
-  },
-  { id: 5, group_id: 4, name_en: "Deep Sea Diver", name_th: "นักประดาน้ำลึก", created_at: "2026-03-01T08:00:00Z" },
-  {
-    id: 6,
-    group_id: 4,
-    name_en: "High-Voltage Lineman",
-    name_th: "ช่างไฟฟ้าแรงสูง",
-    created_at: "2026-03-05T16:45:00Z",
   },
 ];
 
