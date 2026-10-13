@@ -13,7 +13,7 @@ export interface PlanBenefitRow {
   is_custom_clause?: boolean;
 }
 
-export interface BenefitsComparisonGridProps {
+export interface BenefitsBuilderProps {
   planVersionId?: string;
   planCode?: string;
   initialData?: PlanBenefitRow[];
@@ -74,7 +74,7 @@ const DEFAULT_BENEFITS: PlanBenefitRow[] = [
   },
 ];
 
-export const BenefitsBuilder: React.FC<BenefitsComparisonGridProps> = ({
+export const BenefitsBuilder: React.FC<BenefitsBuilderProps> = ({
   initialData = DEFAULT_BENEFITS,
   isReadOnly = false,
   onChange,

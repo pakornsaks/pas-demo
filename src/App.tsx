@@ -37,7 +37,6 @@ import CancellationsRefundsPage from "./features/policy/pages/CancellationsRefun
 import PolicyDirectoryPage from "./features/policy/pages/PolicyDirectoryPage";
 import PolicyEndorsementPage from "./features/policy/pages/PolicyEndorsementPage";
 import RenewalsManagementPage from "./features/policy/pages/RenewalsManagementPage";
-import BenefitsBuilder from "./features/products/components/BenefitsComparisonGrid";
 import CampaignPromoCodesPage from "./features/products/pages/CampaignPromoCodesPage";
 import DynamicSchemaBuilderPage from "./features/products/pages/DynamicSchemaBuilder";
 import PlanTierConfigurationPage from "./features/products/pages/PlanConfigurationPage";
