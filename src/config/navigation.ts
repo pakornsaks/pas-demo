@@ -85,16 +85,6 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             title: 'Product Catalog',
             href: '/products/catalog',
           },
-          // {
-          //   id: 'plan-tier-config',
-          //   title: 'Plan & Tier Configuration',
-          //   href: '/products/plans',
-          // },
-          {
-            id: 'benefits-builder',
-            title: 'Benefits Builder',
-            href: '/products/benefits',
-          },
           {
             id: 'rules-canvas',
             title: 'Pricing & UW Rules Canvas',
