@@ -23,6 +23,15 @@ import OICRegulatoryReportsPage from './features/reports/pages/OICRegulatoryRepo
 import TaxRemittanceReportsPage from './features/reports/pages/TaxRemittanceReportsPage';
 import AnalyticsPerformancePage from './features/reports/pages/AnalyticsPerformancePage';
 import OperationalAccountingPage from './features/reports/pages/OperationalAccountingPage';
+import VersioningPublishingPage from './features/products/pages/VersioningPublishingPage';
+import PromoCodesPage from './features/products/pages/PromoCodesPage';
+import TransactionsGeneralLedgerPage from './features/finance/pages/TransactionsGeneralLedgerPage';
+import InsurerSettlementsPage from './features/finance/pages/InsurerSettlementsPage';
+import CommissionReceivablesPage from './features/finance/pages/CommissionReceivablesPage';
+import AgentWalletsPayoutsPage from './features/finance/pages/AgentWalletsPayoutsPage';
+import SuspenseReconciliationPage from './features/finance/pages/SuspenseReconciliationPage';
+import TaxDocumentCenterPage from './features/finance/pages/TaxDocumentCenterPage';
+import LedgerPeriodManagementPage from './features/finance/pages/LedgerPeriodManagementPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -60,21 +69,21 @@ export default function App() {
           <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
           <Route path="/products/benefits" element={<BenefitsBuilderPage />} />
           <Route path="/products/schemas" element={<PricingUWRulesCanvasPage />} />
-          <Route path="/products/rules" element={<PlaceholderView title="products rules" />} />
-          <Route path="/products/promos" element={<PlaceholderView title="products promos" />} />
-          <Route path="/products/versioning" element={<PlaceholderView title="products versioning" />} />
+          <Route path="/products/rules" element={<PricingUWRulesCanvasPage />} />
+          <Route path="/products/promos" element={<PromoCodesPage />} />
+          <Route path="/products/versioning" element={<VersioningPublishingPage />} />
 
           {/* =====================================================================
               Finance & Distribution
           ===================================================================== */}
           {/* Financial Ledger */}
-          <Route path="/finance/ledger" element={<PlaceholderView title="finance ledger" />} />
-          <Route path="/finance/bordereau" element={<PlaceholderView title="finance bordereau" />} />
-          <Route path="/finance/commission-receivables" element={<PlaceholderView title="finance commission receivables" />} />
-          <Route path="/finance/wallets" element={<PlaceholderView title="finance wallets" />} />
-          <Route path="/finance/reconciliation" element={<PlaceholderView title="finance reconciliation" />} />
-          <Route path="/finance/tax-documents" element={<PlaceholderView title="finance tax documents" />} />
-          <Route path="/finance/period-close" element={<PlaceholderView title="finance period close" />} />
+          <Route path="/finance/ledger" element={<TransactionsGeneralLedgerPage />} />
+          <Route path="/finance/bordereau" element={<InsurerSettlementsPage />} />
+          <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
+          <Route path="/finance/wallets" element={<AgentWalletsPayoutsPage />} />
+          <Route path="/finance/reconciliation" element={<SuspenseReconciliationPage />} />
+          <Route path="/finance/tax-documents" element={<TaxDocumentCenterPage />} />
+          <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />
 
           {/* CRM & Sales Hierarchy */}
           <Route path="/crm/customers" element={<PlaceholderView title="crm customers" />} />
