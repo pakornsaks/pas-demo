@@ -19,6 +19,10 @@ import BulkIngestionPage from './features/policy/pages/BulkIngestionPage';
 import PlanTierConfigurationPage from './features/products/pages/PlanTierConfigurationPage';
 import BenefitsBuilderPage from './features/products/pages/BenefitsBuilderPage';
 import PricingUWRulesCanvasPage from './features/products/pages/PricingUWRulesCanvasPage';
+import OICRegulatoryReportsPage from './features/reports/pages/OICRegulatoryReportsPage';
+import TaxRemittanceReportsPage from './features/reports/pages/TaxRemittanceReportsPage';
+import AnalyticsPerformancePage from './features/reports/pages/AnalyticsPerformancePage';
+import OperationalAccountingPage from './features/reports/pages/OperationalAccountingPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -87,10 +91,10 @@ export default function App() {
           <Route path="/governance/audit-trail" element={<PlaceholderView title="governance audit trail" />} />
 
           {/* Reports & Compliance */}
-          <Route path="/reports/oic" element={<PlaceholderView title="reports oic" />} />
-          <Route path="/reports/tax" element={<PlaceholderView title="reports tax" />} />
-          <Route path="/reports/accounting" element={<PlaceholderView title="reports accounting" />} />
-          <Route path="/reports/analytics" element={<PlaceholderView title="reports analytics" />} />
+          <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
+          <Route path="/reports/tax" element={<TaxRemittanceReportsPage />} />
+          <Route path="/reports/accounting" element={<OperationalAccountingPage />} />
+          <Route path="/reports/analytics" element={<AnalyticsPerformancePage />} />
 
           {/* =====================================================================
               Platform & Foundation
