@@ -376,7 +376,7 @@ export const PricingUWRulesCanvasPage: React.FC = () => {
                 Editing: {draftVersion} (SCD Type-2)
               </span>
             </div>
-            <h1 className="text-xl font-bold text-zinc-900 mt-2">Pricing & Underwriting Rules Canvas</h1>
+            <h1 className="text-xl font-bold text-zinc-900 mt-2">Pricing & Underwriting Rules</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
               Target Plan: <strong className="text-zinc-700">{productCode}</strong> /{" "}
               <span className="text-zinc-700 font-medium">{planCode}</span>

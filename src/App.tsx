@@ -41,7 +41,7 @@ import BenefitsBuilder from "./features/products/components/BenefitsComparisonGr
 import CampaignPromoCodesPage from "./features/products/pages/CampaignPromoCodesPage";
 import DynamicSchemaBuilderPage from "./features/products/pages/DynamicSchemaBuilder";
 import PlanTierConfigurationPage from "./features/products/pages/PlanConfigurationPage";
-import PricingUWRulesCanvasPage from "./features/products/pages/PricingUWRulesCanvasPage";
+import PricingUWRulesPage from "./features/products/pages/PricingUWRulesPage";
 import ProductPlanConfigPage from "./features/products/pages/ProductCategoryPage";
 import VersioningPublishingPage from "./features/products/pages/VersioningPublishingPage";
 import AnalyticsPerformancePage from "./features/reports/pages/AnalyticsPerformancePage";
@@ -76,7 +76,7 @@ export default function App() {
           <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
           <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
           <Route path="/products/benefits" element={<BenefitsBuilder />} />
-          <Route path="/products/rules" element={<PricingUWRulesCanvasPage />} />
+          <Route path="/products/rules" element={<PricingUWRulesPage />} />
           <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
           <Route path="/products/promos" element={<CampaignPromoCodesPage />} />
           <Route path="/products/versioning" element={<VersioningPublishingPage />} />
