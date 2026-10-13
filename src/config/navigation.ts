@@ -305,7 +305,7 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
           },
           {
             id: 'vehicle-master',
-            title: 'Vehicle Master',
+            title: 'Vehicle Hierarchy',
             href: '/master-data/vehicles',
           },
           {

@@ -37,10 +37,10 @@ import CancellationsRefundsPage from "./features/policy/pages/CancellationsRefun
 import PolicyDirectoryPage from "./features/policy/pages/PolicyDirectoryPage";
 import PolicyEndorsementPage from "./features/policy/pages/PolicyEndorsementPage";
 import RenewalsManagementPage from "./features/policy/pages/RenewalsManagementPage";
-import BenefitsBuilderPage from "./features/products/pages/BenefitsBuilderPage";
+import BenefitsBuilder from "./features/products/components/BenefitsComparisonGrid";
 import CampaignPromoCodesPage from "./features/products/pages/CampaignPromoCodesPage";
 import DynamicSchemaBuilderPage from "./features/products/pages/DynamicSchemaBuilder";
-import PlanTierConfigurationPage from "./features/products/pages/PlanTierConfigurationPage";
+import PlanTierConfigurationPage from "./features/products/pages/PlanConfigurationPage";
 import PricingUWRulesCanvasPage from "./features/products/pages/PricingUWRulesCanvasPage";
 import ProductPlanConfigPage from "./features/products/pages/ProductCategoryPage";
 import VersioningPublishingPage from "./features/products/pages/VersioningPublishingPage";
@@ -75,7 +75,7 @@ export default function App() {
           {/* Product Factory & Rules */}
           <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
           <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
-          <Route path="/products/benefits" element={<BenefitsBuilderPage />} />
+          <Route path="/products/benefits" element={<BenefitsBuilder />} />
           <Route path="/products/rules" element={<PricingUWRulesCanvasPage />} />
           <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
           <Route path="/products/promos" element={<CampaignPromoCodesPage />} />

@@ -15,6 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import React, { useState } from "react";
+import BenefitsBuilder from "../components/BenefitsComparisonGrid";
 
 // ==========================================
 // TYPE DEFINITIONS & SCHEMAS (SDD Module 1 & Database 4.4)
@@ -994,137 +995,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
           {/* ==================================================== */}
           {/* TAB 3: BENEFITS & COMPARISON GRID (Screen 8.2.3)     */}
           {/* ==================================================== */}
-          {activeTab === "BENEFITS" && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
-                    Plan Benefits & Limits (Headless Comparison Grid Builder)
-                  </h3>
-                  <p className="text-xs text-zinc-500">
-                    Granular coverage rows served via{" "}
-                    <code className="font-mono text-zinc-700">GET /products/{"{id}"}/plans</code> to power
-                    customer-facing comparison tables.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleAddCoverageRow}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-zinc-900 text-white rounded text-xs font-medium hover:bg-zinc-800 transition-colors shadow-sm"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  Add Coverage Row
-                </button>
-              </div>
-
-              <div className="border border-zinc-200 rounded-lg overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-zinc-50 border-b border-zinc-200 text-[11px] font-semibold text-zinc-600 uppercase tracking-wider">
-                      <th className="py-2.5 px-3">Coverage Group</th>
-                      <th className="py-2.5 px-3">Benefit Code</th>
-                      <th className="py-2.5 px-3">Coverage Name</th>
-                      <th className="py-2.5 px-3">Limit Calculation</th>
-                      <th className="py-2.5 px-3 text-right">Sum Insured / Limit</th>
-                      <th className="py-2.5 px-3 text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-zinc-200 text-xs">
-                    {currentPlan.coverages.map((cov, index) => (
-                      <tr key={cov.benefit_id} className="hover:bg-zinc-50/70 transition-colors">
-                        <td className="py-2.5 px-3">
-                          <input
-                            type="text"
-                            value={cov.coverage_group}
-                            onChange={(e) => {
-                              const updated = [...currentPlan.coverages];
-                              updated[index].coverage_group = e.target.value;
-                              handleUpdateCurrentPlan({ coverages: updated });
-                            }}
-                            className="w-full px-2 py-1 border border-zinc-200 rounded text-xs text-zinc-800 bg-white"
-                          />
-                        </td>
-                        <td className="py-2.5 px-3">
-                          <input
-                            type="text"
-                            value={cov.benefit_code}
-                            onChange={(e) => {
-                              const updated = [...currentPlan.coverages];
-                              updated[index].benefit_code = e.target.value;
-                              handleUpdateCurrentPlan({ coverages: updated });
-                            }}
-                            className="w-full px-2 py-1 border border-zinc-200 rounded font-mono text-[11px] text-zinc-800 bg-white"
-                          />
-                        </td>
-                        <td className="py-2.5 px-3">
-                          <input
-                            type="text"
-                            value={cov.coverage_name}
-                            onChange={(e) => {
-                              const updated = [...currentPlan.coverages];
-                              updated[index].coverage_name = e.target.value;
-                              handleUpdateCurrentPlan({ coverages: updated });
-                            }}
-                            className="w-full px-2 py-1 border border-zinc-200 rounded text-xs text-zinc-900 bg-white"
-                          />
-                        </td>
-                        <td className="py-2.5 px-3">
-                          <select
-                            value={cov.limit_type}
-                            onChange={(e) => {
-                              const updated = [...currentPlan.coverages];
-                              updated[index].limit_type = e.target.value as "FIXED_AMOUNT" | "DYNAMIC_REDBOOK";
-                              handleUpdateCurrentPlan({ coverages: updated });
-                            }}
-                            className="w-full px-2 py-1 border border-zinc-200 rounded text-xs text-zinc-800 bg-white"
-                          >
-                            <option value="FIXED_AMOUNT">Fixed THB Limit</option>
-                            <option value="DYNAMIC_REDBOOK">Dynamic Redbook Value (Sum Insured)</option>
-                          </select>
-                        </td>
-                        <td className="py-2.5 px-3 text-right">
-                          {cov.limit_type === "DYNAMIC_REDBOOK" ? (
-                            <span className="inline-block px-2 py-0.5 rounded text-[11px] font-mono bg-blue-50 text-blue-700 border border-blue-200">
-                              Redbook 80% Market Value
-                            </span>
-                          ) : (
-                            <input
-                              type="number"
-                              value={cov.limit_amount}
-                              onChange={(e) => {
-                                const updated = [...currentPlan.coverages];
-                                updated[index].limit_amount = parseFloat(e.target.value) || 0;
-                                handleUpdateCurrentPlan({ coverages: updated });
-                              }}
-                              className="w-28 text-right px-2 py-1 border border-zinc-200 rounded text-xs font-mono font-medium text-zinc-900 bg-white"
-                            />
-                          )}
-                        </td>
-                        <td className="py-2.5 px-3 text-center">
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveCoverage(cov.benefit_id)}
-                            className="p-1 text-zinc-400 hover:text-red-600 transition-colors"
-                            title="Delete Row"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {currentPlan.coverages.length === 0 && (
-                      <tr>
-                        <td colSpan={6} className="py-8 text-center text-zinc-400 text-xs">
-                          No benefit rows configured for this tier. Click "Add Coverage Row" to populate comparison
-                          grid.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+          {activeTab === "BENEFITS" && <BenefitsBuilder />}
 
           {/* ==================================================== */}
           {/* TAB 4: UNDERWRITING & REFERRAL TEMPLATES             */}
