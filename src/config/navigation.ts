@@ -68,11 +68,11 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             title: 'Cancellations & Refunds',
             href: '/policies/cancellations',
           },
-          {
-            id: 'bulk-ingestion',
-            title: 'Bulk Ingestion',
-            href: '/policies/bulk-ingestion',
-          },
+          // {
+          //   id: 'bulk-ingestion',
+          //   title: 'Bulk Ingestion',
+          //   href: '/policies/bulk-ingestion',
+          // },
         ],
       },
       {
@@ -96,14 +96,14 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             href: '/products/benefits',
           },
           {
-            id: 'dynamic-schema-builder',
-            title: 'Dynamic Schema Builder',
-            href: '/products/schemas',
-          },
-          {
             id: 'rules-canvas',
             title: 'Pricing & UW Rules Canvas',
             href: '/products/rules',
+          },
+          {
+            id: 'dynamic-schema-builder',
+            title: 'Dynamic Schema Builder',
+            href: '/products/schemas',
           },
           {
             id: 'campaigns-promos',
