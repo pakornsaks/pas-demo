@@ -24,7 +24,7 @@ import TaxRemittanceReportsPage from './features/reports/pages/TaxRemittanceRepo
 import AnalyticsPerformancePage from './features/reports/pages/AnalyticsPerformancePage';
 import OperationalAccountingPage from './features/reports/pages/OperationalAccountingPage';
 import VersioningPublishingPage from './features/products/pages/VersioningPublishingPage';
-import PromoCodesPage from './features/products/pages/PromoCodesPage';
+import CampaignPromoCodesPage from './features/products/pages/CampaignPromoCodesPage';
 import TransactionsGeneralLedgerPage from './features/finance/pages/TransactionsGeneralLedgerPage';
 import InsurerSettlementsPage from './features/finance/pages/InsurerSettlementsPage';
 import CommissionReceivablesPage from './features/finance/pages/CommissionReceivablesPage';
@@ -45,6 +45,7 @@ import AccessControlRbacPage from './features/admin/pages/AccessControlRbacPage'
 import IntegrationHubPage from './features/admin/pages/IntegrationHubPage';
 import DocumentTemplateRegistryPage from './features/admin/pages/DocumentTemplateRegistryPage';
 import OperationalSettingsSLAsPage from './features/admin/pages/OperationalSettingsSLAsPage';
+import DynamicSchemaBuilderPage from './features/products/pages/DynamicSchemaBuilder';
 
 export default function App() {
   return (
@@ -72,9 +73,9 @@ export default function App() {
           <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
           <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
           <Route path="/products/benefits" element={<BenefitsBuilderPage />} />
-          <Route path="/products/schemas" element={<PricingUWRulesCanvasPage />} />
+          <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
           <Route path="/products/rules" element={<PricingUWRulesCanvasPage />} />
-          <Route path="/products/promos" element={<PromoCodesPage />} />
+          <Route path="/products/promos" element={<CampaignPromoCodesPage />} />
           <Route path="/products/versioning" element={<VersioningPublishingPage />} />
 
           {/* =====================================================================

@@ -13,10 +13,8 @@ import {
   X,
   FileText,
   Clock,
-  ArrowRight,
   ShieldAlert,
   ChevronDown,
-  Layers,
   Database
 } from 'lucide-react';
 

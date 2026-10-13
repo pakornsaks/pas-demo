@@ -13,7 +13,6 @@ import {
   Sliders,
   DollarSign,
   HelpCircle,
-  Clock,
   ArrowRight
 } from 'lucide-react';
 

@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react';
+import React, { useState } from 'react';
 import {
   GripVertical,
   Plus,
@@ -12,9 +12,7 @@ import {
   AlertCircle,
   CheckCircle2,
   Layers,
-  Sparkles,
   Copy,
-  ChevronDown,
 } from 'lucide-react';
 
 export interface PlanBenefitRow {
@@ -128,7 +126,6 @@ export const BenefitsBuilderPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [isSavedAlert, setIsSavedAlert] = useState<boolean>(false);
-  const [editingCell, setEditingCell] = useState<{ id: string; field: string } | null>(null);
 
   const planInfo: PlanMetadata = {
     product_id: 'PRD-MTR-V1',
