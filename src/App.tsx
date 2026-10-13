@@ -48,7 +48,7 @@ import OperationalSettingsSLAsPage from './features/admin/pages/OperationalSetti
 import DynamicSchemaBuilderPage from './features/products/pages/DynamicSchemaBuilder';
 import IssuerPage from './features/master/pages/IssuerPage';
 import BrokerDirectoryPage from './features/crm/pages/BrokerDirectoryPage';
-import BrokerSettingsPage from './features/crm/pages/BrokerSettingsPage';
+import BrokerSettingsPage from './features/master/pages/BrokerSettingsPage';
 
 export default function App() {
   return (
