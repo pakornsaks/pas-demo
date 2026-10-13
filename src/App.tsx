@@ -1,54 +1,54 @@
-import './App.css'
+import "./App.css";
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AdminLayout } from './layouts/AdminLayout';
-import ProductPlanConfigPage from './features/products/pages/ProductConfigPage';
-import VehicleHierarchyPage from './features/master/pages/VehicleHierarchyPage';
-import GeographyPage from './features/master/pages/GeographyPage';
-import OccupancyUWClassesPage from './features/master/pages/OccupancyUWClassesPage';
-import NetworkProvidersDirectoryPage from './features/master/pages/NetworkProvidersDirectoryPage';
-import ApplicationSearchPage from './features/policy/pages/ApplicationSearchPage';
-import PolicyEndorsementPage from './features/policy/pages/PolicyEndorsementPage';
-import TelesalesCockpitPage from './features/dashboards/pages/TelesalesCockpitPage';
-import UnderwriterWorkbenchPage from './features/dashboards/pages/UnderwriterWorkbenchPage';
-import CollectionInstallmentsPage from './features/dashboards/pages/CollectionInstallmentsPage';
-import PolicyDirectoryPage from './features/policy/pages/PolicyDirectoryPage';
-import RenewalsManagementPage from './features/policy/pages/RenewalsManagementPage';
-import CancellationsRefundsPage from './features/policy/pages/CancellationsRefundsPage';
-import BulkIngestionPage from './features/policy/pages/BulkIngestionPage';
-import PlanTierConfigurationPage from './features/products/pages/PlanTierConfigurationPage';
-import BenefitsBuilderPage from './features/products/pages/BenefitsBuilderPage';
-import PricingUWRulesCanvasPage from './features/products/pages/PricingUWRulesCanvasPage';
-import OICRegulatoryReportsPage from './features/reports/pages/OICRegulatoryReportsPage';
-import TaxRemittanceReportsPage from './features/reports/pages/TaxRemittanceReportsPage';
-import AnalyticsPerformancePage from './features/reports/pages/AnalyticsPerformancePage';
-import OperationalAccountingPage from './features/reports/pages/OperationalAccountingPage';
-import VersioningPublishingPage from './features/products/pages/VersioningPublishingPage';
-import CampaignPromoCodesPage from './features/products/pages/CampaignPromoCodesPage';
-import TransactionsLedgerPage from './features/finance/pages/TransactionsLedgerPage';
-import InsurerSettlementsPage from './features/finance/pages/InsurerSettlementsPage';
-import CommissionReceivablesPage from './features/finance/pages/CommissionReceivablesPage';
-import AgentWalletsPayoutsPage from './features/finance/pages/AgentWalletsPayoutsPage';
-import SuspenseReconciliationPage from './features/finance/pages/SuspenseReconciliationPage';
-import TaxDocumentCenterPage from './features/finance/pages/TaxDocumentCenterPage';
-import LedgerPeriodManagementPage from './features/finance/pages/LedgerPeriodManagementPage';
-import CustomerDirectoryPage from './features/crm/pages/CustomerDirectoryPage';
-import DataPrivacyCenterPage from './features/crm/pages/DataPrivacyCenterPage';
-import AgentSalesForceDirectoryPage from './features/crm/pages/AgentSalesForceDirectoryPage';
-import PartnerChannelHierarchyPage from './features/crm/pages/PartnerChannelHierarchyPage';
-import ApprovalsPage from './features/governance/pages/ApprovalsPage';
-import DiffViewerPage from './features/governance/pages/DiffViewerPage';
-import AuditTrailPage from './features/governance/pages/AuditTrailPage';
-import WorkflowVisualizerCanvasPage from './features/admin/pages/WorkflowVisualizerCanvasPage';
-import TransitionRulesConfiguratorPage from './features/admin/pages/TransitionRulesConfiguratorPage';
-import AccessControlRbacPage from './features/admin/pages/AccessControlRbacPage';
-import IntegrationHubPage from './features/admin/pages/IntegrationHubPage';
-import DocumentTemplateRegistryPage from './features/admin/pages/DocumentTemplateRegistryPage';
-import OperationalSettingsSLAsPage from './features/admin/pages/OperationalSettingsSLAsPage';
-import DynamicSchemaBuilderPage from './features/products/pages/DynamicSchemaBuilder';
-import IssuerPage from './features/master/pages/IssuerPage';
-import BrokerDirectoryPage from './features/crm/pages/BrokerDirectoryPage';
-import BrokerSettingsPage from './features/master/pages/BrokerSettingsPage';
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AccessControlRbacPage from "./features/admin/pages/AccessControlRbacPage";
+import DocumentTemplateRegistryPage from "./features/admin/pages/DocumentTemplateRegistryPage";
+import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
+import OperationalSettingsSLAsPage from "./features/admin/pages/OperationalSettingsSLAsPage";
+import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
+import WorkflowVisualizerCanvasPage from "./features/admin/pages/WorkflowVisualizerCanvasPage";
+import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
+import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
+import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
+import DataPrivacyCenterPage from "./features/crm/pages/DataPrivacyCenterPage";
+import PartnerChannelHierarchyPage from "./features/crm/pages/PartnerChannelHierarchyPage";
+import CollectionInstallmentsPage from "./features/dashboards/pages/CollectionInstallmentsPage";
+import TelesalesCockpitPage from "./features/dashboards/pages/TelesalesCockpitPage";
+import UnderwriterWorkbenchPage from "./features/dashboards/pages/UnderwriterWorkbenchPage";
+import AgentWalletsPayoutsPage from "./features/finance/pages/AgentWalletsPayoutsPage";
+import CommissionReceivablesPage from "./features/finance/pages/CommissionReceivablesPage";
+import InsurerSettlementsPage from "./features/finance/pages/InsurerSettlementsPage";
+import LedgerPeriodManagementPage from "./features/finance/pages/LedgerPeriodManagementPage";
+import SuspenseReconciliationPage from "./features/finance/pages/SuspenseReconciliationPage";
+import TaxDocumentCenterPage from "./features/finance/pages/TaxDocumentCenterPage";
+import TransactionsLedgerPage from "./features/finance/pages/TransactionsLedgerPage";
+import ApprovalsPage from "./features/governance/pages/ApprovalsPage";
+import AuditTrailPage from "./features/governance/pages/AuditTrailPage";
+import DiffViewerPage from "./features/governance/pages/DiffViewerPage";
+import BrokerSettingsPage from "./features/master/pages/BrokerSettingsPage";
+import GeographyPage from "./features/master/pages/GeographyPage";
+import IssuerPage from "./features/master/pages/IssuerPage";
+import NetworkProvidersDirectoryPage from "./features/master/pages/NetworkProvidersDirectoryPage";
+import OccupancyUWClassesPage from "./features/master/pages/OccupancyUWClassesPage";
+import VehicleHierarchyPage from "./features/master/pages/VehicleHierarchyPage";
+import ApplicationSearchPage from "./features/policy/pages/ApplicationSearchPage";
+import BulkIngestionPage from "./features/policy/pages/BulkIngestionPage";
+import CancellationsRefundsPage from "./features/policy/pages/CancellationsRefundsPage";
+import PolicyDirectoryPage from "./features/policy/pages/PolicyDirectoryPage";
+import PolicyEndorsementPage from "./features/policy/pages/PolicyEndorsementPage";
+import RenewalsManagementPage from "./features/policy/pages/RenewalsManagementPage";
+import BenefitsBuilderPage from "./features/products/pages/BenefitsBuilderPage";
+import CampaignPromoCodesPage from "./features/products/pages/CampaignPromoCodesPage";
+import DynamicSchemaBuilderPage from "./features/products/pages/DynamicSchemaBuilder";
+import PlanTierConfigurationPage from "./features/products/pages/PlanTierConfigurationPage";
+import PricingUWRulesCanvasPage from "./features/products/pages/PricingUWRulesCanvasPage";
+import ProductPlanConfigPage from "./features/products/pages/ProductConfigPage";
+import VersioningPublishingPage from "./features/products/pages/VersioningPublishingPage";
+import AnalyticsPerformancePage from "./features/reports/pages/AnalyticsPerformancePage";
+import OICRegulatoryReportsPage from "./features/reports/pages/OICRegulatoryReportsPage";
+import OperationalAccountingPage from "./features/reports/pages/OperationalAccountingPage";
+import TaxRemittanceReportsPage from "./features/reports/pages/TaxRemittanceReportsPage";
+import { AdminLayout } from "./layouts/AdminLayout";
 
 export default function App() {
   return (
@@ -59,7 +59,7 @@ export default function App() {
           {/* =====================================================================
               Operations & Execution
           ===================================================================== */}
-           {/* Dashboards */}
+          {/* Dashboards */}
           <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
           <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
           <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />

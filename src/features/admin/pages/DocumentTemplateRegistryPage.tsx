@@ -1,5 +1,3 @@
-
-
 function PlaceholderView() {
   return (
     <div className="p-6 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm">

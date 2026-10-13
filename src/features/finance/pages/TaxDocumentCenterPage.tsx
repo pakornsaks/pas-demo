@@ -27,11 +27,7 @@ export type TaxDocType =
   | "WHT_50_TAWI" // 50 Tawi (3% WHT on Agent Commission)
   | "OIC_POR_LOR_1"; // Flattened OIC Compliance Tax Register
 
-export type TaxDocStatus =
-  | "ISSUED"
-  | "PENDING_APPROVAL"
-  | "CANCELLED"
-  | "VOIDED";
+export type TaxDocStatus = "ISSUED" | "PENDING_APPROVAL" | "CANCELLED" | "VOIDED";
 
 export interface TaxDocumentItem {
   id: string;
@@ -75,8 +71,7 @@ const MOCK_TAX_DOCUMENTS: TaxDocumentItem[] = [
     grossTotal: 19332.0,
     issuedDate: "2026-10-12 14:32:01",
     status: "ISSUED",
-    s3VaultUrl:
-      "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/TAX-2026-000841.pdf",
+    s3VaultUrl: "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/TAX-2026-000841.pdf",
   },
   {
     id: "doc-uuid-002",
@@ -95,8 +90,7 @@ const MOCK_TAX_DOCUMENTS: TaxDocumentItem[] = [
     grossTotal: -9129.0,
     issuedDate: "2026-10-12 11:18:40",
     status: "ISSUED",
-    s3VaultUrl:
-      "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/CN-2026-000104.pdf",
+    s3VaultUrl: "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/CN-2026-000104.pdf",
   },
   {
     id: "doc-uuid-003",
@@ -115,8 +109,7 @@ const MOCK_TAX_DOCUMENTS: TaxDocumentItem[] = [
     whtDeduction: 75.0, // 3% WHT
     issuedDate: "2026-10-11 16:45:10",
     status: "ISSUED",
-    s3VaultUrl:
-      "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/50TW-2026-003310.pdf",
+    s3VaultUrl: "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/50TW-2026-003310.pdf",
   },
   {
     id: "doc-uuid-004",
@@ -134,8 +127,7 @@ const MOCK_TAX_DOCUMENTS: TaxDocumentItem[] = [
     grossTotal: 48330.0,
     issuedDate: "2026-10-10 09:20:15",
     status: "ISSUED",
-    s3VaultUrl:
-      "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/TAX-2026-000842.pdf",
+    s3VaultUrl: "https://s3.ap-southeast-1.amazonaws.com/pas-epolicy-vault/tax/TAX-2026-000842.pdf",
   },
   {
     id: "doc-uuid-005",
@@ -170,8 +162,7 @@ export const TaxDocumentCenter: React.FC = () => {
   const [unmaskedDocs, setUnmaskedDocs] = useState<Record<string, boolean>>({});
 
   // Modals
-  const [isGenerateInvoiceModal, setIsGenerateInvoiceModal] =
-    useState<boolean>(false);
+  const [isGenerateInvoiceModal, setIsGenerateInvoiceModal] = useState<boolean>(false);
   const [isCreditNoteModal, setIsCreditNoteModal] = useState<boolean>(false);
   const [isAsyncReportModal, setIsAsyncReportModal] = useState<boolean>(false);
   const [notification, setNotification] = useState<{
@@ -183,37 +174,23 @@ export const TaxDocumentCenter: React.FC = () => {
   const filteredDocuments = useMemo(() => {
     return MOCK_TAX_DOCUMENTS.filter((doc) => {
       // Tab filter
-      if (
-        activeTab === "TAX_INVOICE" &&
-        doc.documentType !== "TAX_INVOICE_RECEIPT"
-      )
-        return false;
-      if (activeTab === "CREDIT_NOTE" && doc.documentType !== "TAX_CREDIT_NOTE")
-        return false;
-      if (activeTab === "50_TAWI" && doc.documentType !== "WHT_50_TAWI")
-        return false;
+      if (activeTab === "TAX_INVOICE" && doc.documentType !== "TAX_INVOICE_RECEIPT") return false;
+      if (activeTab === "CREDIT_NOTE" && doc.documentType !== "TAX_CREDIT_NOTE") return false;
+      if (activeTab === "50_TAWI" && doc.documentType !== "WHT_50_TAWI") return false;
 
       // Insurer filter
-      if (selectedInsurer !== "ALL" && doc.insurerName !== selectedInsurer)
-        return false;
+      if (selectedInsurer !== "ALL" && doc.insurerName !== selectedInsurer) return false;
 
       // Status filter
-      if (selectedStatus !== "ALL" && doc.status !== selectedStatus)
-        return false;
+      if (selectedStatus !== "ALL" && doc.status !== selectedStatus) return false;
 
       // Text query
       if (searchQuery.trim() !== "") {
         const query = searchQuery.toLowerCase();
         const matchNum = doc.documentNumber.toLowerCase().includes(query);
-        const matchPol = doc.referencePolicyNumber
-          .toLowerCase()
-          .includes(query);
+        const matchPol = doc.referencePolicyNumber.toLowerCase().includes(query);
         const matchName = doc.partyName.toLowerCase().includes(query);
-        const matchTaxId = (
-          unmaskedDocs[doc.id] ? doc.taxIdPlain : doc.taxIdMasked
-        )
-          .toLowerCase()
-          .includes(query);
+        const matchTaxId = (unmaskedDocs[doc.id] ? doc.taxIdPlain : doc.taxIdMasked).toLowerCase().includes(query);
         if (!matchNum && !matchPol && !matchName && !matchTaxId) return false;
       }
 
@@ -223,24 +200,12 @@ export const TaxDocumentCenter: React.FC = () => {
 
   // Financial KPI Aggregates
   const stats = useMemo(() => {
-    const totalVat = MOCK_TAX_DOCUMENTS.reduce(
-      (acc, curr) => acc + curr.vatAmount,
-      0,
-    );
-    const totalStamp = MOCK_TAX_DOCUMENTS.reduce(
-      (acc, curr) => acc + curr.stampDuty,
-      0,
-    );
-    const totalWht = MOCK_TAX_DOCUMENTS.reduce(
-      (acc, curr) => acc + (curr.whtDeduction || 0),
-      0,
-    );
-    const activeInvoices = MOCK_TAX_DOCUMENTS.filter(
-      (d) => d.documentType === "TAX_INVOICE_RECEIPT",
-    ).length;
+    const totalVat = MOCK_TAX_DOCUMENTS.reduce((acc, curr) => acc + curr.vatAmount, 0);
+    const totalStamp = MOCK_TAX_DOCUMENTS.reduce((acc, curr) => acc + curr.stampDuty, 0);
+    const totalWht = MOCK_TAX_DOCUMENTS.reduce((acc, curr) => acc + (curr.whtDeduction || 0), 0);
+    const activeInvoices = MOCK_TAX_DOCUMENTS.filter((d) => d.documentType === "TAX_INVOICE_RECEIPT").length;
     const pendingCreditNotes = MOCK_TAX_DOCUMENTS.filter(
-      (d) =>
-        d.documentType === "TAX_CREDIT_NOTE" && d.status === "PENDING_APPROVAL",
+      (d) => d.documentType === "TAX_CREDIT_NOTE" && d.status === "PENDING_APPROVAL",
     ).length;
 
     return {
@@ -296,16 +261,12 @@ export const TaxDocumentCenter: React.FC = () => {
               TRD & OIC Tax Module
             </span>
             <span className="text-xs text-zinc-400">|</span>
-            <span className="text-xs font-mono text-zinc-500">
-              Atomic Sequential Generator: ACTIVE
-            </span>
+            <span className="text-xs font-mono text-zinc-500">Atomic Sequential Generator: ACTIVE</span>
           </div>
-          <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1">
-            Tax Document & Compliance Center
-          </h1>
+          <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1">Tax Document & Compliance Center</h1>
           <p className="text-xs text-zinc-500 mt-0.5">
-            Manage Revenue Department tax invoices, credit notes, 50 Tawi
-            withholding certificates, and monthly ledger filings.
+            Manage Revenue Department tax invoices, credit notes, 50 Tawi withholding certificates, and monthly ledger
+            filings.
           </p>
         </div>
 
@@ -346,10 +307,7 @@ export const TaxDocumentCenter: React.FC = () => {
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             <span>{notification.text}</span>
           </div>
-          <button
-            onClick={() => setNotification(null)}
-            className="text-zinc-400 hover:text-white"
-          >
+          <button onClick={() => setNotification(null)} className="text-zinc-400 hover:text-white">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -362,9 +320,7 @@ export const TaxDocumentCenter: React.FC = () => {
         {/* Total Output VAT */}
         <div className="bg-white p-4 rounded-lg border border-zinc-200 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
-              Output VAT (7.0%)
-            </span>
+            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Output VAT (7.0%)</span>
             <span className="p-1.5 rounded-md bg-blue-50 text-blue-600">
               <TrendingUp className="w-4 h-4" />
             </span>
@@ -376,18 +332,14 @@ export const TaxDocumentCenter: React.FC = () => {
                 minimumFractionDigits: 2,
               })}
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1">
-              Net statutory liability to TRD
-            </p>
+            <p className="text-[11px] text-zinc-500 mt-1">Net statutory liability to TRD</p>
           </div>
         </div>
 
         {/* 3% WHT Deduction */}
         <div className="bg-white p-4 rounded-lg border border-zinc-200 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
-              Agent WHT (3.0%)
-            </span>
+            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Agent WHT (3.0%)</span>
             <span className="p-1.5 rounded-md bg-purple-50 text-purple-600">
               <ShieldCheck className="w-4 h-4" />
             </span>
@@ -399,18 +351,14 @@ export const TaxDocumentCenter: React.FC = () => {
                 minimumFractionDigits: 2,
               })}
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1">
-              Withholding tax remittance pool
-            </p>
+            <p className="text-[11px] text-zinc-500 mt-1">Withholding tax remittance pool</p>
           </div>
         </div>
 
         {/* Stamp Duty 0.4% */}
         <div className="bg-white p-4 rounded-lg border border-zinc-200 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
-              Stamp Duty (0.4%)
-            </span>
+            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Stamp Duty (0.4%)</span>
             <span className="p-1.5 rounded-md bg-amber-50 text-amber-600">
               <Layers className="w-4 h-4" />
             </span>
@@ -422,18 +370,14 @@ export const TaxDocumentCenter: React.FC = () => {
                 minimumFractionDigits: 2,
               })}
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1">
-              Statutory policy duty allocation
-            </p>
+            <p className="text-[11px] text-zinc-500 mt-1">Statutory policy duty allocation</p>
           </div>
         </div>
 
         {/* Pending Reversals / Credit Notes */}
         <div className="bg-white p-4 rounded-lg border border-zinc-200 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
-              Maker-Checker Queue
-            </span>
+            <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Maker-Checker Queue</span>
             <span className="p-1.5 rounded-md bg-rose-50 text-rose-600">
               <AlertCircle className="w-4 h-4" />
             </span>
@@ -441,13 +385,9 @@ export const TaxDocumentCenter: React.FC = () => {
           <div className="mt-3">
             <div className="text-2xl font-bold text-zinc-900 tracking-tight font-mono">
               {stats.pendingCreditNotes}{" "}
-              <span className="text-xs font-normal text-zinc-500 font-sans">
-                Pending CNs
-              </span>
+              <span className="text-xs font-normal text-zinc-500 font-sans">Pending CNs</span>
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1">
-              Awaiting checker sign-off for ledger posting
-            </p>
+            <p className="text-[11px] text-zinc-500 mt-1">Awaiting checker sign-off for ledger posting</p>
           </div>
         </div>
       </div>
@@ -505,9 +445,7 @@ export const TaxDocumentCenter: React.FC = () => {
               >
                 <option value="ALL">All Partner Insurers</option>
                 <option value="Viriyah Insurance">Viriyah Insurance</option>
-                <option value="Muang Thai Insurance">
-                  Muang Thai Insurance
-                </option>
+                <option value="Muang Thai Insurance">Muang Thai Insurance</option>
                 <option value="MSIG Insurance">MSIG Insurance</option>
                 <option value="AIA Thailand">AIA Thailand</option>
               </select>
@@ -522,9 +460,7 @@ export const TaxDocumentCenter: React.FC = () => {
               >
                 <option value="ALL">All Document Statuses</option>
                 <option value="ISSUED">ISSUED (Locked)</option>
-                <option value="PENDING_APPROVAL">
-                  PENDING_APPROVAL (Checker)
-                </option>
+                <option value="PENDING_APPROVAL">PENDING_APPROVAL (Checker)</option>
                 <option value="CANCELLED">CANCELLED (Reversed)</option>
               </select>
             </div>
@@ -578,25 +514,16 @@ export const TaxDocumentCenter: React.FC = () => {
                     const is50Tawi = doc.documentType === "WHT_50_TAWI";
 
                     return (
-                      <tr
-                        key={doc.id}
-                        className="hover:bg-zinc-50/80 transition-colors"
-                      >
+                      <tr key={doc.id} className="hover:bg-zinc-50/80 transition-colors">
                         {/* Doc Number & Badge */}
                         <td className="py-3.5 px-4 font-mono font-medium">
                           <div className="flex items-center gap-1.5">
                             <FileText
                               className={`w-3.5 h-3.5 shrink-0 ${
-                                isCreditNote
-                                  ? "text-amber-600"
-                                  : is50Tawi
-                                    ? "text-purple-600"
-                                    : "text-zinc-600"
+                                isCreditNote ? "text-amber-600" : is50Tawi ? "text-purple-600" : "text-zinc-600"
                               }`}
                             />
-                            <span className="text-zinc-900 font-semibold">
-                              {doc.documentNumber}
-                            </span>
+                            <span className="text-zinc-900 font-semibold">{doc.documentNumber}</span>
                           </div>
                           <span
                             className={`inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-sans font-semibold border ${
@@ -613,20 +540,13 @@ export const TaxDocumentCenter: React.FC = () => {
 
                         {/* Reference Policy / Original Invoice */}
                         <td className="py-3.5 px-4 font-mono">
-                          <div className="text-zinc-900">
-                            {doc.referencePolicyNumber}
-                          </div>
+                          <div className="text-zinc-900">{doc.referencePolicyNumber}</div>
                           {doc.originalInvoiceNumber && (
                             <div className="text-[10px] text-zinc-500 font-sans mt-0.5">
-                              Reversing:{" "}
-                              <span className="font-mono text-zinc-700">
-                                {doc.originalInvoiceNumber}
-                              </span>
+                              Reversing: <span className="font-mono text-zinc-700">{doc.originalInvoiceNumber}</span>
                             </div>
                           )}
-                          <div className="text-[10px] text-zinc-400 font-sans">
-                            {doc.issuedDate}
-                          </div>
+                          <div className="text-[10px] text-zinc-400 font-sans">{doc.issuedDate}</div>
                         </td>
 
                         {/* Name & PDPA Masked Tax ID */}
@@ -643,13 +563,9 @@ export const TaxDocumentCenter: React.FC = () => {
                             </span>
                             <button
                               type="button"
-                              onClick={() =>
-                                toggleUnmaskTaxId(doc.id, doc.documentNumber)
-                              }
+                              onClick={() => toggleUnmaskTaxId(doc.id, doc.documentNumber)}
                               className="text-zinc-400 hover:text-zinc-700 focus:outline-none"
-                              title={
-                                isUnmasked ? "Mask PII" : "Audit Unmask PII"
-                              }
+                              title={isUnmasked ? "Mask PII" : "Audit Unmask PII"}
                             >
                               {isUnmasked ? (
                                 <EyeOff className="w-3.5 h-3.5 text-amber-600" />
@@ -661,9 +577,7 @@ export const TaxDocumentCenter: React.FC = () => {
                         </td>
 
                         {/* Insurer */}
-                        <td className="py-3.5 px-4 text-zinc-700">
-                          {doc.insurerName}
-                        </td>
+                        <td className="py-3.5 px-4 text-zinc-700">{doc.insurerName}</td>
 
                         {/* Net Premium */}
                         <td className="py-3.5 px-4 text-right font-mono text-zinc-700">
@@ -674,13 +588,7 @@ export const TaxDocumentCenter: React.FC = () => {
 
                         {/* VAT (7%) */}
                         <td className="py-3.5 px-4 text-right font-mono">
-                          <span
-                            className={
-                              doc.vatAmount < 0
-                                ? "text-amber-700 font-semibold"
-                                : "text-zinc-700"
-                            }
-                          >
+                          <span className={doc.vatAmount < 0 ? "text-amber-700 font-semibold" : "text-zinc-700"}>
                             {doc.vatAmount !== 0
                               ? `฿${doc.vatAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
                               : "—"}
@@ -720,12 +628,8 @@ export const TaxDocumentCenter: React.FC = () => {
                                   : "bg-zinc-100 text-zinc-600 border border-zinc-200"
                             }`}
                           >
-                            {doc.status === "ISSUED" && (
-                              <CheckCircle2 className="w-3 h-3" />
-                            )}
-                            {doc.status === "PENDING_APPROVAL" && (
-                              <AlertCircle className="w-3 h-3" />
-                            )}
+                            {doc.status === "ISSUED" && <CheckCircle2 className="w-3 h-3" />}
+                            {doc.status === "PENDING_APPROVAL" && <AlertCircle className="w-3 h-3" />}
                             {doc.status}
                           </span>
                         </td>
@@ -758,12 +662,8 @@ export const TaxDocumentCenter: React.FC = () => {
           {/* Table Footer / Pagination Metadata */}
           <div className="border-t border-zinc-200 px-4 py-3 bg-zinc-50 flex items-center justify-between text-xs text-zinc-500">
             <div>
-              Showing{" "}
-              <span className="font-semibold text-zinc-800">
-                {filteredDocuments.length}
-              </span>{" "}
-              documents for tax period{" "}
-              <span className="font-mono text-zinc-800">{dateFilter}</span>
+              Showing <span className="font-semibold text-zinc-800">{filteredDocuments.length}</span> documents for tax
+              period <span className="font-mono text-zinc-800">{dateFilter}</span>
             </div>
             <div className="text-[11px] text-zinc-400">
               TRD Locked Sequence Generator Engine v2.0 • Copy-On-Write Storage
@@ -781,28 +681,21 @@ export const TaxDocumentCenter: React.FC = () => {
             <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-zinc-900" />
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Generate Continuous Tax Invoice
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Generate Continuous Tax Invoice</h3>
               </div>
-              <button
-                onClick={() => setIsGenerateInvoiceModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
-              >
+              <button onClick={() => setIsGenerateInvoiceModal(false)} className="text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="mt-4 space-y-3.5 text-xs">
               <p className="text-zinc-600">
-                Generates an immutable Thai Revenue Department (TRD) Tax Invoice
-                & Official Receipt using the locked database sequence.
+                Generates an immutable Thai Revenue Department (TRD) Tax Invoice & Official Receipt using the locked
+                database sequence.
               </p>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Target Policy Number or UUID
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Target Policy Number or UUID</label>
                 <input
                   type="text"
                   placeholder="e.g., VIR-26-994821 or pol-uuid-xxxx"
@@ -811,9 +704,7 @@ export const TaxDocumentCenter: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Tax Calculation Validation
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Tax Calculation Validation</label>
                 <div className="p-3 bg-zinc-50 border border-zinc-200 rounded space-y-1.5 font-mono text-[11px]">
                   <div className="flex justify-between text-zinc-600">
                     <span>Statutory VAT Rate:</span>
@@ -825,17 +716,14 @@ export const TaxDocumentCenter: React.FC = () => {
                   </div>
                   <div className="flex justify-between text-zinc-600">
                     <span>Next Atomic Sequence:</span>
-                    <span className="font-semibold text-emerald-700">
-                      TAX-2026-000843
-                    </span>
+                    <span className="font-semibold text-emerald-700">TAX-2026-000843</span>
                   </div>
                 </div>
               </div>
 
               <div className="p-2.5 bg-amber-50 border border-amber-200 rounded text-amber-800 text-[11px]">
-                <strong>TRD Invariant:</strong> Once generated, sequences cannot
-                be deleted. Any cancellation must proceed through a legal Tax
-                Credit Note (CN).
+                <strong>TRD Invariant:</strong> Once generated, sequences cannot be deleted. Any cancellation must
+                proceed through a legal Tax Credit Note (CN).
               </div>
             </div>
 
@@ -874,28 +762,21 @@ export const TaxDocumentCenter: React.FC = () => {
             <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div className="flex items-center gap-2">
                 <ArrowDownRight className="w-4 h-4 text-amber-600" />
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Generate Legal Credit Note (CN)
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Generate Legal Credit Note (CN)</h3>
               </div>
-              <button
-                onClick={() => setIsCreditNoteModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
-              >
+              <button onClick={() => setIsCreditNoteModal(false)} className="text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="mt-4 space-y-3 text-xs">
               <p className="text-zinc-600">
-                Satisfies OIC & TRD Cancellation Protocols. Reverses output VAT
-                liability for cancelled or refunded policies.
+                Satisfies OIC & TRD Cancellation Protocols. Reverses output VAT liability for cancelled or refunded
+                policies.
               </p>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Original Invoice Number
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Original Invoice Number</label>
                 <input
                   type="text"
                   placeholder="e.g., TAX-2026-000841"
@@ -904,29 +785,17 @@ export const TaxDocumentCenter: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Cancellation Reason Code
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Cancellation Reason Code</label>
                 <select className="w-full px-3 py-2 border border-zinc-300 rounded text-xs bg-white text-zinc-800">
-                  <option value="CUSTOMER_REQUEST">
-                    CUSTOMER_REQUEST (Handler A)
-                  </option>
-                  <option value="INSURER_MANDATED">
-                    INSURER_MANDATED (Handler B)
-                  </option>
-                  <option value="INSTALLMENT_EXHAUSTION">
-                    INSTALLMENT_EXHAUSTION (Handler D)
-                  </option>
-                  <option value="INCORRECT_POLICY_DETAILS">
-                    INCORRECT_POLICY_DETAILS (Correction)
-                  </option>
+                  <option value="CUSTOMER_REQUEST">CUSTOMER_REQUEST (Handler A)</option>
+                  <option value="INSURER_MANDATED">INSURER_MANDATED (Handler B)</option>
+                  <option value="INSTALLMENT_EXHAUSTION">INSTALLMENT_EXHAUSTION (Handler D)</option>
+                  <option value="INCORRECT_POLICY_DETAILS">INCORRECT_POLICY_DETAILS (Correction)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Approved Insurer Refund Amount (THB)
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Approved Insurer Refund Amount (THB)</label>
                 <input
                   type="number"
                   placeholder="e.g., 18000.00"
@@ -935,12 +804,8 @@ export const TaxDocumentCenter: React.FC = () => {
               </div>
 
               <div className="p-2.5 bg-zinc-100 border border-zinc-200 rounded text-[11px] text-zinc-600">
-                <strong>Governance Notice:</strong> High-value Credit Notes
-                require Maker-Checker sign-off. This request will be staged into{" "}
-                <code className="font-mono text-zinc-800">
-                  approval_requests
-                </code>
-                .
+                <strong>Governance Notice:</strong> High-value Credit Notes require Maker-Checker sign-off. This request
+                will be staged into <code className="font-mono text-zinc-800">approval_requests</code>.
               </div>
             </div>
 
@@ -979,48 +844,31 @@ export const TaxDocumentCenter: React.FC = () => {
             <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div className="flex items-center gap-2">
                 <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-                <h3 className="text-sm font-bold text-zinc-900">
-                  Statutory Tax & Regulatory Export
-                </h3>
+                <h3 className="text-sm font-bold text-zinc-900">Statutory Tax & Regulatory Export</h3>
               </div>
-              <button
-                onClick={() => setIsAsyncReportModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
-              >
+              <button onClick={() => setIsAsyncReportModal(false)} className="text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="mt-4 space-y-3.5 text-xs">
               <p className="text-zinc-600">
-                Offloads heavy compliance data extraction to the Read-Replica
-                worker pool with public-key PGP encryption (SDD 5.16).
+                Offloads heavy compliance data extraction to the Read-Replica worker pool with public-key PGP encryption
+                (SDD 5.16).
               </p>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Statutory Report Type
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Statutory Report Type</label>
                 <select className="w-full px-3 py-2 border border-zinc-300 rounded text-xs bg-white text-zinc-800">
-                  <option value="TRD_50_TAWI">
-                    TRD 50 Tawi (Withholding Tax Payout CSV & PDF)
-                  </option>
-                  <option value="OIC_POR_LOR_1">
-                    OIC Por.Lor. 1 (Unified Premium & Tax Ledger)
-                  </option>
-                  <option value="VAT_OUTPUT_REGISTER">
-                    TRD Output Tax Register (รายงานภาษีขาย)
-                  </option>
-                  <option value="BROKER_PAYABLE_TAX">
-                    Insurer Bordereau Tax Settlement File
-                  </option>
+                  <option value="TRD_50_TAWI">TRD 50 Tawi (Withholding Tax Payout CSV & PDF)</option>
+                  <option value="OIC_POR_LOR_1">OIC Por.Lor. 1 (Unified Premium & Tax Ledger)</option>
+                  <option value="VAT_OUTPUT_REGISTER">TRD Output Tax Register (รายงานภาษีขาย)</option>
+                  <option value="BROKER_PAYABLE_TAX">Insurer Bordereau Tax Settlement File</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-zinc-700 font-semibold mb-1">
-                  Tax Filing Month
-                </label>
+                <label className="block text-zinc-700 font-semibold mb-1">Tax Filing Month</label>
                 <input
                   type="month"
                   defaultValue="2026-10"
@@ -1029,14 +877,10 @@ export const TaxDocumentCenter: React.FC = () => {
               </div>
 
               <div className="p-3 bg-zinc-50 border border-zinc-200 rounded text-[11px] text-zinc-600 space-y-1">
-                <div className="font-semibold text-zinc-800">
-                  Automated Transformations Applied:
-                </div>
+                <div className="font-semibold text-zinc-800">Automated Transformations Applied:</div>
                 <ul className="list-disc list-inside text-zinc-500 space-y-0.5">
                   <li>Strips dashes from Thai Citizen & Corporate IDs</li>
-                  <li>
-                    In-memory AES-256 decryption on isolated worker threads
-                  </li>
+                  <li>In-memory AES-256 decryption on isolated worker threads</li>
                   <li>Direct streaming to AWS S3 Compliance Vault</li>
                 </ul>
               </div>

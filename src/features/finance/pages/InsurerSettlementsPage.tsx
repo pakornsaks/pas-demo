@@ -290,7 +290,8 @@ const INITIAL_BATCHES: BordereauBatch[] = [
     checker_id: "usr-mgr-009",
     checker_name: "Thanawat R. (Checker)",
     bank_reference_code: "KBANK-TR-88219482",
-    s3_bordereau_csv_url: "https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/VIRIYAH_BORDEREAU_SEP_2026.csv",
+    s3_bordereau_csv_url:
+      "https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/VIRIYAH_BORDEREAU_SEP_2026.csv",
     created_at: "2026-09-30 17:00:00",
     settled_at: "2026-10-01 10:15:32",
   },
@@ -307,7 +308,8 @@ const INITIAL_BATCHES: BordereauBatch[] = [
     maker_id: "usr-fin-001",
     maker_name: "Ploy Supaporn (Maker)",
     bank_reference_code: "SCB-PENDING-TRACE-ID",
-    s3_bordereau_csv_url: "https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/MSIG_BORDEREAU_SEP_2026.csv",
+    s3_bordereau_csv_url:
+      "https://s3.ap-southeast-1.amazonaws.com/broker-vault/settlements/MSIG_BORDEREAU_SEP_2026.csv",
     created_at: "2026-10-01 09:30:00",
   },
 ];
@@ -401,7 +403,13 @@ export const InsurerSettlementsPage: React.FC = () => {
   // Bulk Reconcile Action (`PATCH /admin/ledger/insurer-payables/{insurer_id}/reconcile`)
   const handleBulkReconcile = (status: ReconcileStatus) => {
     if (selectedTransactionIds.length === 0) return;
-    setPayables((prev) => prev.map((item) => (selectedTransactionIds.includes(item.transaction_id) ? { ...item, reconciliation_status: status, dispute_reason: undefined } : item)));
+    setPayables((prev) =>
+      prev.map((item) =>
+        selectedTransactionIds.includes(item.transaction_id)
+          ? { ...item, reconciliation_status: status, dispute_reason: undefined }
+          : item,
+      ),
+    );
     setSelectedTransactionIds([]);
   };
 
@@ -497,7 +505,11 @@ export const InsurerSettlementsPage: React.FC = () => {
 
   // Toggle Policy Finance Flag (`PATCH /admin/ledger/policies/{policy_id}/finance-flags`)
   const handleToggleReceivablePaid = (receivableId: string) => {
-    setReceivables((prev) => prev.map((r) => (r.receivable_id === receivableId ? { ...r, is_commission_received: !r.is_commission_received } : r)));
+    setReceivables((prev) =>
+      prev.map((r) =>
+        r.receivable_id === receivableId ? { ...r, is_commission_received: !r.is_commission_received } : r,
+      ),
+    );
   };
 
   return (
@@ -509,9 +521,14 @@ export const InsurerSettlementsPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Insurer Settlements & Bordereau</h1>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">OIC Trust Account</span>
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+              OIC Trust Account
+            </span>
           </div>
-          <p className="text-sm text-zinc-500 mt-1">End-of-Month (EOM) Broker Remittances, Statement of Account (SOA), Double-Entry Trust Ledger & Commission Receivables</p>
+          <p className="text-sm text-zinc-500 mt-1">
+            End-of-Month (EOM) Broker Remittances, Statement of Account (SOA), Double-Entry Trust Ledger & Commission
+            Receivables
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -519,7 +536,12 @@ export const InsurerSettlementsPage: React.FC = () => {
             onClick={() => {
               const csvContent =
                 "data:text/csv;charset=utf-8,Transaction ID,Policy No,Customer,Gross,Commission,Net Payable\n" +
-                payables.map((p) => `${p.transaction_id},${p.policy_number},${p.customer_name_masked},${p.gross_premium},${p.broker_commission_amount},${p.net_payable_to_insurer}`).join("\n");
+                payables
+                  .map(
+                    (p) =>
+                      `${p.transaction_id},${p.policy_number},${p.customer_name_masked},${p.gross_premium},${p.broker_commission_amount},${p.net_payable_to_insurer}`,
+                  )
+                  .join("\n");
               const encodedUri = encodeURI(csvContent);
               const link = document.createElement("a");
               link.setAttribute("href", encodedUri);
@@ -559,7 +581,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                 key={ins.insurer_id}
                 onClick={() => setSelectedInsurerId(ins.insurer_id)}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all ${
-                  isSelected ? "bg-blue-50 border-blue-600 text-blue-700 font-semibold shadow-xs" : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                  isSelected
+                    ? "bg-blue-50 border-blue-600 text-blue-700 font-semibold shadow-xs"
+                    : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50"
                 }`}
               >
                 <Building2 className={`w-3.5 h-3.5 ${isSelected ? "text-blue-600" : "text-zinc-400"}`} />
@@ -589,7 +613,9 @@ export const InsurerSettlementsPage: React.FC = () => {
             className={`px-3.5 py-1.5 text-xs font-medium rounded-md transition-all relative ${activeTab === "batches" ? "bg-blue-600 text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"}`}
           >
             Bordereau Batches & Checker
-            {batches.some((b) => b.status === "PENDING_APPROVAL") && <span className="ml-1.5 inline-block w-2 h-2 rounded-full bg-amber-400"></span>}
+            {batches.some((b) => b.status === "PENDING_APPROVAL") && (
+              <span className="ml-1.5 inline-block w-2 h-2 rounded-full bg-amber-400"></span>
+            )}
           </button>
           <button
             onClick={() => setActiveTab("rules")}
@@ -618,7 +644,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <DollarSign className="w-4 h-4" />
                 </span>
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-tight text-zinc-900">฿{payableMetrics.gross.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+              <div className="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
+                ฿{payableMetrics.gross.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </div>
               <p className="mt-1 text-xs text-zinc-500 flex items-center gap-1">
                 <span>Trust Account Inbound (`PREMIUM_IN`)</span>
               </p>
@@ -631,7 +659,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <ArrowDownLeft className="w-4 h-4" />
                 </span>
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-tight text-emerald-600">฿{payableMetrics.comm.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+              <div className="mt-2 text-2xl font-bold tracking-tight text-emerald-600">
+                ฿{payableMetrics.comm.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </div>
               <p className="mt-1 text-xs text-zinc-500">Net deduction before remittance</p>
             </div>
 
@@ -642,7 +672,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <ArrowUpRight className="w-4 h-4" />
                 </span>
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-tight text-indigo-600">฿{payableMetrics.netPayable.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+              <div className="mt-2 text-2xl font-bold tracking-tight text-indigo-600">
+                ฿{payableMetrics.netPayable.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </div>
               <p className="mt-1 text-xs text-zinc-500">Due: Every {currentInsurer.monthly_pay_date}th of month</p>
             </div>
 
@@ -728,13 +760,22 @@ export const InsurerSettlementsPage: React.FC = () => {
             {selectedTransactionIds.length > 0 && (
               <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-lg">
                 <span className="text-xs font-semibold text-blue-700">{selectedTransactionIds.length} selected</span>
-                <button onClick={() => handleBulkReconcile("RECONCILED")} className="px-2 py-1 text-[11px] font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded transition-colors">
+                <button
+                  onClick={() => handleBulkReconcile("RECONCILED")}
+                  className="px-2 py-1 text-[11px] font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded transition-colors"
+                >
                   Mark Reconciled
                 </button>
-                <button onClick={() => handleBulkReconcile("DISPUTED")} className="px-2 py-1 text-[11px] font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded transition-colors">
+                <button
+                  onClick={() => handleBulkReconcile("DISPUTED")}
+                  className="px-2 py-1 text-[11px] font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded transition-colors"
+                >
                   Mark Disputed
                 </button>
-                <button onClick={() => setSelectedTransactionIds([])} className="text-xs text-zinc-500 hover:text-zinc-700 px-1">
+                <button
+                  onClick={() => setSelectedTransactionIds([])}
+                  className="text-xs text-zinc-500 hover:text-zinc-700 px-1"
+                >
                   Cancel
                 </button>
               </div>
@@ -751,7 +792,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                       <input
                         type="checkbox"
                         onChange={handleSelectAll}
-                        checked={filteredPayables.length > 0 && selectedTransactionIds.length === filteredPayables.length}
+                        checked={
+                          filteredPayables.length > 0 && selectedTransactionIds.length === filteredPayables.length
+                        }
                         className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
                       />
                     </th>
@@ -778,7 +821,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                     filteredPayables.map((item) => {
                       const isSelected = selectedTransactionIds.includes(item.transaction_id);
                       return (
-                        <tr key={item.transaction_id} className={`hover:bg-zinc-50/80 transition-colors ${isSelected ? "bg-blue-50/30" : ""}`}>
+                        <tr
+                          key={item.transaction_id}
+                          className={`hover:bg-zinc-50/80 transition-colors ${isSelected ? "bg-blue-50/30" : ""}`}
+                        >
                           <td className="p-3 text-center">
                             <input
                               type="checkbox"
@@ -812,13 +858,19 @@ export const InsurerSettlementsPage: React.FC = () => {
                             </span>
                           </td>
 
-                          <td className="p-3 text-right font-medium text-zinc-900">฿{item.gross_premium.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                          <td className="p-3 text-right font-medium text-zinc-900">
+                            ฿{item.gross_premium.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          </td>
 
                           <td className="p-3 text-right text-zinc-600">{item.base_commission_percent.toFixed(1)}%</td>
 
-                          <td className="p-3 text-right text-emerald-600 font-medium">฿{item.broker_commission_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                          <td className="p-3 text-right text-emerald-600 font-medium">
+                            ฿{item.broker_commission_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          </td>
 
-                          <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">฿{item.net_payable_to_insurer.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                          <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">
+                            ฿{item.net_payable_to_insurer.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          </td>
 
                           <td className="p-3 text-center">
                             {item.reconciliation_status === "RECONCILED" && (
@@ -846,7 +898,13 @@ export const InsurerSettlementsPage: React.FC = () => {
                               {item.reconciliation_status !== "RECONCILED" && (
                                 <button
                                   onClick={() => {
-                                    setPayables((prev) => prev.map((p) => (p.transaction_id === item.transaction_id ? { ...p, reconciliation_status: "RECONCILED", dispute_reason: undefined } : p)));
+                                    setPayables((prev) =>
+                                      prev.map((p) =>
+                                        p.transaction_id === item.transaction_id
+                                          ? { ...p, reconciliation_status: "RECONCILED", dispute_reason: undefined }
+                                          : p,
+                                      ),
+                                    );
                                   }}
                                   className="p-1 text-emerald-600 hover:bg-emerald-50 rounded"
                                   title="Mark as Reconciled"
@@ -855,7 +913,11 @@ export const InsurerSettlementsPage: React.FC = () => {
                                 </button>
                               )}
                               {item.reconciliation_status !== "DISPUTED" && (
-                                <button onClick={() => handleOpenDispute(item)} className="p-1 text-rose-600 hover:bg-rose-50 rounded" title="Mark as Disputed">
+                                <button
+                                  onClick={() => handleOpenDispute(item)}
+                                  className="p-1 text-rose-600 hover:bg-rose-50 rounded"
+                                  title="Mark as Disputed"
+                                >
                                   <AlertCircle className="w-4 h-4" />
                                 </button>
                               )}
@@ -902,8 +964,10 @@ export const InsurerSettlementsPage: React.FC = () => {
             <div className="text-xs text-blue-900 space-y-1">
               <p className="font-semibold">Scenario B: Direct Carrier Collection (`payee_type = INSURER`)</p>
               <p>
-                When a customer pays the insurance company directly, the Insurer is legally required to remit the Broker’s commission. Under Thai Revenue Department (TRD) statutory mandates, the
-                Insurer auto-deducts <strong>3% Withholding Tax (WHT)</strong>, which must balance against the <strong>Prepaid WHT Asset GL</strong>.
+                When a customer pays the insurance company directly, the Insurer is legally required to remit the
+                Broker’s commission. Under Thai Revenue Department (TRD) statutory mandates, the Insurer auto-deducts{" "}
+                <strong>3% Withholding Tax (WHT)</strong>, which must balance against the{" "}
+                <strong>Prepaid WHT Asset GL</strong>.
               </p>
             </div>
           </div>
@@ -913,7 +977,9 @@ export const InsurerSettlementsPage: React.FC = () => {
             <div className="p-4 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-zinc-900">Inward Commission Ledger</h3>
-                <p className="text-xs text-zinc-500">Track and settle inward broker commission payments owed by carriers</p>
+                <p className="text-xs text-zinc-500">
+                  Track and settle inward broker commission payments owed by carriers
+                </p>
               </div>
               <span className="text-xs font-semibold text-zinc-500">
                 Total Unsettled:{" "}
@@ -952,11 +1018,19 @@ export const InsurerSettlementsPage: React.FC = () => {
                       </td>
                       <td className="p-3 text-zinc-700">{r.customer_name_masked}</td>
                       <td className="p-3 text-zinc-500">{r.effective_date}</td>
-                      <td className="p-3 text-right font-medium text-zinc-900">฿{r.gross_premium_collected_by_insurer.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                      <td className="p-3 text-right font-medium text-zinc-900">
+                        ฿{r.gross_premium_collected_by_insurer.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      </td>
                       <td className="p-3 text-right text-zinc-600">{r.commission_percent.toFixed(1)}%</td>
-                      <td className="p-3 text-right font-semibold text-emerald-600">฿{r.gross_commission_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
-                      <td className="p-3 text-right font-mono text-rose-600">-฿{r.statutory_wht_3_percent.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
-                      <td className="p-3 text-right font-bold text-blue-700 bg-zinc-50/50">฿{r.net_receivable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                      <td className="p-3 text-right font-semibold text-emerald-600">
+                        ฿{r.gross_commission_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      </td>
+                      <td className="p-3 text-right font-mono text-rose-600">
+                        -฿{r.statutory_wht_3_percent.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      </td>
+                      <td className="p-3 text-right font-bold text-blue-700 bg-zinc-50/50">
+                        ฿{r.net_receivable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      </td>
                       <td className="p-3 text-center">
                         {r.is_commission_received ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -972,7 +1046,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                         <button
                           onClick={() => handleToggleReceivablePaid(r.receivable_id)}
                           className={`px-3 py-1 text-[11px] font-semibold rounded-md border transition-all ${
-                            r.is_commission_received ? "bg-zinc-100 text-zinc-700 border-zinc-300 hover:bg-zinc-200" : "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
+                            r.is_commission_received
+                              ? "bg-zinc-100 text-zinc-700 border-zinc-300 hover:bg-zinc-200"
+                              : "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
                           }`}
                         >
                           {r.is_commission_received ? "Unmark Received" : "Record Inward Receipt"}
@@ -999,11 +1075,14 @@ export const InsurerSettlementsPage: React.FC = () => {
               <div>
                 <span className="text-xs font-bold text-zinc-900">Governance: Maker-Checker Segregation</span>
                 <p className="text-xs text-zinc-500">
-                  Logged in as: <strong>{CURRENT_USER.name}</strong> ({CURRENT_USER.role}). By OIC audit policy, Maker (`maker_id`) cannot approve their own staged settlement.
+                  Logged in as: <strong>{CURRENT_USER.name}</strong> ({CURRENT_USER.role}). By OIC audit policy, Maker
+                  (`maker_id`) cannot approve their own staged settlement.
                 </p>
               </div>
             </div>
-            <span className="text-xs px-2.5 py-1 bg-white border border-zinc-200 rounded font-mono text-zinc-600">User ID: {CURRENT_USER.id}</span>
+            <span className="text-xs px-2.5 py-1 bg-white border border-zinc-200 rounded font-mono text-zinc-600">
+              User ID: {CURRENT_USER.id}
+            </span>
           </div>
 
           {/* Batches Table */}
@@ -1011,7 +1090,9 @@ export const InsurerSettlementsPage: React.FC = () => {
             <div className="p-4 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-zinc-900">Staged & Executed Bordereau Statements</h3>
-                <p className="text-xs text-zinc-500">Historical remittance archives with Bank Trace IDs and S3 cryptographically signed CSV audits</p>
+                <p className="text-xs text-zinc-500">
+                  Historical remittance archives with Bank Trace IDs and S3 cryptographically signed CSV audits
+                </p>
               </div>
             </div>
 
@@ -1045,11 +1126,17 @@ export const InsurerSettlementsPage: React.FC = () => {
 
                         <td className="p-3 text-center font-medium text-zinc-700">{batch.policy_count}</td>
 
-                        <td className="p-3 text-right font-medium text-zinc-900">฿{batch.gross_collected_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                        <td className="p-3 text-right font-medium text-zinc-900">
+                          ฿{batch.gross_collected_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        </td>
 
-                        <td className="p-3 text-right text-emerald-600 font-medium">฿{batch.commission_deducted.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                        <td className="p-3 text-right text-emerald-600 font-medium">
+                          ฿{batch.commission_deducted.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        </td>
 
-                        <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">฿{batch.net_payable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                        <td className="p-3 text-right font-bold text-zinc-900 bg-zinc-50/50">
+                          ฿{batch.net_payable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        </td>
 
                         <td className="p-3 text-center">
                           {batch.status === "SETTLED" ? (
@@ -1061,7 +1148,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                               <Clock className="w-3 h-3" /> PENDING CHECKER
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-zinc-100 text-zinc-600 border border-zinc-200">{batch.status}</span>
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-zinc-100 text-zinc-600 border border-zinc-200">
+                              {batch.status}
+                            </span>
                           )}
                         </td>
 
@@ -1123,7 +1212,10 @@ export const InsurerSettlementsPage: React.FC = () => {
           <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-xs">
             <div className="p-4 border-b border-zinc-200">
               <h3 className="text-sm font-bold text-zinc-900">Broker-to-Insurer Settlement Settings</h3>
-              <p className="text-xs text-zinc-500">Configured credit terms, remittance modes (Net vs. Gross), and legal cutoff dates (`broker_insurer_settings`)</p>
+              <p className="text-xs text-zinc-500">
+                Configured credit terms, remittance modes (Net vs. Gross), and legal cutoff dates
+                (`broker_insurer_settings`)
+              </p>
             </div>
 
             <div className="overflow-x-auto">
@@ -1149,7 +1241,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                       <td className="p-3">
                         <div className="flex gap-1 flex-wrap">
                           {ins.lob_support.map((lob) => (
-                            <span key={lob} className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-zinc-100 text-zinc-700">
+                            <span
+                              key={lob}
+                              className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-zinc-100 text-zinc-700"
+                            >
                               {lob}
                             </span>
                           ))}
@@ -1159,7 +1254,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                       <td className="p-3">
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
-                            ins.default_settlement_mode === "NET" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-purple-50 text-purple-700 border border-purple-200"
+                            ins.default_settlement_mode === "NET"
+                              ? "bg-blue-50 text-blue-700 border border-blue-200"
+                              : "bg-purple-50 text-purple-700 border border-purple-200"
                           }`}
                         >
                           {ins.default_settlement_mode === "NET" ? "NET (Deduct Before)" : "GROSS (Deduct After)"}
@@ -1176,7 +1273,9 @@ export const InsurerSettlementsPage: React.FC = () => {
 
                       <td className="p-3 text-right">
                         <button
-                          onClick={() => alert(`Settings for ${ins.name_en} are managed under Maker-Checker RBAC approval flow.`)}
+                          onClick={() =>
+                            alert(`Settings for ${ins.name_en} are managed under Maker-Checker RBAC approval flow.`)
+                          }
                           className="text-xs font-semibold text-blue-600 hover:text-blue-800"
                         >
                           Edit Terms
@@ -1204,7 +1303,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                   {currentInsurer.name_en} • Cutoff Date: {currentInsurer.monthly_pay_date}th of Month
                 </p>
               </div>
-              <button onClick={() => setIsStageModalOpen(false)} className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100">
+              <button
+                onClick={() => setIsStageModalOpen(false)}
+                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1250,7 +1352,12 @@ export const InsurerSettlementsPage: React.FC = () => {
 
               <div>
                 <label className="block font-semibold text-zinc-700 mb-1">Insurer Target Wire Account:</label>
-                <input type="text" readOnly value={currentInsurer.corporate_bank_account} className="w-full p-2 bg-zinc-100 border border-zinc-200 rounded-lg font-mono text-zinc-700" />
+                <input
+                  type="text"
+                  readOnly
+                  value={currentInsurer.corporate_bank_account}
+                  className="w-full p-2 bg-zinc-100 border border-zinc-200 rounded-lg font-mono text-zinc-700"
+                />
               </div>
 
               <div>
@@ -1263,16 +1370,23 @@ export const InsurerSettlementsPage: React.FC = () => {
               </div>
 
               <p className="text-[11px] text-zinc-500">
-                Clicking <strong>Stage Settlement</strong> will serialize this payload into <code>approval_requests</code> with status <code>PENDING_APPROVAL</code> and lock these line items from
+                Clicking <strong>Stage Settlement</strong> will serialize this payload into{" "}
+                <code>approval_requests</code> with status <code>PENDING_APPROVAL</code> and lock these line items from
                 future sweeps.
               </p>
             </div>
 
             <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex items-center justify-end gap-2">
-              <button onClick={() => setIsStageModalOpen(false)} className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900">
+              <button
+                onClick={() => setIsStageModalOpen(false)}
+                className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900"
+              >
                 Cancel
               </button>
-              <button onClick={handleStageSettlementRequest} className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm">
+              <button
+                onClick={handleStageSettlementRequest}
+                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
+              >
                 Confirm & Stage Request (Maker)
               </button>
             </div>
@@ -1312,8 +1426,8 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <div>
                     <span className="font-bold">Segregation of Duties Violation Guard:</span>
                     <p className="mt-0.5">
-                      You are the original Maker (<code>{activeBatchForReview.maker_name}</code>) of this request. In production, another Finance Manager with <code>finance:approve</code> role must
-                      sign off.
+                      You are the original Maker (<code>{activeBatchForReview.maker_name}</code>) of this request. In
+                      production, another Finance Manager with <code>finance:approve</code> role must sign off.
                     </p>
                   </div>
                 </div>
@@ -1322,7 +1436,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                   <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold">Authorized Checker Verification:</span>
-                    <p className="mt-0.5">You are authorized to verify the external bank wire trace code and execute ACID general ledger balance.</p>
+                    <p className="mt-0.5">
+                      You are authorized to verify the external bank wire trace code and execute ACID general ledger
+                      balance.
+                    </p>
                   </div>
                 </div>
               )}
@@ -1338,7 +1455,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Net Remittance Amount:</span>
-                  <span className="font-bold text-zinc-900 text-sm">฿{activeBatchForReview.net_payable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                  <span className="font-bold text-zinc-900 text-sm">
+                    ฿{activeBatchForReview.net_payable_amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                  </span>
                 </div>
               </div>
 
@@ -1353,7 +1472,9 @@ export const InsurerSettlementsPage: React.FC = () => {
                   onChange={(e) => setBankTraceInput(e.target.value)}
                   className="w-full p-2.5 bg-white border border-zinc-300 rounded-lg font-mono focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs"
                 />
-                <span className="text-[11px] text-zinc-400 mt-1 block">Mandatory proof of wire from Corporate Banking portal before ledger closure.</span>
+                <span className="text-[11px] text-zinc-400 mt-1 block">
+                  Mandatory proof of wire from Corporate Banking portal before ledger closure.
+                </span>
               </div>
             </div>
 
@@ -1367,7 +1488,10 @@ export const InsurerSettlementsPage: React.FC = () => {
               >
                 Close
               </button>
-              <button onClick={handleCheckerApprove} className="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm">
+              <button
+                onClick={handleCheckerApprove}
+                className="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm"
+              >
                 Approve & Execute ACID Swap
               </button>
             </div>
@@ -1386,7 +1510,10 @@ export const InsurerSettlementsPage: React.FC = () => {
                 <h3 className="text-base font-bold text-zinc-900">Flag Transaction Dispute</h3>
                 <p className="text-xs text-zinc-500">{disputeTargetTx.policy_number}</p>
               </div>
-              <button onClick={() => setDisputeModalOpen(false)} className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100">
+              <button
+                onClick={() => setDisputeModalOpen(false)}
+                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1394,8 +1521,14 @@ export const InsurerSettlementsPage: React.FC = () => {
             <div className="p-5 space-y-4 text-xs">
               <div>
                 <label className="block font-semibold text-zinc-700 mb-1">Dispute Reason Code</label>
-                <select value={disputeReasonCode} onChange={(e) => setDisputeReasonCode(e.target.value)} className="w-full p-2 border border-zinc-200 rounded-lg text-xs">
-                  <option value="PREMIUM_MISMATCH">PREMIUM_MISMATCH (Gross amount differs from carrier schedule)</option>
+                <select
+                  value={disputeReasonCode}
+                  onChange={(e) => setDisputeReasonCode(e.target.value)}
+                  className="w-full p-2 border border-zinc-200 rounded-lg text-xs"
+                >
+                  <option value="PREMIUM_MISMATCH">
+                    PREMIUM_MISMATCH (Gross amount differs from carrier schedule)
+                  </option>
                   <option value="COMMISSION_DISCREPANCY">COMMISSION_DISCREPANCY (Disputed rate tier)</option>
                   <option value="CANCELLATION_IN_FLIGHT">CANCELLATION_IN_FLIGHT (Pending Endorsement / Refund)</option>
                   <option value="DUPLICATE_PAYMENT">DUPLICATE_PAYMENT (Gateway duplicate)</option>
@@ -1415,10 +1548,16 @@ export const InsurerSettlementsPage: React.FC = () => {
             </div>
 
             <div className="p-4 bg-zinc-50 border-t border-zinc-200 flex items-center justify-end gap-2">
-              <button onClick={() => setDisputeModalOpen(false)} className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900">
+              <button
+                onClick={() => setDisputeModalOpen(false)}
+                className="px-4 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900"
+              >
                 Cancel
               </button>
-              <button onClick={handleConfirmDispute} className="px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm">
+              <button
+                onClick={handleConfirmDispute}
+                className="px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm"
+              >
                 Mark as Disputed
               </button>
             </div>

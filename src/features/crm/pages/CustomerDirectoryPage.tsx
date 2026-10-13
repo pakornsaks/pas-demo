@@ -1,4 +1,23 @@
-import { AlertCircle, Building2, Car, Check, ChevronRight, Copy, Eye, EyeOff, Flame, HeartPulse, Lock, Plane, Search, Shield, ShieldAlert, ShieldCheck, User, X } from "lucide-react";
+import {
+  AlertCircle,
+  Building2,
+  Car,
+  Check,
+  ChevronRight,
+  Copy,
+  Eye,
+  EyeOff,
+  Flame,
+  HeartPulse,
+  Lock,
+  Plane,
+  Search,
+  Shield,
+  ShieldAlert,
+  ShieldCheck,
+  User,
+  X,
+} from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 // --- Types & Interfaces (Matching PAS Data Architecture) ---
@@ -423,21 +442,30 @@ export const CustomerDirectoryPage: React.FC = () => {
               <span className="text-zinc-900 font-semibold">Customer 360° Directory</span>
             </div>
             <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Customer 360° Master Directory</h1>
-            <p className="text-xs text-zinc-500 mt-0.5">Golden Record registry, SCD Type 2 demographic versioning, and PDPA-governed customer interaction portfolio.</p>
+            <p className="text-xs text-zinc-500 mt-0.5">
+              Golden Record registry, SCD Type 2 demographic versioning, and PDPA-governed customer interaction
+              portfolio.
+            </p>
           </div>
 
           {/* Quick Metrics Bar */}
           <div className="flex items-center gap-3">
             <div className="bg-zinc-50 border border-zinc-200 px-3 py-2 rounded-lg text-left">
-              <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">Golden Records</span>
+              <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">
+                Golden Records
+              </span>
               <span className="text-sm font-bold text-zinc-900">3 Profiles</span>
             </div>
             <div className="bg-zinc-50 border border-zinc-200 px-3 py-2 rounded-lg text-left">
-              <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">Verified KYC</span>
+              <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">
+                Verified KYC
+              </span>
               <span className="text-sm font-bold text-emerald-600">66.7%</span>
             </div>
             <div className="bg-zinc-50 border border-zinc-200 px-3 py-2 rounded-lg text-left">
-              <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">PDPA Compliant</span>
+              <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">
+                PDPA Compliant
+              </span>
               <span className="text-sm font-bold text-blue-600">100% Opt-in</span>
             </div>
           </div>
@@ -538,7 +566,9 @@ export const CustomerDirectoryPage: React.FC = () => {
                       <div className="font-semibold text-zinc-900 text-sm">{cust.legalNameTh}</div>
                       <div className="text-zinc-500 text-[11px]">{cust.legalNameEn}</div>
                       <div className="flex items-center gap-1.5 mt-1">
-                        <span className="font-mono text-[10px] text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded border border-zinc-200">{cust.customerId.slice(0, 13)}...</span>
+                        <span className="font-mono text-[10px] text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded border border-zinc-200">
+                          {cust.customerId.slice(0, 13)}...
+                        </span>
                         <button
                           title="Copy UUID"
                           onClick={(e) => {
@@ -547,7 +577,11 @@ export const CustomerDirectoryPage: React.FC = () => {
                           }}
                           className="text-zinc-400 hover:text-zinc-700"
                         >
-                          {copiedId === cust.customerId ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                          {copiedId === cust.customerId ? (
+                            <Check className="w-3 h-3 text-emerald-600" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
                         </button>
                       </div>
                     </td>
@@ -566,11 +600,15 @@ export const CustomerDirectoryPage: React.FC = () => {
                     </td>
 
                     {/* ID Card */}
-                    <td className="py-3 px-4 font-mono text-zinc-600">{unmaskedMap[cust.customerId] && cust.unmaskedIdCard ? cust.unmaskedIdCard : cust.maskedIdCard}</td>
+                    <td className="py-3 px-4 font-mono text-zinc-600">
+                      {unmaskedMap[cust.customerId] && cust.unmaskedIdCard ? cust.unmaskedIdCard : cust.maskedIdCard}
+                    </td>
 
                     {/* Phone */}
                     <td className="py-3 px-4">
-                      <div className="font-mono text-zinc-800">{unmaskedMap[cust.customerId] && cust.unmaskedPhone ? cust.unmaskedPhone : cust.maskedPhone}</div>
+                      <div className="font-mono text-zinc-800">
+                        {unmaskedMap[cust.customerId] && cust.unmaskedPhone ? cust.unmaskedPhone : cust.maskedPhone}
+                      </div>
                       <div className="text-[11px] text-zinc-400">{cust.email}</div>
                     </td>
 
@@ -581,7 +619,9 @@ export const CustomerDirectoryPage: React.FC = () => {
                           <span
                             key={role}
                             className={`px-1.5 py-0.2 rounded text-[10px] font-semibold uppercase ${
-                              role === "AGENT" ? "bg-purple-50 text-purple-700 border border-purple-200" : "bg-zinc-100 text-zinc-700 border border-zinc-200"
+                              role === "AGENT"
+                                ? "bg-purple-50 text-purple-700 border border-purple-200"
+                                : "bg-zinc-100 text-zinc-700 border border-zinc-200"
                             }`}
                           >
                             {role}
@@ -636,9 +676,18 @@ export const CustomerDirectoryPage: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Golden Record UUID</span>
-                    <span className="font-mono text-xs bg-zinc-200 px-2 py-0.5 rounded text-zinc-800">{activeCustomer.customerId}</span>
-                    <button onClick={() => handleCopy(activeCustomer.customerId, "drawer-id")} className="text-zinc-500 hover:text-zinc-800">
-                      {copiedId === "drawer-id" ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span className="font-mono text-xs bg-zinc-200 px-2 py-0.5 rounded text-zinc-800">
+                      {activeCustomer.customerId}
+                    </span>
+                    <button
+                      onClick={() => handleCopy(activeCustomer.customerId, "drawer-id")}
+                      className="text-zinc-500 hover:text-zinc-800"
+                    >
+                      {copiedId === "drawer-id" ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
                     </button>
                   </div>
                   <h2 className="text-xl font-bold text-zinc-900 mt-1">{activeCustomer.legalNameTh}</h2>
@@ -650,7 +699,9 @@ export const CustomerDirectoryPage: React.FC = () => {
                   <button
                     onClick={handleOpenUnmaskModal}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border transition ${
-                      isCurrentCustomerUnmasked ? "bg-amber-50 text-amber-700 border-amber-300" : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-100"
+                      isCurrentCustomerUnmasked
+                        ? "bg-amber-50 text-amber-700 border-amber-300"
+                        : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-100"
                     }`}
                   >
                     {isCurrentCustomerUnmasked ? (
@@ -666,7 +717,10 @@ export const CustomerDirectoryPage: React.FC = () => {
                     )}
                   </button>
 
-                  <button onClick={() => setActiveCustomer(null)} className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/50">
+                  <button
+                    onClick={() => setActiveCustomer(null)}
+                    className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/50"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -675,9 +729,13 @@ export const CustomerDirectoryPage: React.FC = () => {
               {/* Badges Strip */}
               <div className="flex flex-wrap items-center gap-2 mt-4">
                 {activeCustomer.dataCompleteness === "VERIFIED" ? (
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-semibold">KYC Verified</span>
+                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-semibold">
+                    KYC Verified
+                  </span>
                 ) : (
-                  <span className="px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-xs font-semibold">Incomplete KYC (Lead)</span>
+                  <span className="px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-xs font-semibold">
+                    Incomplete KYC (Lead)
+                  </span>
                 )}
 
                 {activeCustomer.associatedRoles.map((role) => (
@@ -686,9 +744,15 @@ export const CustomerDirectoryPage: React.FC = () => {
                   </span>
                 ))}
 
-                {activeCustomer.agentCode && <span className="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-mono font-medium">Agent Code: {activeCustomer.agentCode}</span>}
+                {activeCustomer.agentCode && (
+                  <span className="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-mono font-medium">
+                    Agent Code: {activeCustomer.agentCode}
+                  </span>
+                )}
 
-                <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-medium">PDPA: {activeCustomer.pdpaConsent.version}</span>
+                <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-medium">
+                  PDPA: {activeCustomer.pdpaConsent.version}
+                </span>
               </div>
 
               {/* Navigation Tabs */}
@@ -726,13 +790,17 @@ export const CustomerDirectoryPage: React.FC = () => {
                       <div>
                         <span className="text-zinc-500 block">Thai National ID / Tax ID</span>
                         <span className="font-mono font-semibold text-zinc-900">
-                          {isCurrentCustomerUnmasked && activeCustomer.unmaskedIdCard ? activeCustomer.unmaskedIdCard : activeCustomer.maskedIdCard}
+                          {isCurrentCustomerUnmasked && activeCustomer.unmaskedIdCard
+                            ? activeCustomer.unmaskedIdCard
+                            : activeCustomer.maskedIdCard}
                         </span>
                       </div>
                       <div>
                         <span className="text-zinc-500 block">Phone Number (E.164)</span>
                         <span className="font-mono font-semibold text-zinc-900">
-                          {isCurrentCustomerUnmasked && activeCustomer.unmaskedPhone ? activeCustomer.unmaskedPhone : activeCustomer.maskedPhone}
+                          {isCurrentCustomerUnmasked && activeCustomer.unmaskedPhone
+                            ? activeCustomer.unmaskedPhone
+                            : activeCustomer.maskedPhone}
                         </span>
                       </div>
                       <div>
@@ -759,11 +827,15 @@ export const CustomerDirectoryPage: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                       <div>
                         <span className="text-zinc-500 block">Consent Policy Version</span>
-                        <span className="font-mono font-medium text-zinc-900">{activeCustomer.pdpaConsent.version}</span>
+                        <span className="font-mono font-medium text-zinc-900">
+                          {activeCustomer.pdpaConsent.version}
+                        </span>
                       </div>
                       <div>
                         <span className="text-zinc-500 block">Consent Timestamp</span>
-                        <span className="text-zinc-900">{new Date(activeCustomer.pdpaConsent.consentedAt).toLocaleString("th-TH")}</span>
+                        <span className="text-zinc-900">
+                          {new Date(activeCustomer.pdpaConsent.consentedAt).toLocaleString("th-TH")}
+                        </span>
                       </div>
                       <div>
                         <span className="text-zinc-500 block">Consent Channel</span>
@@ -774,7 +846,9 @@ export const CustomerDirectoryPage: React.FC = () => {
 
                   {/* Portfolio Quick Summary Card */}
                   <div className="bg-white border border-zinc-200 rounded-lg p-5 shadow-sm">
-                    <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">Active Customer Exposure</h3>
+                    <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">
+                      Active Customer Exposure
+                    </h3>
                     <div className="grid grid-cols-2 gap-4 text-xs">
                       <div className="p-3 bg-zinc-50 rounded border border-zinc-200">
                         <span className="text-zinc-500 block text-[11px]">Total Active Annual Premium</span>
@@ -805,10 +879,15 @@ export const CustomerDirectoryPage: React.FC = () => {
               {activeTab === "POLICIES" && (
                 <div className="space-y-4">
                   {activeCustomer.policies.length === 0 ? (
-                    <div className="bg-white border border-zinc-200 rounded-lg p-8 text-center text-zinc-400 text-xs">No policies found for this golden identity record.</div>
+                    <div className="bg-white border border-zinc-200 rounded-lg p-8 text-center text-zinc-400 text-xs">
+                      No policies found for this golden identity record.
+                    </div>
                   ) : (
                     activeCustomer.policies.map((p) => (
-                      <div key={p.policyId} className="bg-white border border-zinc-200 rounded-lg p-4 shadow-sm space-y-3">
+                      <div
+                        key={p.policyId}
+                        className="bg-white border border-zinc-200 rounded-lg p-4 shadow-sm space-y-3"
+                      >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {getLobBadge(p.lob)}
@@ -816,7 +895,9 @@ export const CustomerDirectoryPage: React.FC = () => {
                           </div>
                           <span
                             className={`px-2 py-0.5 rounded text-[11px] font-semibold ${
-                              p.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-zinc-100 text-zinc-600"
+                              p.status === "ACTIVE"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : "bg-zinc-100 text-zinc-600"
                             }`}
                           >
                             {p.status}
@@ -858,15 +939,22 @@ export const CustomerDirectoryPage: React.FC = () => {
               {activeTab === "QUOTES" && (
                 <div className="space-y-4">
                   {activeCustomer.quotations.length === 0 ? (
-                    <div className="bg-white border border-zinc-200 rounded-lg p-8 text-center text-zinc-400 text-xs">No active quotes or counter-offers on file.</div>
+                    <div className="bg-white border border-zinc-200 rounded-lg p-8 text-center text-zinc-400 text-xs">
+                      No active quotes or counter-offers on file.
+                    </div>
                   ) : (
                     activeCustomer.quotations.map((q) => (
-                      <div key={q.quotationId} className="bg-white border border-zinc-200 rounded-lg p-4 shadow-sm space-y-2 text-xs">
+                      <div
+                        key={q.quotationId}
+                        className="bg-white border border-zinc-200 rounded-lg p-4 shadow-sm space-y-2 text-xs"
+                      >
                         <div className="flex items-center justify-between">
                           <span className="font-mono font-bold text-zinc-900">{q.quotationId}</span>
                           <span
                             className={`px-2 py-0.5 rounded text-[11px] font-semibold ${
-                              q.status === "QUOTATION_RATED" ? "bg-amber-50 text-amber-700 border border-amber-200" : "bg-blue-50 text-blue-700 border border-blue-200"
+                              q.status === "QUOTATION_RATED"
+                                ? "bg-amber-50 text-amber-700 border border-amber-200"
+                                : "bg-blue-50 text-blue-700 border border-blue-200"
                             }`}
                           >
                             {q.status}
@@ -874,7 +962,8 @@ export const CustomerDirectoryPage: React.FC = () => {
                         </div>
                         <div className="font-medium text-zinc-800">{q.planName}</div>
                         <div className="text-zinc-500">
-                          Valid Until: <span className="font-medium text-zinc-800">{q.validUntil}</span> • Gross: <span className="font-bold text-zinc-900">฿{q.grossPremium.toLocaleString()}</span>
+                          Valid Until: <span className="font-medium text-zinc-800">{q.validUntil}</span> • Gross:{" "}
+                          <span className="font-bold text-zinc-900">฿{q.grossPremium.toLocaleString()}</span>
                         </div>
                         {q.counterOfferNote && (
                           <div className="p-2 bg-amber-50/70 border border-amber-200 rounded text-amber-800 text-[11px] mt-2">
@@ -890,7 +979,9 @@ export const CustomerDirectoryPage: React.FC = () => {
               {/* TAB 4: TIMELINE */}
               {activeTab === "TIMELINE" && (
                 <div className="bg-white border border-zinc-200 rounded-lg p-5 shadow-sm">
-                  <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-4">interaction_logs Audit Trail</h3>
+                  <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-4">
+                    interaction_logs Audit Trail
+                  </h3>
                   <div className="relative border-l border-zinc-200 ml-3 space-y-6">
                     {activeCustomer.interactions.map((event) => (
                       <div key={event.id} className="relative pl-6">
@@ -915,8 +1006,12 @@ export const CustomerDirectoryPage: React.FC = () => {
               {activeTab === "VERSIONS" && (
                 <div className="bg-white border border-zinc-200 rounded-lg p-5 shadow-sm space-y-4">
                   <div>
-                    <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">customer_versions (SCD Type 2 Timeline)</h3>
-                    <p className="text-xs text-zinc-500 mt-0.5">Chronological snapshots of demographic and identity verification records.</p>
+                    <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+                      customer_versions (SCD Type 2 Timeline)
+                    </h3>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                      Chronological snapshots of demographic and identity verification records.
+                    </p>
                   </div>
 
                   <div className="space-y-3">
@@ -961,8 +1056,9 @@ export const CustomerDirectoryPage: React.FC = () => {
             </div>
 
             <p className="text-xs text-zinc-600 leading-relaxed">
-              Revealing unmasked Thai National IDs and Phone Numbers triggers an irrefutable entry in the <code className="text-zinc-900 font-mono bg-zinc-100 px-1 py-0.5 rounded">audit_logs</code>{" "}
-              table storing your User UUID, IP Address, and reasoning.
+              Revealing unmasked Thai National IDs and Phone Numbers triggers an irrefutable entry in the{" "}
+              <code className="text-zinc-900 font-mono bg-zinc-100 px-1 py-0.5 rounded">audit_logs</code> table storing
+              your User UUID, IP Address, and reasoning.
             </p>
 
             <div className="space-y-1">
@@ -979,7 +1075,11 @@ export const CustomerDirectoryPage: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-end gap-2 pt-2 border-t border-zinc-100">
-              <button type="button" onClick={() => setIsUnmaskModalOpen(false)} className="px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 rounded-md transition">
+              <button
+                type="button"
+                onClick={() => setIsUnmaskModalOpen(false)}
+                className="px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 rounded-md transition"
+              >
                 Cancel
               </button>
               <button

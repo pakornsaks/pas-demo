@@ -1,4 +1,21 @@
-import { AlertTriangle, CheckCircle2, Clock, Download, ExternalLink, Eye, EyeOff, FileCheck, FileText, History, KeyRound, Lock, Search, ShieldAlert, ShieldCheck, UserX } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+  Download,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  FileCheck,
+  FileText,
+  History,
+  KeyRound,
+  Lock,
+  Search,
+  ShieldAlert,
+  ShieldCheck,
+  UserX,
+} from "lucide-react";
 import React, { useState } from "react";
 
 // --- Types & Data Contracts ---
@@ -212,7 +229,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
 
   // Search state
   const [searchQuery, setSearchQuery] = useState("cust-550e8400-e29b-41d4-a716-446655440001");
-  const [activeCustomer, setActiveCustomer] = useState<CustomerPDPAProfile | null>(MOCK_CUSTOMERS["cust-550e8400-e29b-41d4-a716-446655440001"]);
+  const [activeCustomer, setActiveCustomer] = useState<CustomerPDPAProfile | null>(
+    MOCK_CUSTOMERS["cust-550e8400-e29b-41d4-a716-446655440001"],
+  );
   const [isRevealed, setIsRevealed] = useState(false);
   const [showUnmaskModal, setShowUnmaskModal] = useState(false);
   const [unmaskReason, setUnmaskReason] = useState("");
@@ -233,7 +252,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
     setIsRevealed(false);
     const found = Object.values(MOCK_CUSTOMERS).find(
       (c) =>
-        c.customerId.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.legalNameTh.includes(searchQuery.trim()) || c.legalNameEn.toLowerCase().includes(searchQuery.trim().toLowerCase()),
+        c.customerId.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
+        c.legalNameTh.includes(searchQuery.trim()) ||
+        c.legalNameEn.toLowerCase().includes(searchQuery.trim().toLowerCase()),
     );
     setActiveCustomer(found || null);
   };
@@ -313,9 +334,13 @@ export const DataPrivacyCenterPage: React.FC = () => {
               <div className="p-1.5 bg-blue-50 text-blue-600 rounded-md">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h1 className="text-xl font-semibold text-zinc-900 tracking-tight">Data Privacy (PDPA) Governance Center</h1>
+              <h1 className="text-xl font-semibold text-zinc-900 tracking-tight">
+                Data Privacy (PDPA) Governance Center
+              </h1>
             </div>
-            <p className="text-xs text-zinc-500 mt-1">Statutory PII Encryption, Subject Rights (DSAR), Unmask Audit Engine & OIC 10-Year Retention Enforcer</p>
+            <p className="text-xs text-zinc-500 mt-1">
+              Statutory PII Encryption, Subject Rights (DSAR), Unmask Audit Engine & OIC 10-Year Retention Enforcer
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -339,7 +364,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
           <button
             onClick={() => setActiveTab("LOOKUP")}
             className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
-              activeTab === "LOOKUP" ? "border-blue-600 text-blue-600" : "border-transparent text-zinc-500 hover:text-zinc-800"
+              activeTab === "LOOKUP"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <Search className="w-4 h-4" />
@@ -348,17 +375,23 @@ export const DataPrivacyCenterPage: React.FC = () => {
           <button
             onClick={() => setActiveTab("ERASURE")}
             className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
-              activeTab === "ERASURE" ? "border-blue-600 text-blue-600" : "border-transparent text-zinc-500 hover:text-zinc-800"
+              activeTab === "ERASURE"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <UserX className="w-4 h-4" />
             Right to Erasure & Anonymization
-            <span className="ml-1 px-1.5 py-0.2 bg-zinc-100 text-zinc-700 rounded text-xs">{erasureRequests.filter((r) => r.status === "PENDING_REVIEW").length}</span>
+            <span className="ml-1 px-1.5 py-0.2 bg-zinc-100 text-zinc-700 rounded text-xs">
+              {erasureRequests.filter((r) => r.status === "PENDING_REVIEW").length}
+            </span>
           </button>
           <button
             onClick={() => setActiveTab("AUDIT")}
             className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
-              activeTab === "AUDIT" ? "border-blue-600 text-blue-600" : "border-transparent text-zinc-500 hover:text-zinc-800"
+              activeTab === "AUDIT"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <History className="w-4 h-4" />
@@ -367,7 +400,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
           <button
             onClick={() => setActiveTab("GOVERNANCE")}
             className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
-              activeTab === "GOVERNANCE" ? "border-blue-600 text-blue-600" : "border-transparent text-zinc-500 hover:text-zinc-800"
+              activeTab === "GOVERNANCE"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-zinc-500 hover:text-zinc-800"
             }`}
           >
             <FileCheck className="w-4 h-4" />
@@ -392,7 +427,10 @@ export const DataPrivacyCenterPage: React.FC = () => {
                   className="w-full pl-9 pr-4 py-2 border border-zinc-300 rounded-md text-sm text-zinc-900 bg-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
+              >
                 Search Customer
               </button>
             </form>
@@ -411,7 +449,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     <span className="text-xs font-mono text-zinc-500">UUID: {activeCustomer.customerId}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-800">KYC: {activeCustomer.dataCompleteness}</span>
+                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-800">
+                      KYC: {activeCustomer.dataCompleteness}
+                    </span>
                     {!isRevealed ? (
                       <button
                         onClick={() => setShowUnmaskModal(true)}
@@ -437,7 +477,10 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                     <div>
                       <p className="font-semibold">Confidential PII Data Unmasked</p>
-                      <p>This view has been logged to the immutable audit ledger with your staff ID and timestamp. Real-time access token valid for this session only.</p>
+                      <p>
+                        This view has been logged to the immutable audit ledger with your staff ID and timestamp.
+                        Real-time access token valid for this session only.
+                      </p>
                     </div>
                   </div>
                 )}
@@ -448,7 +491,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
                       <span>Thai National ID Card (AES-256)</span>
                       <Lock className="w-3 h-3 text-zinc-400" />
                     </div>
-                    <div className="font-mono text-zinc-900 font-medium">{isRevealed ? activeCustomer.unmaskedIdCard : activeCustomer.maskedIdCard}</div>
+                    <div className="font-mono text-zinc-900 font-medium">
+                      {isRevealed ? activeCustomer.unmaskedIdCard : activeCustomer.maskedIdCard}
+                    </div>
                   </div>
 
                   <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-200">
@@ -456,7 +501,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
                       <span>Phone Number (E.164 Encrypted)</span>
                       <Lock className="w-3 h-3 text-zinc-400" />
                     </div>
-                    <div className="font-mono text-zinc-900 font-medium">{isRevealed ? activeCustomer.unmaskedPhone : activeCustomer.maskedPhone}</div>
+                    <div className="font-mono text-zinc-900 font-medium">
+                      {isRevealed ? activeCustomer.unmaskedPhone : activeCustomer.maskedPhone}
+                    </div>
                   </div>
 
                   <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-200">
@@ -553,7 +600,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
             <div className="bg-white border border-zinc-200 rounded-lg p-12 text-center text-zinc-500">
               <ShieldAlert className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
               <p className="text-sm">No customer record matched the search query.</p>
-              <p className="text-xs text-zinc-400 mt-1">Enter an existing Customer UUID or Thai ID Card to inspect consent and decrypted attributes.</p>
+              <p className="text-xs text-zinc-400 mt-1">
+                Enter an existing Customer UUID or Thai ID Card to inspect consent and decrypted attributes.
+              </p>
             </div>
           )}
         </div>
@@ -564,8 +613,13 @@ export const DataPrivacyCenterPage: React.FC = () => {
         <div className="bg-white border border-zinc-200 rounded-lg shadow-sm overflow-hidden">
           <div className="p-4 border-b border-zinc-200 bg-zinc-50 flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-semibold text-zinc-900">Data Subject Right to Erasure (De-identification & Hard Anonymization)</h2>
-              <p className="text-xs text-zinc-500">Enforcing Section 7.5: Rejects requests for customers with Active Policies or records within 10-Year OIC statutory retention.</p>
+              <h2 className="text-sm font-semibold text-zinc-900">
+                Data Subject Right to Erasure (De-identification & Hard Anonymization)
+              </h2>
+              <p className="text-xs text-zinc-500">
+                Enforcing Section 7.5: Rejects requests for customers with Active Policies or records within 10-Year OIC
+                statutory retention.
+              </p>
             </div>
             <span className="text-xs text-zinc-500">Rule: SCD Type 2 Non-Destructive Hash Overwrite</span>
           </div>
@@ -594,7 +648,11 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     </td>
                     <td className="px-4 py-3">{req.requestedDate}</td>
                     <td className="px-4 py-3">
-                      {req.activePoliciesCount > 0 ? <span className="text-red-600 font-semibold">{req.activePoliciesCount} Active</span> : <span className="text-zinc-500">0 Active</span>}
+                      {req.activePoliciesCount > 0 ? (
+                        <span className="text-red-600 font-semibold">{req.activePoliciesCount} Active</span>
+                      ) : (
+                        <span className="text-zinc-500">0 Active</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 font-mono">{req.retentionExpiryDate}</td>
                     <td className="px-4 py-3">
@@ -615,9 +673,21 @@ export const DataPrivacyCenterPage: React.FC = () => {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {req.status === "PENDING_REVIEW" && <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded font-medium">Pending Review</span>}
-                      {req.status === "REJECTED" && <span className="px-2 py-0.5 bg-red-100 text-red-800 rounded font-medium">Legally Rejected</span>}
-                      {req.status === "ANONYMIZED" && <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-medium">Hard Anonymized</span>}
+                      {req.status === "PENDING_REVIEW" && (
+                        <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded font-medium">
+                          Pending Review
+                        </span>
+                      )}
+                      {req.status === "REJECTED" && (
+                        <span className="px-2 py-0.5 bg-red-100 text-red-800 rounded font-medium">
+                          Legally Rejected
+                        </span>
+                      )}
+                      {req.status === "ANONYMIZED" && (
+                        <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-medium">
+                          Hard Anonymized
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-right">
                       {req.status === "PENDING_REVIEW" && req.eligibility === "ELIGIBLE" && (
@@ -633,13 +703,19 @@ export const DataPrivacyCenterPage: React.FC = () => {
                       )}
                       {req.status === "REJECTED" && (
                         <button
-                          onClick={() => alert(`Formal rejection letter issued to customer based on OIC Section 33 and PDPA legal obligation exemption.`)}
+                          onClick={() =>
+                            alert(
+                              `Formal rejection letter issued to customer based on OIC Section 33 and PDPA legal obligation exemption.`,
+                            )
+                          }
                           className="px-2.5 py-1 text-zinc-600 hover:text-zinc-900 border border-zinc-200 hover:bg-zinc-50 rounded text-xs transition-colors"
                         >
                           View Rejection Notice
                         </button>
                       )}
-                      {req.status === "ANONYMIZED" && <span className="text-[11px] text-zinc-400 font-mono">SHA-256 Overwritten</span>}
+                      {req.status === "ANONYMIZED" && (
+                        <span className="text-[11px] text-zinc-400 font-mono">SHA-256 Overwritten</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -655,7 +731,10 @@ export const DataPrivacyCenterPage: React.FC = () => {
           <div className="p-4 border-b border-zinc-200 bg-zinc-50 flex flex-col md:flex-row md:items-center justify-between gap-2">
             <div>
               <h2 className="text-sm font-semibold text-zinc-900">Immutable PDPA Access & Mutation Audit Trail</h2>
-              <p className="text-xs text-zinc-500">Write-Only postgres table (audit_logs). Captures every unmask request, DSAR dossier export, and anonymization.</p>
+              <p className="text-xs text-zinc-500">
+                Write-Only postgres table (audit_logs). Captures every unmask request, DSAR dossier export, and
+                anonymization.
+              </p>
             </div>
             <div className="flex gap-2">
               <button
@@ -696,7 +775,11 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     <td className="px-4 py-3">
                       <span
                         className={`px-2 py-0.5 rounded text-[11px] font-semibold ${
-                          log.action === "UNMASK_PII" ? "bg-amber-100 text-amber-800" : log.action === "ANONYMIZE_PII" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"
+                          log.action === "UNMASK_PII"
+                            ? "bg-amber-100 text-amber-800"
+                            : log.action === "ANONYMIZE_PII"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-blue-100 text-blue-800"
                         }`}
                       >
                         {log.action}
@@ -709,7 +792,10 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
                         {log.fieldsAffected.map((f, idx) => (
-                          <span key={idx} className="px-1.5 py-0.5 bg-zinc-100 text-zinc-600 rounded text-[10px] font-mono">
+                          <span
+                            key={idx}
+                            className="px-1.5 py-0.5 bg-zinc-100 text-zinc-600 rounded text-[10px] font-mono"
+                          >
                             {f}
                           </span>
                         ))}
@@ -718,7 +804,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     <td className="px-4 py-3 max-w-xs text-zinc-700 italic">"{log.justificationReason}"</td>
                     <td className="px-4 py-3 font-mono text-zinc-500">{log.ipAddress}</td>
                     <td className="px-4 py-3">
-                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-semibold text-[11px]">{log.status}</span>
+                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-semibold text-[11px]">
+                        {log.status}
+                      </span>
                     </td>
                   </tr>
                 ))}
@@ -735,9 +823,14 @@ export const DataPrivacyCenterPage: React.FC = () => {
             <div className="flex items-center justify-between border-b border-zinc-100 pb-4 mb-4">
               <div>
                 <h2 className="text-base font-semibold text-zinc-900">Privacy Policy Version Governance</h2>
-                <p className="text-xs text-zinc-500">Manage Legal Notice version snapshots, published consent documents, and customer uptake rates.</p>
+                <p className="text-xs text-zinc-500">
+                  Manage Legal Notice version snapshots, published consent documents, and customer uptake rates.
+                </p>
               </div>
-              <button onClick={() => alert("Open Stage New Policy Version Modal")} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors">
+              <button
+                onClick={() => alert("Open Stage New Policy Version Modal")}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
+              >
                 + Draft New Version
               </button>
             </div>
@@ -747,7 +840,11 @@ export const DataPrivacyCenterPage: React.FC = () => {
                 <div key={v.versionId} className="border border-zinc-200 rounded-lg p-4 bg-zinc-50/50 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-semibold text-sm text-zinc-900">{v.code}</span>
-                    <span className={`px-2 py-0.5 text-xs font-semibold rounded ${v.status === "ACTIVE" ? "bg-emerald-100 text-emerald-800" : "bg-zinc-200 text-zinc-700"}`}>{v.status}</span>
+                    <span
+                      className={`px-2 py-0.5 text-xs font-semibold rounded ${v.status === "ACTIVE" ? "bg-emerald-100 text-emerald-800" : "bg-zinc-200 text-zinc-700"}`}
+                    >
+                      {v.status}
+                    </span>
                   </div>
 
                   <div className="text-xs space-y-1.5 text-zinc-600">
@@ -761,7 +858,9 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span>Active Consented Users:</span>
-                      <span className="font-semibold text-zinc-900">{v.consentedUsersCount.toLocaleString()} customers</span>
+                      <span className="font-semibold text-zinc-900">
+                        {v.consentedUsersCount.toLocaleString()} customers
+                      </span>
                     </div>
                   </div>
 
@@ -776,7 +875,10 @@ export const DataPrivacyCenterPage: React.FC = () => {
                     >
                       Inspect Legal Text <ExternalLink className="w-3 h-3" />
                     </a>
-                    <button onClick={() => alert(`Downloading signed template for ${v.code}`)} className="text-zinc-500 hover:text-zinc-800">
+                    <button
+                      onClick={() => alert(`Downloading signed template for ${v.code}`)}
+                      className="text-zinc-500 hover:text-zinc-800"
+                    >
                       Download Notice (PDF)
                     </button>
                   </div>
@@ -803,7 +905,8 @@ export const DataPrivacyCenterPage: React.FC = () => {
 
             <p className="text-xs text-zinc-600 leading-relaxed">
               Unmasking Personally Identifiable Information (Thai ID card and phone number) requires explicit RBAC scope{" "}
-              <span className="font-mono bg-zinc-100 px-1 py-0.5 rounded text-zinc-800">pii:unmask</span> and records an immutable event in the compliance ledger.
+              <span className="font-mono bg-zinc-100 px-1 py-0.5 rounded text-zinc-800">pii:unmask</span> and records an
+              immutable event in the compliance ledger.
             </p>
 
             <div className="space-y-1.5">
@@ -835,7 +938,11 @@ export const DataPrivacyCenterPage: React.FC = () => {
               >
                 Cancel
               </button>
-              <button type="button" onClick={handleConfirmUnmask} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors">
+              <button
+                type="button"
+                onClick={handleConfirmUnmask}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors"
+              >
                 Authorize & Decrypt
               </button>
             </div>
@@ -868,13 +975,16 @@ export const DataPrivacyCenterPage: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-500">10-Year OIC Legal Limit:</span>
-                <span className="text-emerald-700 font-medium">Cleared (Last policy ended {selectedErasure.retentionExpiryDate})</span>
+                <span className="text-emerald-700 font-medium">
+                  Cleared (Last policy ended {selectedErasure.retentionExpiryDate})
+                </span>
               </div>
             </div>
 
             <p className="text-xs text-zinc-600 leading-relaxed">
-              Per BRD CRM-08, database rows are <span className="font-semibold">not dropped</span> in order to preserve historical financial ledgers and statutory broker statistics. Instead, Thai ID
-              cards, phones, and names will be permanently overwritten with irreversible cryptographic hash digests.
+              Per BRD CRM-08, database rows are <span className="font-semibold">not dropped</span> in order to preserve
+              historical financial ledgers and statutory broker statistics. Instead, Thai ID cards, phones, and names
+              will be permanently overwritten with irreversible cryptographic hash digests.
             </p>
 
             <div className="flex justify-end gap-2 pt-2 border-t border-zinc-100">
@@ -888,7 +998,11 @@ export const DataPrivacyCenterPage: React.FC = () => {
               >
                 Abort
               </button>
-              <button type="button" onClick={handleExecuteHardAnonymization} className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-md transition-colors">
+              <button
+                type="button"
+                onClick={handleExecuteHardAnonymization}
+                className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-md transition-colors"
+              >
                 Confirm Irreversible Anonymization
               </button>
             </div>
