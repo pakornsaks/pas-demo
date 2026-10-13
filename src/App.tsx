@@ -39,6 +39,12 @@ import PartnerChannelHierarchyPage from './features/crm/pages/PartnerChannelHier
 import ApprovalsPage from './features/governance/pages/ApprovalsPage';
 import DiffViewerPage from './features/governance/pages/DiffViewerPage';
 import AuditTrailPage from './features/governance/pages/AuditTrailPage';
+import WorkflowVisualizerCanvasPage from './features/admin/pages/WorkflowVisualizerCanvasPage';
+import TransitionRulesConfiguratorPage from './features/admin/pages/TransitionRulesConfiguratorPage';
+import AccessControlRbacPage from './features/admin/pages/AccessControlRbacPage';
+import IntegrationHubPage from './features/admin/pages/IntegrationHubPage';
+import DocumentTemplateRegistryPage from './features/admin/pages/DocumentTemplateRegistryPage';
+import OperationalSettingsSLAsPage from './features/admin/pages/OperationalSettingsSLAsPage';
 
 function PlaceholderView({ title }: { title: string }) {
   return (
@@ -116,12 +122,12 @@ export default function App() {
               Platform & Foundation
           ===================================================================== */}
           {/* Workflow & Administration */}
-          <Route path="/admin/workflows" element={<PlaceholderView title="admin workflows" />} />
-          <Route path="/admin/transition-rules" element={<PlaceholderView title="admin transition rules" />} />
-          <Route path="/admin/rbac" element={<PlaceholderView title="admin rbac" />} />
-          <Route path="/admin/settings" element={<PlaceholderView title="admin settings" />} />
-          <Route path="/admin/integrations" element={<PlaceholderView title="admin integrations" />} />
-          <Route path="/admin/templates" element={<PlaceholderView title="admin templates" />} />
+          <Route path="/admin/workflows" element={<WorkflowVisualizerCanvasPage />} />
+          <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
+          <Route path="/admin/rbac" element={<AccessControlRbacPage />} />
+          <Route path="/admin/settings" element={<OperationalSettingsSLAsPage />} />
+          <Route path="/admin/integrations" element={<IntegrationHubPage />} />
+          <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
 
           {/* Master Data Management */}
           <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
