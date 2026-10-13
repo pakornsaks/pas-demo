@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // ==========================================
 // 1. Type Definitions & Constants
@@ -85,7 +85,7 @@ const fetchGeoRiskApi = (): Promise<GeoRiskRecord[]> => {
   });
 };
 
-export function useGeoRiskData() {
+export function useGeoRisk() {
   const [data, setData] = useState<GeoRiskRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useGeoRiskData, type GeoRiskRecord, type RiskZoneType } from "../../../hooks/useGeoRiskData";
+import { useGeoRisk, type GeoRiskRecord, type RiskZoneType } from "../../../hooks/useGeoRisk";
 
 const RISK_BADGES: Record<RiskZoneType, { label: string; badgeClass: string; impact: string }> = {
   STANDARD: {
@@ -33,7 +33,7 @@ const RISK_BADGES: Record<RiskZoneType, { label: string; badgeClass: string; imp
 // 3. Main Component
 // ==========================================
 export default function GeoRiskMappingPage() {
-  const { data: remoteData, isLoading, error, refetch } = useGeoRiskData();
+  const { data: remoteData, isLoading, error, refetch } = useGeoRisk();
 
   // Local state สำหรับจัดการข้อมูลและการแก้ไข
   const [geoRecords, setGeoRecords] = useState<GeoRiskRecord[]>([]);

@@ -85,11 +85,11 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             title: 'Product Catalog',
             href: '/products/catalog',
           },
-          {
-            id: 'plan-tier-config',
-            title: 'Plan & Tier Configuration',
-            href: '/products/plans',
-          },
+          // {
+          //   id: 'plan-tier-config',
+          //   title: 'Plan & Tier Configuration',
+          //   href: '/products/plans',
+          // },
           {
             id: 'benefits-builder',
             title: 'Benefits Builder',
@@ -99,11 +99,6 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             id: 'rules-canvas',
             title: 'Pricing & UW Rules Canvas',
             href: '/products/rules',
-          },
-          {
-            id: 'dynamic-schema-builder',
-            title: 'Dynamic Schema Builder',
-            href: '/products/schemas',
           },
           {
             id: 'campaigns-promos',
