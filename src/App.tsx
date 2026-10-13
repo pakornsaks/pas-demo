@@ -6,7 +6,7 @@ import DocumentTemplateRegistryPage from "./features/admin/pages/DocumentTemplat
 import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
 import OperationalSettingsSLAsPage from "./features/admin/pages/OperationalSettingsSLAsPage";
 import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
-import WorkflowVisualizerCanvasPage from "./features/admin/pages/WorkflowVisualizerCanvasPage";
+import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
 import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
 import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
@@ -46,7 +46,7 @@ import ProductPlanConfigPage from "./features/products/pages/ProductConfigPage";
 import VersioningPublishingPage from "./features/products/pages/VersioningPublishingPage";
 import AnalyticsPerformancePage from "./features/reports/pages/AnalyticsPerformancePage";
 import OICRegulatoryReportsPage from "./features/reports/pages/OICRegulatoryReportsPage";
-import OperationalAccountingPage from "./features/reports/pages/OperationalAccountingPage";
+import OperationalAccountingReportPage from "./features/reports/pages/OperationalAccountingReportPage";
 import TaxRemittanceReportsPage from "./features/reports/pages/TaxRemittanceReportsPage";
 import { AdminLayout } from "./layouts/AdminLayout";
 
@@ -111,14 +111,14 @@ export default function App() {
           {/* Reports & Compliance */}
           <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
           <Route path="/reports/tax" element={<TaxRemittanceReportsPage />} />
-          <Route path="/reports/accounting" element={<OperationalAccountingPage />} />
+          <Route path="/reports/accounting" element={<OperationalAccountingReportPage />} />
           <Route path="/reports/analytics" element={<AnalyticsPerformancePage />} />
 
           {/* =====================================================================
               Platform & Foundation
           ===================================================================== */}
           {/* Workflow & Administration */}
-          <Route path="/admin/workflows" element={<WorkflowVisualizerCanvasPage />} />
+          <Route path="/admin/workflows" element={<WorkflowVisualizerPage />} />
           <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
           <Route path="/admin/rbac" element={<AccessControlRbacPage />} />
           <Route path="/admin/settings" element={<OperationalSettingsSLAsPage />} />
