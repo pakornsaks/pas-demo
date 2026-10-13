@@ -180,6 +180,11 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
             href: '/crm/pdpa',
           },
           {
+            id: 'broker-master',
+            title: 'Broker Directory & Licensing',
+            href: '/crm/brokers',
+          },
+          {
             id: 'agent-directory',
             title: 'Agent & Sales Force Directory',
             href: '/crm/agents',
@@ -293,6 +298,16 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
         title: 'Master Data Management',
         icon: Database,
         children: [
+          {
+            id: 'insurer-master',
+            title: 'Insurer & Carrier Directory',
+            href: '/master-data/insurers',
+          },
+          {
+            id: 'broker-operations-configurator',
+            title: 'Broker Operations & Settlement',
+            href: '/master-data/broker-settings',
+          },
           {
             id: 'vehicle-master',
             title: 'Vehicle Master',

@@ -46,6 +46,9 @@ import IntegrationHubPage from './features/admin/pages/IntegrationHubPage';
 import DocumentTemplateRegistryPage from './features/admin/pages/DocumentTemplateRegistryPage';
 import OperationalSettingsSLAsPage from './features/admin/pages/OperationalSettingsSLAsPage';
 import DynamicSchemaBuilderPage from './features/products/pages/DynamicSchemaBuilder';
+import IssuerPage from './features/master/pages/IssuerPage';
+import BrokerDirectoryPage from './features/crm/pages/BrokerDirectoryPage';
+import BrokerSettingsPage from './features/crm/pages/BrokerSettingsPage';
 
 export default function App() {
   return (
@@ -93,6 +96,7 @@ export default function App() {
           {/* CRM & Sales Hierarchy */}
           <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
           <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
+          <Route path="/crm/brokers" element={<BrokerDirectoryPage />} />
           <Route path="/crm/agents" element={<AgentSalesForceDirectoryPage />} />
           <Route path="/crm/channels" element={<PartnerChannelHierarchyPage />} />
 
@@ -122,6 +126,8 @@ export default function App() {
           <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
 
           {/* Master Data Management */}
+          <Route path="/master-data/insurers" element={<IssuerPage />} />
+          <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
           <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
           <Route path="/master-data/geography" element={<GeographyPage />} />
           <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
