@@ -163,6 +163,10 @@ export default function GeoRiskMappingPage() {
             <option value="FLOOD_ZONE_B">Flood Zone B</option>
             <option value="EARTHQUAKE_ZONE">Earthquake Zone</option>
             <option value="HIGH_FIRE_RISK">High Fire Risk</option>
+            <option value="LANDSLIDE_RISK">Landslide Risk</option>
+            <option value="COASTAL_STORM_RISK">Coastal Storm Risk</option>
+            <option value="FLASH_FLOOD_RISK">Flash Flood Risk</option>
+            <option value="INDUSTRIAL_HAZARD_ZONE">Industrial Hazard Zone</option>
           </select>
         </div>
       </div>
@@ -223,11 +227,15 @@ export default function GeoRiskMappingPage() {
                             onChange={(e) => setTempRisk(e.target.value as RiskZoneType)}
                             className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 text-xs rounded p-1 text-zinc-900 dark:text-zinc-100"
                           >
-                            <option value="STANDARD">Normal / Low Risk</option>
+                            <option value="STANDARD">Standard / Low Risk</option>
                             <option value="FLOOD_ZONE_A">Flood Zone A</option>
                             <option value="FLOOD_ZONE_B">Flood Zone B</option>
-                            <option value="EARTHQUAKE_ZONE">Earthquake Fault Line</option>
-                            <option value="HIGH_FIRE_RISK">Industrial Fire Hazard</option>
+                            <option value="EARTHQUAKE_ZONE">Earthquake Zone</option>
+                            <option value="HIGH_FIRE_RISK">High Fire Risk</option>
+                            <option value="LANDSLIDE_RISK">Landslide Risk</option>
+                            <option value="COASTAL_STORM_RISK">Coastal Storm Risk</option>
+                            <option value="FLASH_FLOOD_RISK">Flash Flood Risk</option>
+                            <option value="INDUSTRIAL_HAZARD_ZONE">Industrial Hazard Zone</option>
                           </select>
                         ) : (
                           <span
