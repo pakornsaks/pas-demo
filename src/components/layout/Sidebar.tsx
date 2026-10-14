@@ -1,6 +1,6 @@
+import { usePasAuth } from "@/features/auth/context/PasAuthContext";
 import React, { useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { usePasAuth } from "../../features/auth/context/PasAuthContext";
 
 export interface NavItem {
   label: string;
@@ -71,7 +71,7 @@ const GroupIcons = {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
       />
     </svg>
   ),
@@ -139,7 +139,6 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "Dashboards",
         icon: GroupIcons.dashboards,
         items: [
-          // { label: "Telesales Cockpit", to: "/dashboards/telesales", brdRef: "8.7.1" },
           {
             label: "Underwriter Workbench",
             to: "/dashboards/underwriter",
@@ -425,43 +424,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggleC
   // ===========================================================================
   return (
     <aside className="w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 select-none h-[calc(100vh-4rem)] sticky top-16">
-      {/* 1. Bound Broker Session Context Card */}
-      <div className="p-3.5 m-3 mb-2 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span
-              className={`w-2 h-2 rounded-full ${activeContext?.is_global_view ? "bg-indigo-400" : "bg-emerald-400"}`}
-            />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
-              {activeContext?.is_global_view ? "Global Platform Scope" : "Bound Broker Scope"}
-            </span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleSwitchBroker}
-            className="text-[11px] font-semibold bg-white/10 hover:bg-white/20 text-blue-200 px-2 py-0.5 rounded border border-white/15 transition-colors"
-          >
-            Switch
-          </button>
-        </div>
-
-        <div className="text-xs font-bold text-white mt-2 truncate">
-          {activeContext?.broker_name_en ?? "No Broker Selected"}
-        </div>
-
-        <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[11px] text-slate-300">
-          <span className="font-mono text-[10px] bg-black/30 px-1.5 py-0.5 rounded">
-            {activeContext?.broker_code ?? "UNBOUND"}
-          </span>
-          <span className="truncate max-w-[130px] text-[10px] text-slate-300">
-            {activeContext?.roles?.join(", ") || "Internal Staff"}
-          </span>
-        </div>
-      </div>
-
-      {/* 2. Quick Menu Filter Search Box */}
-      <div className="px-3 pb-2">
+      {/* 1. Quick Menu Filter Search Box */}
+      <div className="px-3 pt-3 pb-2">
         <div className="relative">
           <input
             type="text"
@@ -482,7 +446,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggleC
         </div>
       </div>
 
-      {/* 3. Scrollable Navigation Pillars & Accordion Sub-Groups */}
+      {/* 2. Scrollable Navigation Pillars & Accordion Sub-Groups */}
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-5">
         {filteredNavigation.map((pillar) => (
           <div key={pillar.pillarId}>
@@ -570,7 +534,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggleC
         )}
       </div>
 
-      {/* 4. Sidebar Governance & PDPA Compliance Footer */}
+      {/* 3. Sidebar Governance & PDPA Compliance Footer */}
       <div className="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-[11px] text-slate-500">
         <div className="flex items-center gap-1.5 truncate">
           <span className={`w-2 h-2 rounded-full shrink-0 ${hasPiiUnmaskScope ? "bg-amber-500" : "bg-emerald-500"}`} />
