@@ -126,7 +126,7 @@ export const OccupancyUWClassesPage: React.FC = () => {
     <div className="bg-slate-50 min-h-screen text-slate-800">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Occupancy & Underwriting Risk Classes</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Occupancy & Risk</h1>
         <p className="text-sm text-slate-500 mt-1">
           Master Data management for Personal Accident (PA), Health, and Life risk rating groups (URE Engine).
         </p>

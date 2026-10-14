@@ -180,7 +180,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Transactions Ledger", to: "/finance/ledger", brdRef: "8.7.3" },
           { label: "Insurer Bordereau", to: "/finance/bordereau" },
           { label: "Commission Receivables", to: "/finance/commission-receivables" },
-          { label: "Agent Wallets & Payouts", to: "/finance/wallets" },
+          { label: "Agent Wallets", to: "/finance/wallets" },
           { label: "Suspense Reconciliation", to: "/finance/reconciliation" },
           { label: "Tax Documents (50 Tawi)", to: "/finance/tax-documents" },
           { label: "Ledger Period Close", to: "/finance/period-close" },
@@ -257,7 +257,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         items: [
           { label: "Insurer Directory", to: "/master-data/insurers" },
           { label: "Broker SLA & Settlements", to: "/master-data/broker-settings", brdRef: "8.1.3" },
-          { label: "Vehicle Hierarchy (Redbook)", to: "/master-data/vehicles", brdRef: "8.1.2" },
+          { label: "Vehicle Hierarchy", to: "/master-data/vehicles", brdRef: "8.1.2" },
           { label: "Geography & Risk", to: "/master-data/geography" },
           { label: "Occupancy & UW Classes", to: "/master-data/occupations" },
           { label: "Network Providers", to: "/master-data/network-providers" },

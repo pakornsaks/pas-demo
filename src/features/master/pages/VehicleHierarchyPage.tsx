@@ -388,11 +388,6 @@ export const VehicleHierarchyPage: React.FC = () => {
       {/* ======================================================== */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-zinc-200">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-zinc-400 uppercase">
-            <span>Master Data</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-zinc-600">Vehicle Hierarchy & Redbook</span>
-          </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900 mt-1 flex items-center gap-2.5">
             <Car className="w-6 h-6 text-zinc-800" />
             Vehicle Master Data

@@ -129,7 +129,7 @@ export const BACKOFFICE_NAVIGATION: NavSection[] = [
           },
           {
             id: 'agent-wallets',
-            title: 'Agent Wallets & Payouts',
+            title: 'Agent Wallets',
             href: '/finance/wallets',
           },
           {
