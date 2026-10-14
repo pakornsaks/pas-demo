@@ -228,12 +228,6 @@ export const InsurerCarrierDirectoryPage: React.FC = () => {
             <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1 flex items-center gap-2">
               <Building2 className="w-5 h-5 text-indigo-600" />
               Insurers
-              <Tooltip>
-                <TooltipTrigger render={<Button variant="outline">Hover</Button>} />
-                <TooltipContent>
-                  <p>Add to library</p>
-                </TooltipContent>
-              </Tooltip>
             </h1>
           </div>
 
