@@ -150,9 +150,9 @@ export default function App() {
               ================================================================= */}
               {/* Financial Ledger */}
               <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
-              <Route path="/finance/bordereau" element={<InsurerSettlementsPage />} />
+              <Route path="/finance/insurer-settlements" element={<InsurerSettlementsPage />} />
               <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
-              <Route path="/finance/wallets" element={<AgentWalletsPayoutsPage />} />
+              <Route path="/finance/agent-commission" element={<AgentWalletsPayoutsPage />} />
               <Route path="/finance/reconciliation" element={<SuspenseReconciliationPage />} />
               <Route path="/finance/tax-documents" element={<TaxDocumentCenterPage />} />
               <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />

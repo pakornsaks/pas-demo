@@ -360,8 +360,9 @@ export const CommissionReceivablesPage: React.FC = () => {
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Commission Receivables Ledger</h1>
             <p className="text-sm text-zinc-500 mt-0.5">
-              Track outstanding broker commission owed by insurers under Gross Settlement (Deduct After) and
-              Direct-to-Carrier payment collections.
+              สมุดบัญชีที่ทำหน้าที่รวบรวมและติดตามยอดค่าคอมมิชชันที่บริษัทโบรกเกอร์ต้องได้รับจากบริษัทประกันภัย
+              <br />
+              กรณีที่ลูกค้าชำระเงินค่าเบี้ยประกันภัยตรงกับบริษัทประกันภัย
             </p>
           </div>
 

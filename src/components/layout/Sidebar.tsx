@@ -185,9 +185,9 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         icon: GroupIcons.finance,
         items: [
           { label: "Transactions Ledger", to: "/finance/ledger", brdRef: "8.7.3" },
-          { label: "Insurer Bordereau", to: "/finance/bordereau" },
+          { label: "Insurer Settlements", to: "/finance/insurer-settlements" },
           { label: "Commission Receivables", to: "/finance/commission-receivables" },
-          { label: "Agent Wallets", to: "/finance/wallets" },
+          { label: "Agent Commission", to: "/finance/agent-commission" },
           { label: "Suspense Reconciliation", to: "/finance/reconciliation" },
           { label: "Tax Documents (50 Tawi)", to: "/finance/tax-documents" },
           { label: "Ledger Period Close", to: "/finance/period-close" },

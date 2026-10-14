@@ -339,7 +339,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-xl font-bold text-zinc-900">Agent Commission Ledger & Payouts</h1>
+                <h1 className="text-xl font-bold text-zinc-900">Agent Commission Ledger</h1>
                 <span className="text-xs bg-zinc-100 text-zinc-700 font-medium px-2 py-0.5 rounded border border-zinc-200">
                   Sub-Broker Ledger
                 </span>

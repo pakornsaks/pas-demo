@@ -344,10 +344,7 @@ export const TransactionsLedgerPage: React.FC = () => {
                 Ledger Engine Active (Append-Only)
               </span>
             </div>
-            <p className="text-xs text-zinc-500 mt-0.5">
-              System of Record for Inbound Premiums, 3% TRD WHT Calculations, Sub-Agent Wallets & Double-Entry Bordereau
-              Settlements.
-            </p>
+            <p className="text-xs text-zinc-500 mt-0.5">ระบบบัญชีหลักขององค์กร (แยกประเภท)</p>
           </div>
 
           <div className="flex items-center space-x-2">

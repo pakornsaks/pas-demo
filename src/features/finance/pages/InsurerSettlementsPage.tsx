@@ -526,8 +526,9 @@ export const InsurerSettlementsPage: React.FC = () => {
             </span>
           </div>
           <p className="text-sm text-zinc-500 mt-1">
-            End-of-Month (EOM) Broker Remittances, Statement of Account (SOA), Double-Entry Trust Ledger & Commission
-            Receivables
+            กระบวนการชำระเงินและการทำบัญชีสรุปยอดสิ้นเดือน (End-of-Month) ระหว่างบริษัทโบรกเกอร์และบริษัทประกันภัย
+            <br />
+            เกิดขึ้นในกรณีที่โบรกเกอร์เป็นผู้รับเงินค่าเบี้ยประกันภัยมาจากลูกค้า หรือการสรุปยอดเคลียร์บัญชีประจำเดือน
           </p>
         </div>
 
