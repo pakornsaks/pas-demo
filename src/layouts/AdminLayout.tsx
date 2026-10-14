@@ -1,7 +1,7 @@
+import AppHeader from "@/components/layout/AppHeader";
 import { useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { SIDEBAR_NAVIGATION } from "../components/layout/Sidebar";
-import TopNavigationBar from "./TopNavigationBar";
 
 export function AdminLayout() {
   const location = useLocation();
@@ -42,7 +42,7 @@ export function AdminLayout() {
       {/* =====================================================================
           TOP COMMAND BAR (Fixed 56px Height, Never Scrolls Off)
       ===================================================================== */}
-      <TopNavigationBar onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)} />
+      <AppHeader onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)} />
 
       {/* =====================================================================
           BODY CONTAINER (Locked Flex-1 with min-h-0 so both panes scroll independently)
