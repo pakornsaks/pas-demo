@@ -33,7 +33,6 @@ import NetworkProvidersDirectoryPage from "./features/master/pages/NetworkProvid
 import OccupancyUWClassesPage from "./features/master/pages/OccupancyUWClassesPage";
 import VehicleHierarchyPage from "./features/master/pages/VehicleHierarchyPage";
 import ApplicationSearchPage from "./features/policy/pages/ApplicationSearchPage";
-import BulkIngestionPage from "./features/policy/pages/BulkIngestionPage";
 import CancellationsRefundsPage from "./features/policy/pages/CancellationsRefundsPage";
 import PolicyDirectoryPage from "./features/policy/pages/PolicyDirectoryPage";
 import PolicyEndorsementPage from "./features/policy/pages/PolicyEndorsementPage";
@@ -135,7 +134,6 @@ export default function App() {
               <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
               <Route path="/policies/renewals" element={<RenewalsManagementPage />} />
               <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
-              <Route path="/policies/bulk-ingestion" element={<BulkIngestionPage />} />
 
               {/* Product Factory & Rules */}
               <Route path="/products/catalog" element={<ProductPlanConfigPage />} />

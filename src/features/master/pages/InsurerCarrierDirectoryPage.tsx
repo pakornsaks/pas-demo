@@ -234,7 +234,7 @@ export const InsurerCarrierDirectoryPage: React.FC = () => {
             </div>
             <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1 flex items-center gap-2">
               <Building2 className="w-5 h-5 text-indigo-600" />
-              Insurer & Carrier Directory
+              Insurer Directory
             </h1>
           </div>
 

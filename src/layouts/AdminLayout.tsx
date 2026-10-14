@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { SIDEBAR_NAVIGATION } from "../components/layout/Sidebar";
 import { usePasAuth } from "../features/auth/context/PasAuthContext";
@@ -9,7 +9,6 @@ export function AdminLayout() {
   const location = useLocation();
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [globalSearchQuery, setGlobalSearchQuery] = useState("");
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
 
   // Resolve active breadcrumb
@@ -41,12 +40,6 @@ export function AdminLayout() {
   const handleSignOut = () => {
     logout();
     navigate("/select-broker", { replace: true });
-  };
-
-  const handleGlobalSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!globalSearchQuery.trim()) return;
-    navigate(`/policies/search?q=${encodeURIComponent(globalSearchQuery.trim())}`);
   };
 
   const toggleSubGroup = (groupTitle: string) => {
@@ -83,29 +76,10 @@ export function AdminLayout() {
             </div>
             <div className="hidden sm:block leading-tight">
               <div className="text-xs font-bold tracking-tight">Unified Broker Platform</div>
-              <div className="text-[10px] text-slate-400">Back-Office Command Center</div>
+              <div className="text-[10px] text-slate-400">Policy Administration System</div>
             </div>
           </div>
         </div>
-
-        {/* Center: Global Search */}
-        <form onSubmit={handleGlobalSearchSubmit} className="hidden md:flex items-center max-w-md w-full mx-4">
-          <div className="relative w-full">
-            <input
-              type="text"
-              value={globalSearchQuery}
-              onChange={(e) => setGlobalSearchQuery(e.target.value)}
-              placeholder="Search Policy No, Application ID, Customer Name, or ID Card..."
-              className="w-full bg-slate-800/90 text-white placeholder-slate-400 text-xs rounded-lg pl-3 pr-16 py-1.5 border border-slate-700 focus:outline-none focus:border-blue-500"
-            />
-            <button
-              type="submit"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[11px] font-semibold bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white px-2.5 py-0.5 rounded transition-colors"
-            >
-              Search
-            </button>
-          </div>
-        </form>
 
         {/* Right: PDPA Status & Active Broker Switcher */}
         <div className="flex items-center gap-2.5 shrink-0">
@@ -227,23 +201,6 @@ export function AdminLayout() {
               <span>{activeRouteMeta.groupTitle}</span>
               <span>/</span>
               <span className="font-bold text-slate-900">{activeRouteMeta.pageLabel}</span>
-            </div>
-
-            <div className="flex items-center gap-3 text-[11px] text-slate-500">
-              <span>
-                RLS Partition:{" "}
-                <strong className="font-mono text-slate-800">
-                  {activeContext?.is_global_view ? "GLOBAL_ALL_BROKERS" : (activeContext?.broker_code ?? "UNSCOPED")}
-                </strong>
-              </span>
-              <span className="text-slate-300">|</span>
-              <button
-                type="button"
-                onClick={handleSwitchBroker}
-                className="text-blue-600 hover:text-blue-800 font-semibold hover:underline"
-              >
-                Switch Broker Workspace
-              </button>
             </div>
           </div>
 

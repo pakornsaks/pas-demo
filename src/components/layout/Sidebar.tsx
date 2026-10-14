@@ -150,7 +150,6 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Endorsements", to: "/policies/endorsements", badge: "SCD2", badgeTone: "blue" },
           { label: "Renewals Management", to: "/policies/renewals" },
           { label: "Cancellations & Refunds", to: "/policies/cancellations" },
-          { label: "Bulk Ingestion", to: "/policies/bulk-ingestion" },
         ],
       },
       {
