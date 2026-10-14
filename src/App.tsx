@@ -10,6 +10,7 @@ import { PasAuthProvider, usePasAuth } from "./features/auth/context/PasAuthCont
 import BrokerSelectionPage from "./features/auth/pages/BrokerSelectionPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
 import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
+import CommisionTierPage from "./features/crm/pages/CommisionTierPage";
 import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
 import DataPrivacyCenterPage from "./features/crm/pages/DataPrivacyCenterPage";
 import PartnerChannelHierarchyPage from "./features/crm/pages/PartnerChannelHierarchyPage";
@@ -159,9 +160,12 @@ export default function App() {
               {/* CRM & Sales Hierarchy */}
               <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
               <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
-              <Route path="/crm/brokers" element={<BrokerDirectoryPage />} />
-              <Route path="/crm/agents" element={<AgentSalesForceDirectoryPage />} />
-              <Route path="/crm/channels" element={<PartnerChannelHierarchyPage />} />
+
+              {/* Sales Hierarchy */}
+              <Route path="/sales/brokers" element={<BrokerDirectoryPage />} />
+              <Route path="/sales/agents" element={<AgentSalesForceDirectoryPage />} />
+              <Route path="/sales/channels" element={<PartnerChannelHierarchyPage />} />
+              <Route path="/sales/comission-tier" element={<CommisionTierPage />} />
 
               {/* =================================================================
                   Compliance & Governance

@@ -207,9 +207,10 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "Sales Hierarchy",
         icon: GroupIcons.sales,
         items: [
-          { label: "Brokers", to: "/crm/brokers" },
-          { label: "Agents & Sales Force", to: "/crm/agents" },
-          { label: "Partners & Channels", to: "/crm/channels" },
+          { label: "Brokers", to: "/sales/brokers" },
+          { label: "Agents & Sales Force", to: "/sales/agents" },
+          { label: "Partners & Channels", to: "/sales/channels" },
+          { label: "Commission Tier", to: "/sales/commision-tier" },
         ],
       },
     ],
