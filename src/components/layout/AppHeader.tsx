@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { usePasAuth } from "../features/auth/context/PasAuthContext";
+import { usePasAuth } from "../../features/auth/context/PasAuthContext";
 
-export interface TopNavbarProps {
+export interface AppHeaderProps {
   onToggleSidebar?: () => void;
 }
 
-export const TopNavigationBar: React.FC<TopNavbarProps> = ({ onToggleSidebar }) => {
+export const AppHeader: React.FC<AppHeaderProps> = ({ onToggleSidebar }) => {
   const { activeContext, clearBrokerContextForSwitch, logout } = usePasAuth();
   const navigate = useNavigate();
 
@@ -109,4 +109,4 @@ export const TopNavigationBar: React.FC<TopNavbarProps> = ({ onToggleSidebar }) 
   );
 };
 
-export default TopNavigationBar;
+export default AppHeader;
