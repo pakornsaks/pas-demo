@@ -437,9 +437,6 @@ const CancellationsRefundsPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Cancellations & Refunds Workspace</h1>
-            <span className="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200">
-              PAS Core Engine v2.0
-            </span>
           </div>
           <p className="text-xs text-zinc-500 mt-1">
             Governs the 4 lifecycle cancellation cases, manual refund overrides, agent clawbacks, and Maker-Checker

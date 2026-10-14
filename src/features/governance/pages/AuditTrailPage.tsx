@@ -308,11 +308,6 @@ export const AuditTrailPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-4 shrink-0 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1">
-              <span>Governance & Approvals</span>
-              <span>/</span>
-              <span className="text-zinc-800 font-semibold">Audit Trail</span>
-            </div>
             <h1 className="text-2xl font-bold text-zinc-900 tracking-tight flex items-center gap-2">
               <ShieldCheck className="w-6 h-6 text-zinc-800" />
               Audit Trail & Compliance Ledger

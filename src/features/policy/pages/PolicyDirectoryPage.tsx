@@ -372,10 +372,6 @@ const StatusBadge: React.FC<{ status: PolicyStatus }> = ({ status }) => {
   );
 };
 
-// ============================================================================
-// Main Policy Directory Page
-// ============================================================================
-
 export const PolicyDirectoryPage: React.FC = () => {
   const [policies, setPolicies] = useState<PolicyRecord[]>(MOCK_POLICIES);
   const [searchQuery, setSearchQuery] = useState("");

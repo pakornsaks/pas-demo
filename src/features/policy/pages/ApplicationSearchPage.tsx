@@ -411,7 +411,6 @@ export const ApplicationSearchAndIntakePage: React.FC = () => {
                 PAS
               </div>
               <div>
-                <nav className="text-xs text-slate-500 font-medium">Policy Lifecycle &gt; Underwriting &amp; Ops</nav>
                 <h1 className="text-lg font-bold text-slate-800">Application Search &amp; Intake</h1>
               </div>
             </div>

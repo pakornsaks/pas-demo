@@ -443,13 +443,6 @@ export const ApprovalInboxPage: React.FC = () => {
       <header className="bg-white border-b border-zinc-200 px-6 py-4 sticky top-0 z-20 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
-                Maker-Checker Hub
-              </span>
-              <span className="text-zinc-300">/</span>
-              <span className="text-xs font-medium text-zinc-500">Governance & Control</span>
-            </div>
             <h1 className="text-xl font-bold text-zinc-900 mt-1 flex items-center gap-2.5">
               Approval Inbox
               <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200">

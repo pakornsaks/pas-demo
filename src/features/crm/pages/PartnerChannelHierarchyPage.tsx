@@ -449,11 +449,6 @@ export const PartnerChannelHierarchyPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-5 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-7xl mx-auto">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-semibold text-blue-600 uppercase tracking-wider">
-              <span>Core Modules</span>
-              <ChevronRight size={12} />
-              <span>CRM & Distribution Governance</span>
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-zinc-950 mt-1">Partner & Channel Hierarchy</h1>
             <p className="text-sm text-zinc-500 mt-0.5">
               Configure multi-tier sales trees, Row-Level Security downlines, and Channel SLA auto-cancellation offsets.

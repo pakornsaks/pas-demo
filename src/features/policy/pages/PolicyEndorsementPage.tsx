@@ -302,17 +302,7 @@ export const PolicyEndorsementPage: React.FC = () => {
         {/* ==================================================================== */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-5 gap-4">
           <div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded">
-                SCD Type 2 Architecture
-              </span>
-              <span className="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
-                PAS Core v2.0
-              </span>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">
-              Policy Endorsement (Mid-Term Adjustment)
-            </h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">Policy Endorsement</h1>
             <p className="text-sm text-slate-500">
               Implements immutable Clone & Swap methodology. Modifying active risks creates a new version snapshot.
             </p>

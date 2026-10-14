@@ -146,11 +146,6 @@ export const SuspenseReconciliationPage: React.FC = () => {
       <div className="bg-white border-b border-slate-200 px-8 py-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded">
-                MODULE 5: FINANCE & RECONCILIATION
-              </span>
-            </div>
             <h1 className="text-xl font-bold text-slate-900 mt-1">Suspense Funds & Settlement Reconciliation</h1>
             <p className="text-xs text-slate-500 mt-0.5">
               Dual-entry suspense pool allocation, Satang round-off handling, and Insurer Bordereau reconciliation.

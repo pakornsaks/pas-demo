@@ -214,9 +214,6 @@ export const RenewalsManagementPage: React.FC = () => {
       {/* Breadcrumb & Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-zinc-200">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1">
-            Policy Lifecycle Management (Stage 7)
-          </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Renewals Management</h1>
           <p className="text-sm text-zinc-500 mt-1">
             Monitor automated 90-day expiry triggers, pricing strategy recalculations, and bulk renewal lists.

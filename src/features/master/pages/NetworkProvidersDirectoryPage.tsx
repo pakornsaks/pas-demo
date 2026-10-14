@@ -233,14 +233,6 @@ export const NetworkProvidersDirectoryPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-200 gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
-              MODULE 1 & 6: MASTER DATA
-            </span>
-            <span className="text-xs font-mono font-medium px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-              SCD TYPE 2
-            </span>
-          </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 mt-1">Network Providers Directory</h1>
           <p className="text-sm text-slate-500 mt-0.5">
             Directory and insurer affiliation registry for Garages, Hospitals, and Clinics (`GET

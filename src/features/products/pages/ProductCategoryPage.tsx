@@ -2,7 +2,6 @@ import {
   Building2,
   Calendar,
   CheckCircle2,
-  ChevronRight,
   Clock,
   Copy,
   CreditCard,
@@ -262,13 +261,6 @@ export const ProductCatalogPage: React.FC = () => {
       <div className="-mt-6 -mx-6 bg-white border-b border-zinc-200 px-6 py-5 mb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">
-              <span>Operations & Execution</span>
-              <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-              <span>Product Factory & Rules</span>
-              <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-              <span className="text-zinc-900 font-bold">Product Catalog</span>
-            </div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Product Master Catalog</h1>
               <span className="px-2 py-0.5 rounded text-xs font-semibold bg-zinc-100 text-zinc-700 border border-zinc-200">

@@ -1,23 +1,23 @@
-import React, { useState, useId } from 'react';
 import {
   AlertTriangle,
-  Clock,
-  CheckCircle2,
-  XCircle,
-  Search,
-  Filter,
-  Send,
-  Ban,
-  TrendingDown,
-  Layers,
   ArrowUpRight,
+  Ban,
+  CheckCircle2,
+  Clock,
+  Filter,
+  Layers,
+  Search,
+  Send,
   ShieldAlert,
-} from 'lucide-react';
+  TrendingDown,
+  XCircle,
+} from "lucide-react";
+import React, { useId, useState } from "react";
 
 // --- Types based on PAS Schema & Requirements ---
 
-export type InstallmentStatus = 'PENDING' | 'PAID' | 'OVERDUE';
-export type PolicyStatus = 'ACTIVE' | 'PENDING_OFFICIAL_NUMBER' | 'SUSPENDED' | 'CANCELLED';
+export type InstallmentStatus = "PENDING" | "PAID" | "OVERDUE";
+export type PolicyStatus = "ACTIVE" | "PENDING_OFFICIAL_NUMBER" | "SUSPENDED" | "CANCELLED";
 
 export interface OverduePolicyItem {
   policyId: string;
@@ -42,7 +42,7 @@ export interface InstallmentWarningItem {
   expectedAmount: number;
   dueDate: string;
   daysUntilDue: number;
-  warningStatus: 'REMINDER_QUEUED' | 'REMINDER_SENT' | 'PENDING_ACTION';
+  warningStatus: "REMINDER_QUEUED" | "REMINDER_SENT" | "PENDING_ACTION";
 }
 
 export interface CancelledPolicyItem {
@@ -50,7 +50,7 @@ export interface CancelledPolicyItem {
   policyNumber: string;
   customerName: string;
   cancellationDate: string;
-  reasonCode: 'CUSTOMER_REQUEST' | 'NON_PAYMENT' | 'INSTALLMENT_EXHAUSTION';
+  reasonCode: "CUSTOMER_REQUEST" | "NON_PAYMENT" | "INSTALLMENT_EXHAUSTION";
   paidPremium: number;
   refundAmount: number;
   clawbackAmount: number;
@@ -68,38 +68,38 @@ const MOCK_METRICS = {
 
 const MOCK_OVERDUE_POLICIES: OverduePolicyItem[] = [
   {
-    policyId: 'POL-2026-9011',
-    policyNumber: 'V-MTR-883192',
-    customerName: 'Somchai Prasert',
-    phone: '081-456-7890',
-    channelName: 'Telesales',
+    policyId: "POL-2026-9011",
+    policyNumber: "V-MTR-883192",
+    customerName: "Somchai Prasert",
+    phone: "081-456-7890",
+    channelName: "Telesales",
     cycleNumber: 2,
     expectedAmount: 2500.0,
-    dueDate: '2026-03-25',
+    dueDate: "2026-03-25",
     daysOverdue: 19,
     autoCancelOffsetDays: 0,
   },
   {
-    policyId: 'POL-2026-9045',
-    policyNumber: 'TMP-2026-0045',
-    customerName: 'Anong Rattana',
-    phone: '089-112-3344',
-    channelName: 'Sub agent',
+    policyId: "POL-2026-9045",
+    policyNumber: "TMP-2026-0045",
+    customerName: "Anong Rattana",
+    phone: "089-112-3344",
+    channelName: "Sub agent",
     cycleNumber: 3,
     expectedAmount: 3200.0,
-    dueDate: '2026-04-02',
+    dueDate: "2026-04-02",
     daysOverdue: 11,
     autoCancelOffsetDays: 30,
   },
   {
-    policyId: 'POL-2026-9102',
-    policyNumber: 'TI-TRV-102941',
-    customerName: 'Kittisak Wong',
-    phone: '082-789-9901',
-    channelName: 'Website',
+    policyId: "POL-2026-9102",
+    policyNumber: "TI-TRV-102941",
+    customerName: "Kittisak Wong",
+    phone: "082-789-9901",
+    channelName: "Website",
     cycleNumber: 2,
     expectedAmount: 1850.0,
-    dueDate: '2026-04-05',
+    dueDate: "2026-04-05",
     daysOverdue: 8,
     autoCancelOffsetDays: 7,
   },
@@ -107,72 +107,72 @@ const MOCK_OVERDUE_POLICIES: OverduePolicyItem[] = [
 
 const MOCK_WARNING_QUEUE: InstallmentWarningItem[] = [
   {
-    installmentId: 'INST-1029',
-    policyId: 'POL-2026-9881',
-    policyNumber: 'BKI-FIR-556102',
-    customerName: 'Siriporn Bunnak',
-    channelName: 'Website',
+    installmentId: "INST-1029",
+    policyId: "POL-2026-9881",
+    policyNumber: "BKI-FIR-556102",
+    customerName: "Siriporn Bunnak",
+    channelName: "Website",
     cycleNumber: 2,
     expectedAmount: 4500.0,
-    dueDate: '2026-04-16',
+    dueDate: "2026-04-16",
     daysUntilDue: 3,
-    warningStatus: 'REMINDER_QUEUED',
+    warningStatus: "REMINDER_QUEUED",
   },
   {
-    installmentId: 'INST-1030',
-    policyId: 'POL-2026-9904',
-    customerName: 'Natthaphol Chot',
-    policyNumber: 'V-MTR-990142',
-    channelName: 'Direct sale',
+    installmentId: "INST-1030",
+    policyId: "POL-2026-9904",
+    customerName: "Natthaphol Chot",
+    policyNumber: "V-MTR-990142",
+    channelName: "Direct sale",
     cycleNumber: 2,
     expectedAmount: 2800.0,
-    dueDate: '2026-04-15',
+    dueDate: "2026-04-15",
     daysUntilDue: 2,
-    warningStatus: 'REMINDER_SENT',
+    warningStatus: "REMINDER_SENT",
   },
   {
-    installmentId: 'INST-1031',
-    policyId: 'POL-2026-9930',
-    customerName: 'Wichai Thanakorn',
-    policyNumber: 'BKI-MTR-440192',
-    channelName: 'Sub agent',
+    installmentId: "INST-1031",
+    policyId: "POL-2026-9930",
+    customerName: "Wichai Thanakorn",
+    policyNumber: "BKI-MTR-440192",
+    channelName: "Sub agent",
     cycleNumber: 3,
     expectedAmount: 3400.0,
-    dueDate: '2026-04-14',
+    dueDate: "2026-04-14",
     daysUntilDue: 1,
-    warningStatus: 'PENDING_ACTION',
+    warningStatus: "PENDING_ACTION",
   },
 ];
 
 const MOCK_CANCELLED_POLICIES: CancelledPolicyItem[] = [
   {
-    policyId: 'POL-2026-8700',
-    policyNumber: 'V-MTR-776211',
-    customerName: 'Kornkanok Suk',
-    cancellationDate: '2026-04-10',
-    reasonCode: 'INSTALLMENT_EXHAUSTION',
+    policyId: "POL-2026-8700",
+    policyNumber: "V-MTR-776211",
+    customerName: "Kornkanok Suk",
+    cancellationDate: "2026-04-10",
+    reasonCode: "INSTALLMENT_EXHAUSTION",
     paidPremium: 5250.0,
     refundAmount: 0.0,
     clawbackAmount: 0.0,
     isExhausted: true,
   },
   {
-    policyId: 'POL-2026-8512',
-    policyNumber: 'TI-MTR-102451',
-    customerName: 'Prasit Charoen',
-    cancellationDate: '2026-04-08',
-    reasonCode: 'CUSTOMER_REQUEST',
+    policyId: "POL-2026-8512",
+    policyNumber: "TI-MTR-102451",
+    customerName: "Prasit Charoen",
+    cancellationDate: "2026-04-08",
+    reasonCode: "CUSTOMER_REQUEST",
     paidPremium: 15000.0,
     refundAmount: 6250.0,
     clawbackAmount: 1125.0,
     isExhausted: false,
   },
   {
-    policyId: 'POL-2026-8401',
-    policyNumber: 'MS-TRV-998124',
-    customerName: 'Mayura Thep',
-    cancellationDate: '2026-04-02',
-    reasonCode: 'NON_PAYMENT',
+    policyId: "POL-2026-8401",
+    policyNumber: "MS-TRV-998124",
+    customerName: "Mayura Thep",
+    cancellationDate: "2026-04-02",
+    reasonCode: "NON_PAYMENT",
     paidPremium: 4200.0,
     refundAmount: 0.0,
     clawbackAmount: 756.0,
@@ -181,21 +181,21 @@ const MOCK_CANCELLED_POLICIES: CancelledPolicyItem[] = [
 ];
 
 export const CollectionInstallmentsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overdue' | 'warning' | 'cancelled'>('overdue');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [channelFilter, setChannelFilter] = useState('ALL');
+  const [activeTab, setActiveTab] = useState<"overdue" | "warning" | "cancelled">("overdue");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [channelFilter, setChannelFilter] = useState("ALL");
   const [selectedPolicy, setSelectedPolicy] = useState<OverduePolicyItem | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const [cancelOption, setCancelOption] = useState<'IMMEDIATE' | 'EXHAUSTION'>('EXHAUSTION');
-  const [refundAmount, setRefundAmount] = useState<string>('0.00');
+  const [cancelOption, setCancelOption] = useState<"IMMEDIATE" | "EXHAUSTION">("EXHAUSTION");
+  const [refundAmount, setRefundAmount] = useState<string>("0.00");
   const searchInputId = useId();
   const channelFilterId = useId();
   const refundAmountInputId = useId();
 
   const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('th-TH', {
-      style: 'currency',
-      currency: 'THB',
+    return new Intl.NumberFormat("th-TH", {
+      style: "currency",
+      currency: "THB",
       minimumFractionDigits: 2,
     }).format(val);
   };
@@ -211,10 +211,14 @@ export const CollectionInstallmentsPage: React.FC = () => {
 
   const handleExecuteCancellation = () => {
     if (!selectedPolicy) return;
-    if (cancelOption === 'EXHAUSTION') {
-      alert(`Policy ${selectedPolicy.policyNumber} set to "Cancel When Exhausted". Pro-rata scheduled cancellation queued with 0.00 THB refund.`);
+    if (cancelOption === "EXHAUSTION") {
+      alert(
+        `Policy ${selectedPolicy.policyNumber} set to "Cancel When Exhausted". Pro-rata scheduled cancellation queued with 0.00 THB refund.`,
+      );
     } else {
-      alert(`Policy ${selectedPolicy.policyNumber} cancelled immediately with refund amount: THB ${refundAmount}. Clawback workflow staged.`);
+      alert(
+        `Policy ${selectedPolicy.policyNumber} cancelled immediately with refund amount: THB ${refundAmount}. Clawback workflow staged.`,
+      );
     }
     setIsCancelModalOpen(false);
     setSelectedPolicy(null);
@@ -225,11 +229,9 @@ export const CollectionInstallmentsPage: React.FC = () => {
       {/* Title & Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900">
-            Collection & Installment Dashboard
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-900">Collection & Installment Dashboard</h1>
           <p className="text-xs text-zinc-500 mt-1">
-            BRD 8.7.4 & Module 4 — Monitor premium cash positions, aging receivables, and installment default triage.
+            Monitor premium cash positions, aging receivables, and installment default triage.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -307,11 +309,11 @@ export const CollectionInstallmentsPage: React.FC = () => {
         {/* Navigation Tabs */}
         <div className="flex border-b border-zinc-200 px-6 pt-3 bg-zinc-50/50">
           <button
-            onClick={() => setActiveTab('overdue')}
+            onClick={() => setActiveTab("overdue")}
             className={`flex items-center gap-2 pb-3 px-1 text-xs font-semibold border-b-2 transition-colors mr-6 ${
-              activeTab === 'overdue'
-                ? 'border-red-600 text-red-600'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "overdue"
+                ? "border-red-600 text-red-600"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <ShieldAlert className="w-4 h-4" />
@@ -322,11 +324,11 @@ export const CollectionInstallmentsPage: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('warning')}
+            onClick={() => setActiveTab("warning")}
             className={`flex items-center gap-2 pb-3 px-1 text-xs font-semibold border-b-2 transition-colors mr-6 ${
-              activeTab === 'warning'
-                ? 'border-zinc-900 text-zinc-900'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "warning"
+                ? "border-zinc-900 text-zinc-900"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -337,11 +339,11 @@ export const CollectionInstallmentsPage: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('cancelled')}
+            onClick={() => setActiveTab("cancelled")}
             className={`flex items-center gap-2 pb-3 px-1 text-xs font-semibold border-b-2 transition-colors ${
-              activeTab === 'cancelled'
-                ? 'border-zinc-900 text-zinc-900'
-                : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              activeTab === "cancelled"
+                ? "border-zinc-900 text-zinc-900"
+                : "border-transparent text-zinc-500 hover:text-zinc-700"
             }`}
           >
             <TrendingDown className="w-4 h-4" />
@@ -355,7 +357,9 @@ export const CollectionInstallmentsPage: React.FC = () => {
         {/* Filter Bar */}
         <div className="p-4 border-b border-zinc-200 bg-white flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="relative w-full sm:w-72">
-            <label htmlFor={searchInputId} className="sr-only">Search</label>
+            <label htmlFor={searchInputId} className="sr-only">
+              Search
+            </label>
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
             <input
               id={searchInputId}
@@ -368,7 +372,9 @@ export const CollectionInstallmentsPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label htmlFor={channelFilterId} className="sr-only">Filter by channel</label>
+            <label htmlFor={channelFilterId} className="sr-only">
+              Filter by channel
+            </label>
             <div className="flex items-center gap-2">
               <Filter className="w-3.5 h-3.5 text-zinc-400" />
               <select
@@ -390,7 +396,7 @@ export const CollectionInstallmentsPage: React.FC = () => {
         {/* Table Content */}
         <div className="overflow-x-auto">
           {/* TAB 1: OVERDUE QUEUE */}
-          {activeTab === 'overdue' && (
+          {activeTab === "overdue" && (
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-zinc-200 bg-zinc-50 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
@@ -417,18 +423,14 @@ export const CollectionInstallmentsPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-zinc-600">{item.channelName}</td>
                     <td className="py-3 px-4 text-center font-medium">#{item.cycleNumber}</td>
-                    <td className="py-3 px-4 font-semibold text-red-600">
-                      {formatCurrency(item.expectedAmount)}
-                    </td>
+                    <td className="py-3 px-4 font-semibold text-red-600">{formatCurrency(item.expectedAmount)}</td>
                     <td className="py-3 px-4 text-zinc-600">{item.dueDate}</td>
                     <td className="py-3 px-4">
                       <div className="inline-flex items-center gap-1 text-red-600 font-semibold">
                         <AlertTriangle className="w-3.5 h-3.5" />
                         {item.daysOverdue} days past due
                       </div>
-                      <div className="text-[10px] text-zinc-400 mt-0.5">
-                        Grace offset: {item.autoCancelOffsetDays}d
-                      </div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5">Grace offset: {item.autoCancelOffsetDays}d</div>
                     </td>
                     <td className="py-3 px-4 text-right space-x-2">
                       <button
@@ -453,7 +455,7 @@ export const CollectionInstallmentsPage: React.FC = () => {
           )}
 
           {/* TAB 2: WARNING QUEUE */}
-          {activeTab === 'warning' && (
+          {activeTab === "warning" && (
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-zinc-200 bg-zinc-50 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
@@ -477,17 +479,15 @@ export const CollectionInstallmentsPage: React.FC = () => {
                     <td className="py-3 px-4 font-medium text-zinc-800">{item.customerName}</td>
                     <td className="py-3 px-4 text-zinc-600">{item.channelName}</td>
                     <td className="py-3 px-4 text-center font-medium">#{item.cycleNumber}</td>
-                    <td className="py-3 px-4 font-semibold text-zinc-900">
-                      {formatCurrency(item.expectedAmount)}
-                    </td>
+                    <td className="py-3 px-4 font-semibold text-zinc-900">{formatCurrency(item.expectedAmount)}</td>
                     <td className="py-3 px-4 text-zinc-600">{item.dueDate}</td>
                     <td className="py-3 px-4">
                       <span className="inline-flex items-center gap-1 text-amber-700 font-medium">
                         <Clock className="w-3.5 h-3.5 text-amber-500" />
-                        Due in {item.daysUntilDue} day{item.daysUntilDue > 1 ? 's' : ''}
+                        Due in {item.daysUntilDue} day{item.daysUntilDue > 1 ? "s" : ""}
                       </span>
                       <div className="text-[10px] text-zinc-400">
-                        {item.warningStatus === 'REMINDER_SENT' ? 'Reminder dispatched' : 'Scheduled SMS queued'}
+                        {item.warningStatus === "REMINDER_SENT" ? "Reminder dispatched" : "Scheduled SMS queued"}
                       </div>
                     </td>
                     <td className="py-3 px-4 text-right">
@@ -506,7 +506,7 @@ export const CollectionInstallmentsPage: React.FC = () => {
           )}
 
           {/* TAB 3: CANCELLED POLICIES LEDGER */}
-          {activeTab === 'cancelled' && (
+          {activeTab === "cancelled" && (
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-zinc-200 bg-zinc-50 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
@@ -535,11 +535,9 @@ export const CollectionInstallmentsPage: React.FC = () => {
                       )}
                     </td>
                     <td className="py-3 px-4 text-zinc-700">{formatCurrency(item.paidPremium)}</td>
-                    <td className="py-3 px-4 font-medium text-zinc-900">
-                      {formatCurrency(item.refundAmount)}
-                    </td>
+                    <td className="py-3 px-4 font-medium text-zinc-900">{formatCurrency(item.refundAmount)}</td>
                     <td className="py-3 px-4 text-red-600 font-medium">
-                      {item.clawbackAmount > 0 ? `-${formatCurrency(item.clawbackAmount)}` : '0.00 THB'}
+                      {item.clawbackAmount > 0 ? `-${formatCurrency(item.clawbackAmount)}` : "0.00 THB"}
                     </td>
                     <td className="py-3 px-4 text-center">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700 border border-zinc-200">
@@ -564,10 +562,7 @@ export const CollectionInstallmentsPage: React.FC = () => {
                 <Ban className="w-5 h-5" />
                 <h3 className="font-bold text-sm text-zinc-900">Installment Cancellation Triage</h3>
               </div>
-              <button
-                onClick={() => setIsCancelModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-600"
-              >
+              <button onClick={() => setIsCancelModalOpen(false)} className="text-zinc-400 hover:text-zinc-600">
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
@@ -600,16 +595,15 @@ export const CollectionInstallmentsPage: React.FC = () => {
                     <input
                       type="radio"
                       name="cancelProtocol"
-                      checked={cancelOption === 'EXHAUSTION'}
-                      onChange={() => setCancelOption('EXHAUSTION')}
+                      checked={cancelOption === "EXHAUSTION"}
+                      onChange={() => setCancelOption("EXHAUSTION")}
                       className="mt-0.5 text-zinc-900 focus:ring-zinc-900"
                     />
                     <div>
-                      <div className="font-semibold text-zinc-900">
-                        Cancel When Money Is Exhausted (Recommended)
-                      </div>
+                      <div className="font-semibold text-zinc-900">Cancel When Money Is Exhausted (Recommended)</div>
                       <div className="text-[11px] text-zinc-500 mt-0.5">
-                        Coverage stays active until pro-rata value of collected installments reaches 0. No customer refund, Agent Clawback = 0.00 THB.
+                        Coverage stays active until pro-rata value of collected installments reaches 0. No customer
+                        refund, Agent Clawback = 0.00 THB.
                       </div>
                     </div>
                   </label>
@@ -618,23 +612,22 @@ export const CollectionInstallmentsPage: React.FC = () => {
                     <input
                       type="radio"
                       name="cancelProtocol"
-                      checked={cancelOption === 'IMMEDIATE'}
-                      onChange={() => setCancelOption('IMMEDIATE')}
+                      checked={cancelOption === "IMMEDIATE"}
+                      onChange={() => setCancelOption("IMMEDIATE")}
                       className="mt-0.5 text-zinc-900 focus:ring-zinc-900"
                     />
                     <div>
-                      <div className="font-semibold text-zinc-900">
-                        Cancel Immediately & Refund (Manual Override)
-                      </div>
+                      <div className="font-semibold text-zinc-900">Cancel Immediately & Refund (Manual Override)</div>
                       <div className="text-[11px] text-zinc-500 mt-0.5">
-                        Terminates coverage immediately. Operations inputs fiat refund amount; automatically schedules commission clawback.
+                        Terminates coverage immediately. Operations inputs fiat refund amount; automatically schedules
+                        commission clawback.
                       </div>
                     </div>
                   </label>
                 </div>
               </div>
 
-              {cancelOption === 'IMMEDIATE' && (
+              {cancelOption === "IMMEDIATE" && (
                 <div className="p-3 bg-red-50/50 border border-red-200 rounded">
                   <label htmlFor={refundAmountInputId} className="block font-medium text-red-900 mb-1">
                     Manual Customer Refund Amount (THB):

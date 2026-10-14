@@ -261,7 +261,7 @@ export const AgentDirectoryPage: React.FC = () => {
       {/* Page Title & Operational Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-5">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900">Agent & Sales Force Directory</h1>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-900">Agent & Sales Force</h1>
           <p className="text-sm text-zinc-500 mt-1">
             Master repository for internal sales channels, brokers, sub-agents, and OIC licensing compliance.
           </p>
@@ -393,7 +393,7 @@ export const AgentDirectoryPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Agent Directory Data Grid */}
+      {/* Agents Data Grid */}
       <div className="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">

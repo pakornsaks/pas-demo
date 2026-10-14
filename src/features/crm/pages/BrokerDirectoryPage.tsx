@@ -393,7 +393,7 @@ export const BrokerDirectoryPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-8 py-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight mt-0.5">Broker Directory & Licensing</h1>
+            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight mt-0.5">Brokers</h1>
             <p className="text-xs text-zinc-500 mt-1">
               Centralized repository for licensed corporate intermediaries, OIC license renewals, Authorized LOBs, and
               SCD Type 2 version audit trails.

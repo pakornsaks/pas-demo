@@ -28,7 +28,7 @@ import AuditTrailPage from "./features/governance/pages/AuditTrailPage";
 import DiffViewerPage from "./features/governance/pages/DiffViewerPage";
 import BrokerSettingsPage from "./features/master/pages/BrokerSettingsPage";
 import GeographyPage from "./features/master/pages/GeographyPage";
-import InsurerCarrierDirectoryPage from "./features/master/pages/InsurerCarrierDirectoryPage";
+import InsurerCarrierDirectoryPage from "./features/master/pages/InsurerDirectoryPage";
 import NetworkProvidersDirectoryPage from "./features/master/pages/NetworkProvidersDirectoryPage";
 import OccupancyUWClassesPage from "./features/master/pages/OccupancyUWClassesPage";
 import VehicleHierarchyPage from "./features/master/pages/VehicleHierarchyPage";
@@ -145,7 +145,7 @@ export default function App() {
               <Route path="/products/versioning" element={<VersioningPublishingPage />} />
 
               {/* =================================================================
-                  Finance & Distribution
+                  Finance & Accounting
               ================================================================= */}
               {/* Financial Ledger */}
               <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />

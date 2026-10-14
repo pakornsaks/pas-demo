@@ -208,11 +208,6 @@ export const OperationalSettingsPage: React.FC = () => {
       {/* Top Page Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">
-            <span>Administration</span>
-            <span>/</span>
-            <span className="text-zinc-800">Operational Governance</span>
-          </div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Operational Settings & SLAs</h1>
           <p className="text-sm text-zinc-500 mt-0.5">
             Manage channel auto-cancellation offset windows, payment reminder schedules, insurer settlements, and system

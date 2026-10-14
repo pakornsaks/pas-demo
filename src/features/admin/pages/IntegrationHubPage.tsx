@@ -347,13 +347,6 @@ export const IntegrationHubPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">
-              <span>Backoffice Operations</span>
-              <span>/</span>
-              <span>Adapter Framework</span>
-              <span>/</span>
-              <span className="text-zinc-800">Dead Letter Queue</span>
-            </div>
             <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Integration Hub & DLQ Failsafe</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
               Monitor carrier adapter telemetry, isolate failed B2B transactions, and re-dispatch quarantined payloads.

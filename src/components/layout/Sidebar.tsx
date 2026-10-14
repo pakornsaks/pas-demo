@@ -75,6 +75,16 @@ const GroupIcons = {
       />
     </svg>
   ),
+  sales: (
+    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+      />
+    </svg>
+  ),
   governance: (
     <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
@@ -148,7 +158,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Quotation Search", to: "/policies/quotations", brdRef: "8.3.1" },
           { label: "Application Search", to: "/policies/applications", brdRef: "8.3.1" },
           { label: "Policy Directory", to: "/policies/directory", brdRef: "8.3.1" },
-          { label: "Endorsements", to: "/policies/endorsements", badge: "SCD2", badgeTone: "blue" },
+          { label: "Endorsement", to: "/policies/endorsements", badge: "SCD2", badgeTone: "blue" },
           { label: "Renewals Management", to: "/policies/renewals" },
           { label: "Cancellations & Refunds", to: "/policies/cancellations" },
         ],
@@ -168,7 +178,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
   },
   {
     pillarId: "finance",
-    pillarTitle: "Finance & Distribution",
+    pillarTitle: "Finance & Accounting",
     subGroups: [
       {
         groupId: "finance-ledger",
@@ -186,14 +196,21 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
       },
       {
         groupId: "crm",
-        groupTitle: "CRM & Sales Hierarchy",
+        groupTitle: "CRM",
         icon: GroupIcons.crm,
         items: [
           { label: "Customer 360°", to: "/crm/customers" },
           { label: "PDPA Privacy Center", to: "/crm/pdpa", badge: "PDPA", badgeTone: "emerald" },
-          { label: "Broker Directory", to: "/crm/brokers" },
-          { label: "Agent Sales Force", to: "/crm/agents" },
-          { label: "Partner & Channels", to: "/crm/channels" },
+        ],
+      },
+      {
+        groupId: "sales",
+        groupTitle: "Sales Hierarchy",
+        icon: GroupIcons.sales,
+        items: [
+          { label: "Brokers", to: "/crm/brokers" },
+          { label: "Agents & Sales Force", to: "/crm/agents" },
+          { label: "Partners & Channels", to: "/crm/channels" },
         ],
       },
     ],
@@ -236,6 +253,18 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
     pillarTitle: "Platform & Foundation",
     subGroups: [
       {
+        groupId: "master-data",
+        groupTitle: "Master Data",
+        icon: GroupIcons.masterData,
+        items: [
+          { label: "Insurers", to: "/master-data/insurers" },
+          { label: "Vehicles", to: "/master-data/vehicles", brdRef: "8.1.2" },
+          { label: "Geography & Risk", to: "/master-data/geography" },
+          { label: "Occupancy & Risk", to: "/master-data/occupations" },
+          { label: "Network Providers", to: "/master-data/network-providers" },
+        ],
+      },
+      {
         groupId: "admin-workflow",
         groupTitle: "Workflow & Admin",
         icon: GroupIcons.admin,
@@ -244,21 +273,9 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Transition Rules Config", to: "/admin/transition-rules", brdRef: "8.8.2" },
           { label: "RBAC Access Control", to: "/admin/rbac", brdRef: "8.6.1" },
           { label: "Operational Settings", to: "/admin/settings" },
+          { label: "Broker SLA & Settlements", to: "/master-data/broker-settings", brdRef: "8.1.3" },
           { label: "Integration Hub", to: "/admin/integrations" },
           { label: "Document Templates", to: "/admin/templates" },
-        ],
-      },
-      {
-        groupId: "master-data",
-        groupTitle: "Master Data",
-        icon: GroupIcons.masterData,
-        items: [
-          { label: "Insurer", to: "/master-data/insurers" },
-          { label: "Broker SLA & Settlements", to: "/master-data/broker-settings", brdRef: "8.1.3" },
-          { label: "Vehicles", to: "/master-data/vehicles", brdRef: "8.1.2" },
-          { label: "Geography & Risk", to: "/master-data/geography" },
-          { label: "Occupancy & Risk", to: "/master-data/occupations" },
-          { label: "Network Providers", to: "/master-data/network-providers" },
         ],
       },
     ],

@@ -317,12 +317,6 @@ export const VersioningPublishingPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
-                Product Factory & Master Governance
-              </span>
-              <span className="text-xs text-zinc-600">SCD Type 2 Snapshot Immutability</span>
-            </div>
             <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1">Versioning &amp; Publishing Codes</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
               Manage product codes, rate snapshots, tariff timelines, and Maker-Checker deployment gates.

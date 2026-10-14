@@ -494,13 +494,6 @@ export const TransitionRulesConfigurator: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-4 shadow-sm shrink-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1">
-              <span>Backoffice Governance</span>
-              <span>/</span>
-              <span>Module 10 (Dynamic Workflow)</span>
-              <span>/</span>
-              <span className="text-blue-600">State Transition Rules</span>
-            </div>
             <h1 className="text-xl font-bold tracking-tight text-zinc-900 flex items-center gap-2">
               Transition Rules Configurator
               <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
