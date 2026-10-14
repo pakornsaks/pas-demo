@@ -129,7 +129,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "Dashboards",
         icon: GroupIcons.dashboards,
         items: [
-          { label: "Telesales Cockpit", to: "/dashboards/telesales", brdRef: "8.7.1" },
+          // { label: "Telesales Cockpit", to: "/dashboards/telesales", brdRef: "8.7.1" },
           {
             label: "Underwriter Workbench",
             to: "/dashboards/underwriter",
@@ -259,7 +259,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Broker SLA & Settlements", to: "/master-data/broker-settings", brdRef: "8.1.3" },
           { label: "Vehicle Hierarchy", to: "/master-data/vehicles", brdRef: "8.1.2" },
           { label: "Geography & Risk", to: "/master-data/geography" },
-          { label: "Occupancy & UW Classes", to: "/master-data/occupations" },
+          { label: "Occupancy & Risk", to: "/master-data/occupations" },
           { label: "Network Providers", to: "/master-data/network-providers" },
         ],
       },

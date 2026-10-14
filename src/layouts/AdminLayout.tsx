@@ -161,31 +161,8 @@ export function AdminLayout() {
         {/* Left Sidebar (Independent vertical scroll) */}
         {!isSidebarCollapsed && (
           <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 select-none h-full overflow-y-auto">
-            {/* Bound Session Context Card */}
-            <div className="p-3 m-2.5 rounded-xl bg-slate-50 border border-slate-200 shrink-0">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Bound Session Context
-                </span>
-                <button
-                  type="button"
-                  onClick={handleSwitchBroker}
-                  className="text-[11px] font-semibold text-blue-600 hover:text-blue-800 hover:underline"
-                >
-                  Change →
-                </button>
-              </div>
-              <div className="text-xs font-bold text-slate-900 mt-1 truncate">
-                {activeContext?.broker_name_en ?? "No Broker Selected"}
-              </div>
-              <div className="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-200/80 text-[11px] text-slate-500">
-                <span className="font-mono">{activeContext?.broker_code ?? "N/A"}</span>
-                <span className="truncate max-w-[110px]">{activeContext?.roles?.join(", ") || "Staff"}</span>
-              </div>
-            </div>
-
             {/* Navigation Tree */}
-            <div className="px-2.5 pb-6 space-y-4">
+            <div className="px-2.5 p-6 space-y-4">
               {SIDEBAR_NAVIGATION.map((pillar) => (
                 <div key={pillar.pillarId}>
                   <div className="px-2 mb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
