@@ -1,11 +1,9 @@
 import { useMemo, useState } from "react";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { SIDEBAR_NAVIGATION } from "../components/layout/Sidebar";
-import { usePasAuth } from "../features/auth/context/PasAuthContext";
+import TopNavigationBar from "./TopNavigationBar";
 
 export function AdminLayout() {
-  const { activeContext, clearBrokerContextForSwitch, logout } = usePasAuth();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -32,16 +30,6 @@ export function AdminLayout() {
     };
   }, [location.pathname]);
 
-  const handleSwitchBroker = () => {
-    clearBrokerContextForSwitch();
-    navigate("/select-broker", { replace: true });
-  };
-
-  const handleSignOut = () => {
-    logout();
-    navigate("/select-broker", { replace: true });
-  };
-
   const toggleSubGroup = (groupTitle: string) => {
     setCollapsedGroups((prev) => ({
       ...prev,
@@ -49,84 +37,12 @@ export function AdminLayout() {
     }));
   };
 
-  const hasPiiUnmaskScope = activeContext?.scopes?.includes("pii:unmask") ?? false;
-
   return (
     <div className="h-screen w-full overflow-hidden bg-slate-100 text-slate-800 flex flex-col">
       {/* =====================================================================
           TOP COMMAND BAR (Fixed 56px Height, Never Scrolls Off)
       ===================================================================== */}
-      <header className="h-14 shrink-0 bg-slate-900 text-white border-b border-slate-800 px-4 flex items-center justify-between z-30">
-        {/* Left: Sidebar Toggle & Brand */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={() => setIsSidebarCollapsed((prev) => !prev)}
-            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
-            title="Toggle Navigation Sidebar"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 font-bold text-xs flex items-center justify-center shadow-inner shrink-0">
-              PAS
-            </div>
-            <div className="hidden sm:block leading-tight">
-              <div className="text-xs font-bold tracking-tight">Unified Broker Platform</div>
-              <div className="text-[10px] text-slate-400">Policy Administration System</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: PDPA Status & Active Broker Switcher */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          <div
-            className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium border ${
-              hasPiiUnmaskScope
-                ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
-                : "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${hasPiiUnmaskScope ? "bg-amber-400" : "bg-emerald-400"}`} />
-            {hasPiiUnmaskScope ? "PII Unmask Authorized" : "PDPA Masked Mode"}
-          </div>
-
-          <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1">
-            <span
-              className={`w-2 h-2 rounded-full shrink-0 ${
-                activeContext?.is_global_view ? "bg-indigo-400" : "bg-emerald-400"
-              }`}
-            />
-            <div className="text-left hidden sm:block">
-              <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold leading-none">
-                {activeContext?.is_global_view ? "Global Scope" : "Active Broker"}
-              </div>
-              <div className="text-xs font-bold text-white leading-tight max-w-[170px] truncate">
-                {activeContext?.broker_code ?? "UNBOUND"} • {activeContext?.broker_name_en ?? "Select Broker"}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleSwitchBroker}
-              className="text-[11px] font-semibold bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded transition-colors shrink-0"
-            >
-              Switch Broker
-            </button>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleSignOut}
-            className="text-xs font-medium text-slate-300 hover:text-red-400 border border-slate-700 hover:border-red-500/40 px-2.5 py-1 rounded-lg transition-colors"
-          >
-            Sign Out
-          </button>
-        </div>
-      </header>
+      <TopNavigationBar onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)} />
 
       {/* =====================================================================
           BODY CONTAINER (Locked Flex-1 with min-h-0 so both panes scroll independently)
