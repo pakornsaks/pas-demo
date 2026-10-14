@@ -74,7 +74,6 @@ export default function App() {
           {/* Product Factory & Rules */}
           <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
           <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
-          <Route path="/products/benefits" element={<BenefitsBuilder />} />
           <Route path="/products/rules" element={<PricingUWRulesPage />} />
           <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
           <Route path="/products/promos" element={<CampaignPromoCodesPage />} />

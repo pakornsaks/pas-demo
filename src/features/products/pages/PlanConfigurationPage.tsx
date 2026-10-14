@@ -272,28 +272,6 @@ export const PlanTierConfigurationPage: React.FC = () => {
     );
   };
 
-  // Add new coverage row
-  const handleAddCoverageRow = () => {
-    const newCoverage: PlanBenefitVersion = {
-      benefit_id: `ben-${Date.now()}`,
-      benefit_code: "NEW_COVERAGE",
-      coverage_group: "Custom Add-on",
-      coverage_name: "Supplemental Medical / Bail Bond",
-      limit_type: "FIXED_AMOUNT",
-      limit_amount: 100000,
-    };
-    handleUpdateCurrentPlan({
-      coverages: [...currentPlan.coverages, newCoverage],
-    });
-  };
-
-  // Remove coverage row
-  const handleRemoveCoverage = (benefitId: string) => {
-    handleUpdateCurrentPlan({
-      coverages: currentPlan.coverages.filter((c) => c.benefit_id !== benefitId),
-    });
-  };
-
   // Maker-Checker Submission trigger (BRD 7.9)
   const handleSubmitMakerChecker = () => {
     setSaveSuccessNotice(
@@ -350,7 +328,7 @@ export const PlanTierConfigurationPage: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-blue-600 text-xs font-medium rounded-md text-white hover:bg-blue-700 shadow-sm transition-colors"
           >
             <ShieldCheck className="w-4 h-4" />
-            Submit For Approval (Maker-Checker)
+            Submit For Approval
           </button>
         </div>
       </div>

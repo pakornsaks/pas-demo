@@ -379,7 +379,7 @@ export const AgentWalletsPayoutsPage: React.FC = () => {
               }`}
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Stage Payout (Maker)</span>
+              <span>Stage Payout</span>
             </button>
 
             <button
