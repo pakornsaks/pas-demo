@@ -49,7 +49,7 @@ const MOCK_AVAILABLE_BROKERS: AvailableBrokersPayload = {
     email: "pakornsak@9singhabroker.co.th",
     roles: ["Super Admin", "Underwriter"],
   },
-  allow_global_view: true,
+  allow_global_view: false,
   available_brokers: [
     {
       broker_id: "111e8400-e29b-41d4-a716-446655440001",
@@ -119,17 +119,16 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({
 
   // Step 3: Execute POST /admin/auth/select-broker to mint the scoped JWT
   const handleSelectBroker = useCallback(
-    async (brokerId: string | null, isGlobalView: boolean = false) => {
-      const submissionKey = isGlobalView ? "GLOBAL_VIEW" : brokerId || "";
-      setIsSubmittingId(submissionKey);
+    async (brokerId: string) => {
+      setIsSubmittingId(brokerId);
       setErrorMessage(null);
 
       const correlationId = generateUuidV4();
       const idempotencyKey = generateUuidV4();
 
       const requestBody: SelectBrokerRequest = {
-        broker_id: isGlobalView ? null : brokerId,
-        is_global_view: isGlobalView,
+        broker_id: brokerId,
+        is_global_view: false,
       };
 
       try {
@@ -164,7 +163,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({
         // Fallback simulation for DEV/SIT environments when backend is offline
         if (payload) {
           const chosenBroker = payload.available_brokers.find((b) => b.broker_id === brokerId);
-          if (!isGlobalView && chosenBroker && chosenBroker.license_details.status !== "ACTIVE") {
+          if (chosenBroker && chosenBroker.license_details.status !== "ACTIVE") {
             setErrorMessage(
               `Cannot bind session to ${chosenBroker.broker_code}: OIC License (${chosenBroker.license_details.oic_license_no}) is ${chosenBroker.license_details.status}.`,
             );
@@ -175,10 +174,10 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({
           const simulatedResponse: SelectBrokerResponse = {
             access_token: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.simulated.${correlationId}`,
             active_context: {
-              broker_id: isGlobalView ? null : chosenBroker?.broker_id || null,
-              broker_code: isGlobalView ? "GLOBAL-ALL" : chosenBroker?.broker_code || "UNKNOWN",
-              broker_name_en: isGlobalView ? "All Brokers (Global Platform View)" : chosenBroker?.broker_name_en || "",
-              is_global_view: isGlobalView,
+              broker_id: chosenBroker?.broker_id || brokerId,
+              broker_code: chosenBroker?.broker_code || "UNKNOWN",
+              broker_name_en: chosenBroker?.broker_name_en || "",
+              is_global_view: false,
               roles: payload.admin_user.roles,
               scopes: ["application:review", "policy:read", "rule:override", "maker:request"],
             },
@@ -240,15 +239,14 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({
     };
   }, [preSessionToken]);
 
-  // Requirement BO-11: Single-Broker Auto-Route if user has exactly 1 active broker & no global view
+  // Requirement BO-11: Single-Broker Auto-Route if user has exactly 1 active broker
   useEffect(() => {
     if (
       payload &&
-      !payload.allow_global_view &&
       payload.available_brokers.length === 1 &&
       payload.available_brokers[0].license_details.status === "ACTIVE"
     ) {
-      handleSelectBroker(payload.available_brokers[0].broker_id, false);
+      handleSelectBroker(payload.available_brokers[0].broker_id);
     }
   }, [payload, handleSelectBroker]);
 
@@ -380,32 +378,6 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({
           </div>
         </div>
 
-        {/* Global Cross-Broker Banner (Restricted to Super Admin / Cross-Broker Underwriter) */}
-        {payload?.allow_global_view && (
-          <div className="mb-6 bg-gradient-to-r from-slate-900 to-blue-950 text-white rounded-xl p-5 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/30 border border-blue-400/40 rounded text-blue-200">
-                  Privileged RBAC Scope
-                </span>
-                <h3 className="text-base font-bold">All Brokers (Global Platform View)</h3>
-              </div>
-              <p className="text-xs text-slate-300 mt-1">
-                Aggregate underwriting queues, Maker-Checker approval inboxes, and OIC compliance reports across all
-                broker entities simultaneously.
-              </p>
-            </div>
-            <button
-              type="button"
-              disabled={isSubmittingId !== null}
-              onClick={() => handleSelectBroker(null, true)}
-              className="shrink-0 bg-white text-slate-900 hover:bg-blue-50 disabled:opacity-50 font-semibold text-xs px-4 py-2.5 rounded-lg shadow transition-colors"
-            >
-              {isSubmittingId === "GLOBAL_VIEW" ? "Binding Global Session..." : "Enter Global Workspace →"}
-            </button>
-          </div>
-        )}
-
         {/* Broker Entity Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredBrokers.map((broker: BrokerOption) => {
@@ -502,7 +474,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({
                   <button
                     type="button"
                     disabled={!isLicenseActive || isSubmittingId !== null}
-                    onClick={() => handleSelectBroker(broker.broker_id, false)}
+                    onClick={() => handleSelectBroker(broker.broker_id)}
                     className={`w-full py-2.5 px-4 rounded-lg text-xs font-bold transition-colors ${
                       isLicenseActive
                         ? "bg-blue-700 hover:bg-blue-800 text-white shadow-sm disabled:opacity-50"
