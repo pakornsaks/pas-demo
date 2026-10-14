@@ -229,7 +229,7 @@ export const NetworkProvidersDirectoryPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen text-slate-800">
+    <div className="min-h-screen text-slate-800">
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-200 gap-4">
         <div>

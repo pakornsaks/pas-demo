@@ -145,8 +145,9 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "Policy Lifecycle",
         icon: GroupIcons.policies,
         items: [
-          { label: "Application Search", to: "/policies/search", brdRef: "8.3.1" },
-          { label: "Policy Directory", to: "/policies/directory1", brdRef: "8.3.1" },
+          { label: "Quotation Search", to: "/policies/quotations", brdRef: "8.3.1" },
+          { label: "Application Search", to: "/policies/applications", brdRef: "8.3.1" },
+          { label: "Policy Directory", to: "/policies/directory", brdRef: "8.3.1" },
           { label: "Endorsements", to: "/policies/endorsements", badge: "SCD2", badgeTone: "blue" },
           { label: "Renewals Management", to: "/policies/renewals" },
           { label: "Cancellations & Refunds", to: "/policies/cancellations" },
@@ -158,9 +159,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         icon: GroupIcons.products,
         items: [
           { label: "Product Catalog", to: "/products/catalog", brdRef: "8.2.1" },
-          { label: "Plan & Tier Config", to: "/products/plans", brdRef: "8.2.2" },
           { label: "Pricing & UW Rules", to: "/products/rules", brdRef: "8.4.1" },
-          { label: "Dynamic Schema Builder", to: "/products/schemas", brdRef: "8.2.4" },
           { label: "Campaign & Promo Codes", to: "/products/promos", brdRef: "8.5.1" },
           { label: "Versioning & Publishing", to: "/products/versioning", brdRef: "8.2.5" },
         ],
@@ -190,7 +189,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "CRM & Sales Hierarchy",
         icon: GroupIcons.crm,
         items: [
-          { label: "Customer Directory", to: "/crm/customers" },
+          { label: "Customer 360°", to: "/crm/customers" },
           { label: "PDPA Privacy Center", to: "/crm/pdpa", badge: "PDPA", badgeTone: "emerald" },
           { label: "Broker Directory", to: "/crm/brokers" },
           { label: "Agent Sales Force", to: "/crm/agents" },
@@ -254,9 +253,9 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "Master Data",
         icon: GroupIcons.masterData,
         items: [
-          { label: "Insurer Directory", to: "/master-data/insurers" },
+          { label: "Insurer", to: "/master-data/insurers" },
           { label: "Broker SLA & Settlements", to: "/master-data/broker-settings", brdRef: "8.1.3" },
-          { label: "Vehicle Hierarchy", to: "/master-data/vehicles", brdRef: "8.1.2" },
+          { label: "Vehicles", to: "/master-data/vehicles", brdRef: "8.1.2" },
           { label: "Geography & Risk", to: "/master-data/geography" },
           { label: "Occupancy & Risk", to: "/master-data/occupations" },
           { label: "Network Providers", to: "/master-data/network-providers" },

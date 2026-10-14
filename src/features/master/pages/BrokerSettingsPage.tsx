@@ -296,11 +296,6 @@ export const BrokerSettingsPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-4 shadow-xs sticky top-0 z-20">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium tracking-wide uppercase">
-              <span>Master Data Management</span>
-              <span>/</span>
-              <span className="text-zinc-800 font-semibold">Broker Settings Trail</span>
-            </div>
             <div className="flex items-center gap-2 mt-1">
               <h1 className="text-xl font-bold text-zinc-900 tracking-tight">
                 Broker Operations & Settlement Audit Trail

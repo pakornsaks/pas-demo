@@ -390,7 +390,7 @@ export const VehicleHierarchyPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900 mt-1 flex items-center gap-2.5">
             <Car className="w-6 h-6 text-zinc-800" />
-            Vehicle Master Data
+            Vehicles
           </h1>
           <p className="text-xs text-zinc-500 mt-0.5">
             Manage the 3-level Redbook valuation catalog, OIC vehicle type mapping, and EV battery ratings.

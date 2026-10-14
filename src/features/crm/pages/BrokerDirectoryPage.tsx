@@ -393,10 +393,6 @@ export const BrokerDirectoryPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-8 py-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-blue-600 uppercase">
-              <ShieldCheck className="w-4 h-4" />
-              <span>OIC Regulatory Registry & Master Entities</span>
-            </div>
             <h1 className="text-2xl font-bold text-zinc-900 tracking-tight mt-0.5">Broker Directory & Licensing</h1>
             <p className="text-xs text-zinc-500 mt-1">
               Centralized repository for licensed corporate intermediaries, OIC license renewals, Authorized LOBs, and

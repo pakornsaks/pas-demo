@@ -461,10 +461,6 @@ export const CampaignPromoCodesPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 -mx-6 px-6 pt-6 pb-5 shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-600 mb-1">
-              <Sparkles className="w-4 h-4" />
-              Module 6.3 • Campaign & Discount Governance
-            </div>
             <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Campaigns & Promo Codes</h1>
             <p className="text-sm text-zinc-500 mt-1 max-w-2xl">
               Configure corporate discount codes (Type A marketing expenses), enforce redemption caps, and coordinate

@@ -36,6 +36,7 @@ import ApplicationSearchPage from "./features/policy/pages/ApplicationSearchPage
 import CancellationsRefundsPage from "./features/policy/pages/CancellationsRefundsPage";
 import PolicyDirectoryPage from "./features/policy/pages/PolicyDirectoryPage";
 import PolicyEndorsementPage from "./features/policy/pages/PolicyEndorsementPage";
+import QuotationSearchPage from "./features/policy/pages/QuotationSearchPage";
 import RenewalsManagementPage from "./features/policy/pages/RenewalsManagementPage";
 import CampaignPromoCodesPage from "./features/products/pages/CampaignPromoCodesPage";
 import DynamicSchemaBuilderPage from "./features/products/pages/DynamicSchemaBuilder";
@@ -128,8 +129,8 @@ export default function App() {
               <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
 
               {/* Policy Lifecycle */}
-              <Route path="/policies/search" element={<ApplicationSearchPage />} />
-              <Route path="/policies/directory1" element={<PolicyDirectoryPage />} />
+              <Route path="/policies/quotations" element={<QuotationSearchPage />} />
+              <Route path="/policies/applications" element={<ApplicationSearchPage />} />
               <Route path="/policies/directory" element={<PolicyDirectoryPage />} />
               <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
               <Route path="/policies/renewals" element={<RenewalsManagementPage />} />

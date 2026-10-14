@@ -123,7 +123,7 @@ export const OccupancyUWClassesPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen text-slate-800">
+    <div className="min-h-screen text-slate-800">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">Occupancy & Risk</h1>

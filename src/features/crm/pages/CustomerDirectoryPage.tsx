@@ -436,12 +436,7 @@ export const CustomerDirectoryPage: React.FC = () => {
       <div className="-mt-6 -mx-6 bg-white border-b border-zinc-200 px-6 py-4 mb-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium mb-1">
-              <span>MDM & Single Identity</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-zinc-900 font-semibold">Customer 360° Directory</span>
-            </div>
-            <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Customer 360° Master Directory</h1>
+            <h1 className="text-xl font-bold text-zinc-900 tracking-tight">Customer 360°</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
               Golden Record registry, SCD Type 2 demographic versioning, and PDPA-governed customer interaction
               portfolio.

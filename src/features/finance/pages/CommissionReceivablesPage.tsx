@@ -358,13 +358,6 @@ export const CommissionReceivablesPage: React.FC = () => {
       <div className="bg-white border-b border-zinc-200 px-6 py-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1">
-              <span>Finance & Operations</span>
-              <span>/</span>
-              <span>Ledger & Reconciliation</span>
-              <span>/</span>
-              <span className="text-blue-600">REP-04 Compliance</span>
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Commission Receivables Ledger</h1>
             <p className="text-sm text-zinc-500 mt-0.5">
               Track outstanding broker commission owed by insurers under Gross Settlement (Deduct After) and

@@ -225,16 +225,9 @@ export const InsurerCarrierDirectoryPage: React.FC = () => {
       <header className="bg-white border-b border-zinc-200 px-6 py-4 sticky top-0 z-20 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
-                Master Data Management
-              </span>
-              <span className="text-xs text-zinc-400">•</span>
-              <span className="text-xs text-zinc-500 font-medium">B2B Integration Layer</span>
-            </div>
             <h1 className="text-xl font-bold text-zinc-900 tracking-tight mt-1 flex items-center gap-2">
               <Building2 className="w-5 h-5 text-indigo-600" />
-              Insurer Directory
+              Insurer
             </h1>
           </div>
 
