@@ -7,7 +7,7 @@ import type {
   SelectBrokerRequest,
   SelectBrokerResponse,
   SystemRole,
-} from "../../types/brokerContext";
+} from "../../../types/brokerContext";
 
 // Helper to generate UUIDv4 for X-Correlation-ID & X-Idempotency-Key (SDD 3.1)
 const generateUuidV4 = (): string => {

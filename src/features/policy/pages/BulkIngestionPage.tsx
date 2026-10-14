@@ -310,11 +310,6 @@ export const BulkIngestionPage: React.FC = () => {
       {/* ==================================================================== */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1">
-            <span>Policy Lifecycle</span>
-            <span>/</span>
-            <span className="text-blue-600">Bulk Ingestion & Migration</span>
-          </div>
           <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Bulk Policy Ingestion & Migration</h1>
           <p className="text-sm text-zinc-500 mt-1">
             Ingest external legacy policies, trigger the JIT Renewal Bridge, and stage renewal applications via async

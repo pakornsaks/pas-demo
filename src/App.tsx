@@ -1,12 +1,13 @@
-import "./App.css";
-
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AccessControlPage from "./features/admin/pages/AccessControlPage";
 import DocumentTemplateRegistryPage from "./features/admin/pages/DocumentTemplateRegistryPage";
 import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
 import { OperationalSettingsPage } from "./features/admin/pages/OperationalSettingsPage";
 import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
 import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
+import { RequireBrokerContextGuard } from "./features/auth/components/RequireBrokerContextGuard";
+import { PasAuthProvider, usePasAuth } from "./features/auth/context/PasAuthContext";
+import BrokerSelectionPage from "./features/auth/pages/BrokerSelectionPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
 import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
 import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
@@ -48,92 +49,160 @@ import OICRegulatoryReportsPage from "./features/reports/pages/OICRegulatoryRepo
 import OperationalAccountingReportPage from "./features/reports/pages/OperationalAccountingReportPage";
 import TaxRemittanceReportsPage from "./features/reports/pages/TaxRemittanceReportsPage";
 import { AdminLayout } from "./layouts/AdminLayout";
+import type { SelectBrokerResponse, SystemRole } from "./types/brokerContext";
+
+/**
+ * Resolves the default landing route based on the user's primary RBAC role
+ * aligned with your existing route paths in App.tsx.
+ */
+const resolveDefaultDashboard = (roles: SystemRole[]): string => {
+  if (roles.includes("Underwriter")) return "/dashboards/underwriter";
+  if (roles.includes("Finance Officer")) return "/finance/ledger";
+  if (roles.includes("Approver (Manager)")) return "/governance/approvals";
+  return "/dashboards/telesales";
+};
+
+/**
+ * Connects BrokerSelectionPage to React Router and PasAuthContext.
+ * If a user already selected a broker, redirects them straight into the app.
+ */
+function BrokerSelectionRoute() {
+  const { preSessionToken, hasBoundBrokerContext, activeContext, bindBrokerSession, logout } = usePasAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Destination requested before being intercepted by RequireBrokerContextGuard
+  const intendedDestination = (location.state as { from?: { pathname?: string } })?.from?.pathname;
+
+  if (hasBoundBrokerContext && activeContext) {
+    const targetPath =
+      intendedDestination && intendedDestination !== "/select-broker"
+        ? intendedDestination
+        : resolveDefaultDashboard(activeContext.roles);
+    return <Navigate to={targetPath} replace />;
+  }
+
+  const handleContextSelected = (session: SelectBrokerResponse) => {
+    bindBrokerSession(session);
+    const targetPath =
+      intendedDestination && intendedDestination !== "/select-broker"
+        ? intendedDestination
+        : resolveDefaultDashboard(session.active_context.roles);
+    navigate(targetPath, { replace: true });
+  };
+
+  return (
+    <BrokerSelectionPage
+      preSessionToken={preSessionToken || "dev-pre-session-token"}
+      onContextSelected={handleContextSelected}
+      onLogout={() => {
+        logout();
+        navigate("/select-broker", { replace: true });
+      }}
+    />
+  );
+}
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AdminLayout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
+    <PasAuthProvider>
+      <BrowserRouter>
+        <Routes>
           {/* =====================================================================
-              Operations & Execution
+              Pre-Application Gate: Broker Selection Portal (Outside AdminLayout)
           ===================================================================== */}
-          {/* Dashboards */}
-          <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
-          <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
-          <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
-
-          {/* Policy Lifecycle */}
-          <Route path="/policies/search" element={<ApplicationSearchPage />} />
-          <Route path="/policies/directory1" element={<PolicyDirectoryPage />} />
-          <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
-          <Route path="/policies/renewals" element={<RenewalsManagementPage />} />
-          <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
-          <Route path="/policies/bulk-ingestion" element={<BulkIngestionPage />} />
-
-          {/* Product Factory & Rules */}
-          <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
-          <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
-          <Route path="/products/rules" element={<PricingUWRulesPage />} />
-          <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
-          <Route path="/products/promos" element={<CampaignPromoCodesPage />} />
-          <Route path="/products/versioning" element={<VersioningPublishingPage />} />
+          <Route path="/select-broker" element={<BrokerSelectionRoute />} />
 
           {/* =====================================================================
-              Finance & Distribution
+              Protected Application Routes (Requires Bound Broker Context)
           ===================================================================== */}
-          {/* Financial Ledger */}
-          <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
-          <Route path="/finance/bordereau" element={<InsurerSettlementsPage />} />
-          <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
-          <Route path="/finance/wallets" element={<AgentWalletsPayoutsPage />} />
-          <Route path="/finance/reconciliation" element={<SuspenseReconciliationPage />} />
-          <Route path="/finance/tax-documents" element={<TaxDocumentCenterPage />} />
-          <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />
+          <Route element={<RequireBrokerContextGuard />}>
+            <Route path="/" element={<AdminLayout />}>
+              <Route index element={<Navigate to="/dashboards/telesales" replace />} />
 
-          {/* CRM & Sales Hierarchy */}
-          <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
-          <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
-          <Route path="/crm/brokers" element={<BrokerDirectoryPage />} />
-          <Route path="/crm/agents" element={<AgentSalesForceDirectoryPage />} />
-          <Route path="/crm/channels" element={<PartnerChannelHierarchyPage />} />
+              {/* =================================================================
+                  Operations & Execution
+              ================================================================= */}
+              {/* Dashboards */}
+              <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
+              <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
+              <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
 
-          {/* =====================================================================
-              Compliance & Governance
-          ===================================================================== */}
-          {/* Governance & Approvals */}
-          <Route path="/governance/approvals" element={<ApprovalInboxPage />} />
-          <Route path="/governance/diff-viewer" element={<DiffViewerPage />} />
-          <Route path="/governance/audit-trail" element={<AuditTrailPage />} />
+              {/* Policy Lifecycle */}
+              <Route path="/policies/search" element={<ApplicationSearchPage />} />
+              <Route path="/policies/directory1" element={<PolicyDirectoryPage />} />
+              <Route path="/policies/directory" element={<PolicyDirectoryPage />} />
+              <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
+              <Route path="/policies/renewals" element={<RenewalsManagementPage />} />
+              <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
+              <Route path="/policies/bulk-ingestion" element={<BulkIngestionPage />} />
 
-          {/* Reports & Compliance */}
-          <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
-          <Route path="/reports/tax" element={<TaxRemittanceReportsPage />} />
-          <Route path="/reports/accounting" element={<OperationalAccountingReportPage />} />
-          <Route path="/reports/analytics" element={<AnalyticsPerformancePage />} />
+              {/* Product Factory & Rules */}
+              <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
+              <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
+              <Route path="/products/rules" element={<PricingUWRulesPage />} />
+              <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
+              <Route path="/products/promos" element={<CampaignPromoCodesPage />} />
+              <Route path="/products/versioning" element={<VersioningPublishingPage />} />
 
-          {/* =====================================================================
-              Platform & Foundation
-          ===================================================================== */}
-          {/* Workflow & Administration */}
-          <Route path="/admin/workflows" element={<WorkflowVisualizerPage />} />
-          <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
-          <Route path="/admin/rbac" element={<AccessControlPage />} />
-          <Route path="/admin/settings" element={<OperationalSettingsPage />} />
-          <Route path="/admin/integrations" element={<IntegrationHubPage />} />
-          <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
+              {/* =================================================================
+                  Finance & Distribution
+              ================================================================= */}
+              {/* Financial Ledger */}
+              <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
+              <Route path="/finance/bordereau" element={<InsurerSettlementsPage />} />
+              <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
+              <Route path="/finance/wallets" element={<AgentWalletsPayoutsPage />} />
+              <Route path="/finance/reconciliation" element={<SuspenseReconciliationPage />} />
+              <Route path="/finance/tax-documents" element={<TaxDocumentCenterPage />} />
+              <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />
 
-          {/* Master Data Management */}
-          <Route path="/master-data/insurers" element={<InsurerCarrierDirectoryPage />} />
-          <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
-          <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
-          <Route path="/master-data/geography" element={<GeographyPage />} />
-          <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
-          <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
+              {/* CRM & Sales Hierarchy */}
+              <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
+              <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
+              <Route path="/crm/brokers" element={<BrokerDirectoryPage />} />
+              <Route path="/crm/agents" element={<AgentSalesForceDirectoryPage />} />
+              <Route path="/crm/channels" element={<PartnerChannelHierarchyPage />} />
 
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+              {/* =================================================================
+                  Compliance & Governance
+              ================================================================= */}
+              {/* Governance & Approvals */}
+              <Route path="/governance/approvals" element={<ApprovalInboxPage />} />
+              <Route path="/governance/diff-viewer" element={<DiffViewerPage />} />
+              <Route path="/governance/audit-trail" element={<AuditTrailPage />} />
+
+              {/* Reports & Compliance */}
+              <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
+              <Route path="/reports/tax" element={<TaxRemittanceReportsPage />} />
+              <Route path="/reports/accounting" element={<OperationalAccountingReportPage />} />
+              <Route path="/reports/analytics" element={<AnalyticsPerformancePage />} />
+
+              {/* =================================================================
+                  Platform & Foundation
+              ================================================================= */}
+              {/* Workflow & Administration */}
+              <Route path="/admin/workflows" element={<WorkflowVisualizerPage />} />
+              <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
+              <Route path="/admin/rbac" element={<AccessControlPage />} />
+              <Route path="/admin/settings" element={<OperationalSettingsPage />} />
+              <Route path="/admin/integrations" element={<IntegrationHubPage />} />
+              <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
+
+              {/* Master Data Management */}
+              <Route path="/master-data/insurers" element={<InsurerCarrierDirectoryPage />} />
+              <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
+              <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
+              <Route path="/master-data/geography" element={<GeographyPage />} />
+              <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
+              <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
+
+              {/* Fallback inside authenticated layout */}
+              <Route path="*" element={<Navigate to="/dashboards/telesales" replace />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </PasAuthProvider>
   );
 }
