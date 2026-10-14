@@ -423,7 +423,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggleC
   // EXPANDED FULL SIDEBAR MODE
   // ===========================================================================
   return (
-    <aside className="w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 select-none h-[calc(100vh-4rem)] sticky top-16">
+    <aside className="w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 select-none sticky top-16">
       {/* 1. Quick Menu Filter Search Box */}
       <div className="px-3 pt-3 pb-2">
         <div className="relative">

@@ -5,9 +5,7 @@ import Sidebar, { SIDEBAR_NAVIGATION } from "../components/layout/Sidebar";
 
 export function AdminLayout() {
   const location = useLocation();
-
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [_, setCollapsedGroups] = useState<Record<string, boolean>>({});
 
   // Resolve active breadcrumb
   const activeRouteMeta = useMemo(() => {
