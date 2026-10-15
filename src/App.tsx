@@ -7,9 +7,9 @@ import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRu
 import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
 import { PasAuthProvider } from "./features/auth/context/PasAuthContext";
 import BrokerSelectionPage from "./features/auth/pages/BrokerSelectionPage";
+import CommisionTierPage from "./features/crm/pages/AgentCommissionTierPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
 import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
-import CommisionTierPage from "./features/crm/pages/CommissionTierAgentPage";
 import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
 import DataPrivacyCenterPage from "./features/crm/pages/DataPrivacyCenterPage";
 import PartnerChannelHierarchyPage from "./features/crm/pages/PartnerChannelHierarchyPage";

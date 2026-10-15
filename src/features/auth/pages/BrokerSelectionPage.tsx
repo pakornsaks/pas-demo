@@ -6,7 +6,6 @@ import {
   ChevronRight,
   Clock,
   ExternalLink,
-  MessageSquare,
   MoreVertical,
   Plus,
   Search,
@@ -310,12 +309,12 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
 
           {/* Right Header Controls */}
           <div className="flex items-center space-x-4">
-            <button
+            {/* <button
               title="Support & Messages"
               className="p-2 text-slate-500 hover:text-slate-800 hover:bg-gray-100 rounded-full transition"
             >
               <MessageSquare className="w-5 h-5" />
-            </button>
+            </button> */}
             <button
               title="User Account"
               className="flex items-center space-x-2 p-1.5 rounded-full text-slate-700 hover:bg-gray-100 transition"
@@ -328,7 +327,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
         </div>
 
         {/* Navigation Tabs Bar */}
-        <div className="max-w-[1440px] mx-auto px-6 flex space-x-8 text-sm font-medium">
+        {/* <div className="max-w-[1440px] mx-auto px-6 flex space-x-8 text-sm font-medium">
           <button className="py-3 border-b-2 border-blue-600 text-blue-600 font-semibold">Brokers</button>
           <button className="py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition flex items-center">
             Analytics
@@ -337,7 +336,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
           <button className="py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition">
             Admin
           </button>
-        </div>
+        </div> */}
       </header>
 
       {/* ==================================================================== */}
@@ -548,10 +547,6 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
                               <p className="text-xs text-slate-500 font-light">{broker.broker_name_th}</p>
 
                               <div className="flex items-center text-xs text-slate-400 space-x-2 pt-0.5">
-                                <span className="font-mono text-[11px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
-                                  {broker.broker_code}
-                                </span>
-                                <span>•</span>
                                 <span>Lic: {broker.license_details.oic_license_no}</span>
                                 <span>•</span>
                                 <span>

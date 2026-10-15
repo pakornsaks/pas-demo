@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { usePasAuth } from "../../features/auth/context/PasAuthContext";
@@ -80,11 +81,12 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onToggleSidebar }) => {
 
         {/* Sign Out Action */}
         <button
-          type="button"
-          onClick={handleSignOut}
-          className="text-xs font-medium text-slate-300 hover:text-red-400 border border-slate-700 hover:border-red-500/40 px-2.5 py-1 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          title="User Account"
+          className="flex items-center space-x-2 p-1.5 rounded-full text-slate-700 hover:bg-gray-100 transition"
         >
-          Sign Out
+          <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
+            <User className="w-5 h-5" />
+          </div>
         </button>
       </div>
     </header>

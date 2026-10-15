@@ -260,7 +260,7 @@ const getTierBadge = (tier: TierLevel) => {
   }
 };
 
-function CommissionTierAgentPage() {
+function AgentCommissionTierPage() {
   const [activeTab, setActiveTab] = useState<"tiers" | "agents" | "approvals">("agents");
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState<string>("ALL");
@@ -1055,4 +1055,4 @@ function CommissionTierAgentPage() {
   );
 }
 
-export default CommissionTierAgentPage;
+export default AgentCommissionTierPage;

@@ -582,7 +582,7 @@ export const UnderwriterWorkbenchPage: React.FC = () => {
                 <th className="py-3 px-4">Insurer & Channel</th>
                 <th className="py-3 px-4">Referral Reason</th>
                 <th className="py-3 px-4">SLA Countdown</th>
-                <th className="py-3 px-4">Assigned To</th>
+                {/* <th className="py-3 px-4">Assigned To</th> */}
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -648,7 +648,7 @@ export const UnderwriterWorkbenchPage: React.FC = () => {
                       {getSlaBadge(app.sla_alert_level, app.hours_elapsed)}
                     </td>
 
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    {/* <td className="py-3 px-4 whitespace-nowrap">
                       {app.assigned_to ? (
                         <span className="inline-flex items-center gap-1 text-indigo-700 font-medium bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
                           <UserCheck className="w-3 h-3" />
@@ -662,7 +662,7 @@ export const UnderwriterWorkbenchPage: React.FC = () => {
                           Claim Ticket
                         </button>
                       )}
-                    </td>
+                    </td> */}
 
                     <td className="py-3 px-4 text-right whitespace-nowrap">
                       <button

@@ -157,7 +157,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Quotation Search", to: "/policies/quotations", brdRef: "8.3.1" },
           { label: "Application Search", to: "/policies/applications", brdRef: "8.3.1" },
           { label: "Policy Directory", to: "/policies/directory", brdRef: "8.3.1" },
-          { label: "Endorsement", to: "/policies/endorsements", badge: "SCD2", badgeTone: "blue" },
+          { label: "Endorsement", to: "/policies/endorsements" },
           { label: "Renewals Management", to: "/policies/renewals" },
           { label: "Cancellations & Refunds", to: "/policies/cancellations" },
         ],
@@ -199,6 +199,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         icon: GroupIcons.crm,
         items: [
           { label: "Customer 360°", to: "/crm/customers" },
+          { label: "Agents & Sales Force", to: "/sales/agents" },
           { label: "PDPA Privacy Center", to: "/crm/pdpa", badge: "PDPA", badgeTone: "emerald" },
         ],
       },
@@ -208,9 +209,8 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         icon: GroupIcons.sales,
         items: [
           { label: "Brokers", to: "/sales/brokers" },
-          { label: "Agents & Sales Force", to: "/sales/agents" },
           { label: "Partners & Channels", to: "/sales/channels" },
-          { label: "Commission Tier", to: "/sales/commission-tier" },
+          { label: "Agent Tier", to: "/sales/commission-tier" },
         ],
       },
     ],
@@ -227,8 +227,6 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           {
             label: "Approval Inbox",
             to: "/governance/approvals",
-            badge: "Checker",
-            badgeTone: "rose",
             brdRef: "8.9.1",
           },
           { label: "Audit Trail & Compliance", to: "/governance/audit-trail" },
