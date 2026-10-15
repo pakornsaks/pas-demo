@@ -184,7 +184,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
         groupTitle: "Financial Ledger",
         icon: GroupIcons.finance,
         items: [
-          { label: "Transactions Ledger", to: "/finance/ledger", brdRef: "8.7.3" },
+          { label: "Transactions & General", to: "/finance/transactions", brdRef: "8.7.3" },
           { label: "Insurer Settlements", to: "/finance/insurer-settlements" },
           { label: "Commission Receivables", to: "/finance/commission-receivables" },
           { label: "Agent Commission", to: "/finance/agent-commission" },
@@ -231,8 +231,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
             badgeTone: "rose",
             brdRef: "8.9.1",
           },
-          { label: "Visual Diff Viewer", to: "/governance/diff-viewer", brdRef: "8.9.2" },
-          { label: "Immutable Audit Trail", to: "/governance/audit-trail" },
+          { label: "Audit Trail & Compliance", to: "/governance/audit-trail" },
         ],
       },
       {
