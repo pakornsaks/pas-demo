@@ -1,11 +1,11 @@
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AccessControlPage from "./features/admin/pages/AccessControlPage";
 import DocumentTemplateRegistryPage from "./features/admin/pages/DocumentTemplateRegistryPage";
 import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
 import { OperationalSettingsPage } from "./features/admin/pages/OperationalSettingsPage";
 import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
 import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
-import { PasAuthProvider, usePasAuth } from "./features/auth/context/PasAuthContext";
+import { PasAuthProvider } from "./features/auth/context/PasAuthContext";
 import BrokerSelectionPage from "./features/auth/pages/BrokerSelectionPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
 import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
@@ -14,6 +14,7 @@ import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
 import DataPrivacyCenterPage from "./features/crm/pages/DataPrivacyCenterPage";
 import PartnerChannelHierarchyPage from "./features/crm/pages/PartnerChannelHierarchyPage";
 import CollectionInstallmentsPage from "./features/dashboards/pages/CollectionInstallmentsPage";
+import HomePage from "./features/dashboards/pages/HomePage";
 import TelesalesCockpitPage from "./features/dashboards/pages/TelesalesCockpitPage";
 import UnderwriterWorkbenchPage from "./features/dashboards/pages/UnderwriterWorkbenchPage";
 import AgentWalletsPayoutsPage from "./features/finance/pages/AgentWalletsPayoutsPage";
@@ -49,59 +50,6 @@ import OICRegulatoryReportsPage from "./features/reports/pages/OICRegulatoryRepo
 import OperationalAccountingReportPage from "./features/reports/pages/OperationalAccountingReportPage";
 import TaxRemittanceReportsPage from "./features/reports/pages/TaxRemittanceReportsPage";
 import { AdminLayout } from "./layouts/AdminLayout";
-import type { SelectBrokerResponse, SystemRole } from "./types/brokerContext";
-
-/**
- * Resolves the default landing route based on the user's primary RBAC role
- * aligned with your existing route paths in App.tsx.
- */
-const resolveDefaultDashboard = (roles: SystemRole[]): string => {
-  if (roles.includes("Underwriter")) return "/dashboards/underwriter";
-  if (roles.includes("Finance Officer")) return "/finance/ledger";
-  if (roles.includes("Approver (Manager)")) return "/governance/approvals";
-  return "/dashboards/telesales";
-};
-
-/**
- * Connects BrokerSelectionPage to React Router and PasAuthContext.
- * If a user already selected a broker, redirects them straight into the app.
- */
-function BrokerSelectionRoute() {
-  const { preSessionToken, hasBoundBrokerContext, activeContext, bindBrokerSession, logout } = usePasAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Destination requested before being intercepted by RequireBrokerContextGuard
-  const intendedDestination = (location.state as { from?: { pathname?: string } })?.from?.pathname;
-
-  if (hasBoundBrokerContext && activeContext) {
-    const targetPath =
-      intendedDestination && intendedDestination !== "/select-broker"
-        ? intendedDestination
-        : resolveDefaultDashboard(activeContext.roles);
-    return <Navigate to={targetPath} replace />;
-  }
-
-  const handleContextSelected = (session: SelectBrokerResponse) => {
-    bindBrokerSession(session);
-    const targetPath =
-      intendedDestination && intendedDestination !== "/select-broker"
-        ? intendedDestination
-        : resolveDefaultDashboard(session.active_context.roles);
-    navigate(targetPath, { replace: true });
-  };
-
-  return (
-    <BrokerSelectionPage
-      preSessionToken={preSessionToken || "dev-pre-session-token"}
-      onContextSelected={handleContextSelected}
-      onLogout={() => {
-        logout();
-        navigate("/select-broker", { replace: true });
-      }}
-    />
-  );
-}
 
 export default function App() {
   return (
@@ -111,13 +59,13 @@ export default function App() {
           {/* =====================================================================
               Pre-Application Gate: Broker Selection Portal (Outside AdminLayout)
           ===================================================================== */}
-          <Route path="/select-broker" element={<BrokerSelectionRoute />} />
+          <Route path="/select-broker" element={<BrokerSelectionPage />} />
 
           {/* =====================================================================
               Protected Application Routes (Requires Bound Broker Context)
           ===================================================================== */}
           <Route path="/" element={<AdminLayout />}>
-            <Route index element={<Navigate to="/dashboards/telesales" replace />} />
+            <Route index element={<HomePage />} />
 
             {/* =================================================================
                   Operations & Execution
@@ -147,7 +95,7 @@ export default function App() {
                   Finance & Accounting
               ================================================================= */}
             {/* Financial Ledger */}
-            <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
+            <Route path="/finance/transactions" element={<TransactionsLedgerPage />} />
             <Route path="/finance/insurer-settlements" element={<InsurerSettlementsPage />} />
             <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
             <Route path="/finance/agent-commission" element={<AgentWalletsPayoutsPage />} />
@@ -199,7 +147,7 @@ export default function App() {
             <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
 
             {/* Fallback inside authenticated layout */}
-            <Route path="*" element={<Navigate to="/dashboards/telesales" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
       </BrowserRouter>

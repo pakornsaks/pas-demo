@@ -1,7 +1,10 @@
 import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { SIDEBAR_NAVIGATION } from "./Sidebar";
 
 export const Breadcrumb: React.FC = () => {
+  const location = useLocation();
+
   // Resolve active breadcrumb
   const activeRouteMeta = useMemo(() => {
     for (const pillar of SIDEBAR_NAVIGATION) {
