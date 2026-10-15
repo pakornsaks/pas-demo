@@ -13,6 +13,7 @@ import {
   XCircle,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // ============================================================================
 // Types & Schema Alignment (BRD 6.7, SDD 4.7 & 4.8)
@@ -264,6 +265,8 @@ const EntityBadge: React.FC<{ entity: EntityType | string }> = ({ entity }) => {
 // ============================================================================
 
 export const AuditTrailPage: React.FC = () => {
+  const navigate = useNavigate();
+
   // Navigation / Tabs
   const [activeTab, setActiveTab] = useState<"system_audit" | "maker_checker">("system_audit");
 
@@ -273,14 +276,25 @@ export const AuditTrailPage: React.FC = () => {
   const [selectedAction, setSelectedAction] = useState<string>("ALL");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Inspector Modal State
-  const [selectedAuditLog, setSelectedAuditLog] = useState<AuditLogItem | null>(null);
+  // Inspector Modal State (Retained for Maker-Checker decisions)
   const [selectedApprovalLog, setSelectedApprovalLog] = useState<ApprovalLogItem | null>(null);
 
   // Handlers
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => setIsRefreshing(false), 600);
+  };
+
+  const handleNavigateToDiffViewer = (log: AuditLogItem) => {
+    const searchParams = new URLSearchParams({
+      log_id: log.log_id,
+      entity_type: log.entity_type,
+      entity_id: log.entity_id,
+    });
+
+    navigate(`/governance/diff-viewer?${searchParams.toString()}`, {
+      state: { auditLog: log },
+    });
   };
 
   // Filtered System Audit Logs
@@ -300,11 +314,8 @@ export const AuditTrailPage: React.FC = () => {
   }, [searchTerm, selectedEntity, selectedAction]);
 
   return (
-    // Top negative margins cleanly cancel parent's padding for a seamless flush header
     <div className="-mt-6 -mx-6 min-h-full bg-zinc-50 flex flex-col antialiased">
-      {/* =====================================================================
-          1. Header Banner & Context Navigation (Flush to top)
-         ===================================================================== */}
+      {/* 1. Header Banner & Context Navigation */}
       <div className="bg-white border-b border-zinc-200 px-6 py-4 shrink-0 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -337,9 +348,7 @@ export const AuditTrailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* ===================================================================
-            2. Tab Switcher
-           =================================================================== */}
+        {/* 2. Tab Switcher */}
         <div className="flex border-b border-zinc-200 mt-6 -mb-4 space-x-8">
           <button
             onClick={() => setActiveTab("system_audit")}
@@ -366,13 +375,10 @@ export const AuditTrailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* =====================================================================
-          3. Sub-Header Filter Bar
-         ===================================================================== */}
+      {/* 3. Sub-Header Filter Bar */}
       <div className="p-6 pb-2">
         <div className="bg-white border border-zinc-200 rounded-lg p-4 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            {/* Search Input */}
             <div className="relative md:col-span-2">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input
@@ -384,7 +390,6 @@ export const AuditTrailPage: React.FC = () => {
               />
             </div>
 
-            {/* Entity Selector */}
             <div>
               <select
                 value={selectedEntity}
@@ -400,7 +405,6 @@ export const AuditTrailPage: React.FC = () => {
               </select>
             </div>
 
-            {/* Action Selector */}
             <div>
               <select
                 value={selectedAction}
@@ -433,13 +437,10 @@ export const AuditTrailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* =====================================================================
-          4. Main Content Table
-         ===================================================================== */}
+      {/* 4. Main Content Table */}
       <div className="px-6 pb-6 flex-1">
         <div className="bg-white border border-zinc-200 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
           {activeTab === "system_audit" ? (
-            /* System Audit Log Table */
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm border-collapse">
                 <thead>
@@ -493,7 +494,7 @@ export const AuditTrailPage: React.FC = () => {
                         <td className="py-3 px-4 font-mono text-xs text-zinc-600">{log.ip_address}</td>
                         <td className="py-3 px-4 text-right">
                           <button
-                            onClick={() => setSelectedAuditLog(log)}
+                            onClick={() => handleNavigateToDiffViewer(log)}
                             className="inline-flex items-center px-2.5 py-1 text-xs font-medium text-zinc-700 bg-white border border-zinc-300 rounded shadow-sm hover:bg-zinc-100 transition"
                           >
                             <Eye className="w-3 h-3 mr-1 text-zinc-500" />
@@ -507,7 +508,6 @@ export const AuditTrailPage: React.FC = () => {
               </table>
             </div>
           ) : (
-            /* Maker-Checker Decisions Table */
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm border-collapse">
                 <thead>
@@ -606,126 +606,7 @@ export const AuditTrailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* =====================================================================
-          5. Visual Diff & PII Inspector Modal (Old vs. New Snapshot)
-         ===================================================================== */}
-      {selectedAuditLog && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full border border-zinc-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-semibold text-zinc-500">AUDIT LOG INSPECTOR</span>
-                  <ActionBadge action={selectedAuditLog.action} />
-                </div>
-                <h2 className="text-lg font-bold text-zinc-900 mt-0.5">Log Entry: {selectedAuditLog.log_id}</h2>
-              </div>
-              <button
-                onClick={() => setSelectedAuditLog(null)}
-                className="text-zinc-400 hover:text-zinc-600 p-1 rounded-md transition"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-              {/* Metadata Overview Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-zinc-50 border border-zinc-200 rounded-lg text-xs">
-                <div>
-                  <div className="text-zinc-500 font-medium">Entity Type</div>
-                  <div className="font-mono font-semibold text-zinc-900 mt-0.5">{selectedAuditLog.entity_type}</div>
-                </div>
-                <div>
-                  <div className="text-zinc-500 font-medium">Entity UUID</div>
-                  <div className="font-mono text-zinc-700 truncate mt-0.5" title={selectedAuditLog.entity_id}>
-                    {selectedAuditLog.entity_id}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-zinc-500 font-medium">Actor</div>
-                  <div className="text-zinc-900 font-medium mt-0.5">{selectedAuditLog.actor_name}</div>
-                  <div className="text-zinc-500 text-[10px]">{selectedAuditLog.actor_role}</div>
-                </div>
-                <div>
-                  <div className="text-zinc-500 font-medium">Network Origin</div>
-                  <div className="font-mono text-zinc-700 mt-0.5">{selectedAuditLog.ip_address}</div>
-                  <div className="text-zinc-500 text-[10px]">{selectedAuditLog.timestamp}</div>
-                </div>
-              </div>
-
-              {/* Special Alert for PDPA Unmasking Event */}
-              {selectedAuditLog.action === "UNMASK" && selectedAuditLog.metadata?.justification_reason && (
-                <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-xs font-bold text-amber-800 uppercase tracking-wider">
-                    <Lock className="w-3.5 h-3.5" />
-                    PDPA Statutory Compliance Audit Entry
-                  </div>
-                  <p className="text-sm text-amber-900 mt-1 font-medium">
-                    {selectedAuditLog.metadata.justification_reason}
-                  </p>
-                  <p className="text-xs text-amber-700 mt-2">
-                    Note: Unmasking events are cryptographically recorded in accordance with Thai PDPA regulations and
-                    OIC guidelines.
-                  </p>
-                </div>
-              )}
-
-              {/* Side-by-Side Diff Viewer */}
-              <div>
-                <h3 className="text-xs font-bold text-zinc-700 uppercase tracking-wider mb-2">
-                  Payload State Comparison (Snapshot Versioning SCD Type 2)[cite: 2]
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Left: Old Values */}
-                  <div className="border border-red-200 rounded-lg overflow-hidden bg-red-50/20">
-                    <div className="bg-red-50 px-3 py-1.5 border-b border-red-200 text-xs font-semibold text-red-700 flex items-center justify-between">
-                      <span>BEFORE STATE (Old Values)</span>
-                      {selectedAuditLog.old_values === null && (
-                        <span className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded">
-                          NULL (Insertion)
-                        </span>
-                      )}
-                    </div>
-                    <pre className="p-3 text-xs font-mono text-zinc-800 overflow-x-auto whitespace-pre-wrap">
-                      {selectedAuditLog.old_values
-                        ? JSON.stringify(selectedAuditLog.old_values, null, 2)
-                        : "// No previous record (New row created)"}
-                    </pre>
-                  </div>
-
-                  {/* Right: New Values */}
-                  <div className="border border-emerald-200 rounded-lg overflow-hidden bg-emerald-50/20">
-                    <div className="bg-emerald-50 px-3 py-1.5 border-b border-emerald-200 text-xs font-semibold text-emerald-700 flex items-center justify-between">
-                      <span>AFTER STATE (New Values)</span>
-                      <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">APPLIED</span>
-                    </div>
-                    <pre className="p-3 text-xs font-mono text-zinc-800 overflow-x-auto whitespace-pre-wrap">
-                      {JSON.stringify(selectedAuditLog.new_values, null, 2)}
-                    </pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-6 py-3 bg-zinc-50 border-t border-zinc-200 flex justify-end">
-              <button
-                onClick={() => setSelectedAuditLog(null)}
-                className="px-4 py-2 border border-zinc-300 rounded text-xs font-medium text-zinc-700 bg-white hover:bg-zinc-100 transition"
-              >
-                Close Inspector
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================================
-          6. Maker-Checker Inspection Modal
-         ===================================================================== */}
+      {/* 5. Maker-Checker Inspection Modal (Decision & Sign-off Details) */}
       {selectedApprovalLog && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full border border-zinc-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150">

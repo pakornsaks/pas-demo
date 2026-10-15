@@ -13,6 +13,7 @@ import {
   User,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // ============================================================================
 // Data Contracts & Types (Aligned with SDD Section 4.3 & BRD Section 6.2)
@@ -155,6 +156,7 @@ interface BrokerSelectionPageProps {
 }
 
 export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ currentBrokerId, onCreateBroker }) => {
+  const navigate = useNavigate();
   // --------------------------------------------------------------------------
   // Component State
   // --------------------------------------------------------------------------
@@ -234,9 +236,8 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
     }
   };
 
-  // Step 3: Execute POST /admin/auth/select-broker to mint the scoped JWT
-  const handleSelectBroker = () => {
-    window.location.href = "/dashboards/";
+  const handleSelectBroker = async (_broker: BrokerRecord) => {
+    navigate("/reports/analytics");
   };
 
   // Helper: Status Pill
@@ -267,7 +268,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-slate-800 font-sans antialiased">
+    <div className="min-h-screen text-slate-800 font-sans antialiased">
       {/* ==================================================================== */}
       {/* 1. TOP NAVIGATION BAR (Agoda Partner Portal Style)                   */}
       {/* ==================================================================== */}
@@ -327,18 +328,14 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
         </div>
 
         {/* Navigation Tabs Bar */}
-        <div className="max-w-[1440px] mx-auto px-6 flex space-x-8 text-sm font-medium border-t border-gray-100">
+        <div className="max-w-[1440px] mx-auto px-6 flex space-x-8 text-sm font-medium">
           <button className="py-3 border-b-2 border-blue-600 text-blue-600 font-semibold">Brokers</button>
-          <button className="py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition flex items-center">
-            Settlement Ledgers
-            <span className="ml-1.5 w-2 h-2 rounded-full bg-red-500 inline-block" />
-          </button>
           <button className="py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition flex items-center">
             Analytics
             <span className="ml-1.5 w-2 h-2 rounded-full bg-red-500 inline-block" />
           </button>
           <button className="py-3 border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition">
-            Payout Accounts
+            Admin
           </button>
         </div>
       </header>
@@ -610,7 +607,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
                           <div className="inline-flex items-center space-x-2">
                             <button
                               type="button"
-                              onClick={handleSelectBroker}
+                              onClick={() => handleSelectBroker(broker)}
                               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                                 isSelected
                                   ? "bg-emerald-600 text-white hover:bg-emerald-700"
@@ -639,7 +636,7 @@ export const BrokerSelectionPage: React.FC<BrokerSelectionPageProps> = ({ curren
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    onSelectBroker?.(broker);
+                                    handleSelectBroker(broker);
                                     setActiveMenuId(null);
                                   }}
                                   className="w-full px-4 py-2 text-xs text-slate-700 hover:bg-gray-50 flex items-center justify-between"
