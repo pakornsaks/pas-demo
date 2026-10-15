@@ -210,7 +210,7 @@ export const SIDEBAR_NAVIGATION: NavPillar[] = [
           { label: "Brokers", to: "/sales/brokers" },
           { label: "Agents & Sales Force", to: "/sales/agents" },
           { label: "Partners & Channels", to: "/sales/channels" },
-          { label: "Commission Tier", to: "/sales/commision-tier" },
+          { label: "Commission Tier", to: "/sales/commission-tier" },
         ],
       },
     ],

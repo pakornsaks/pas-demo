@@ -56,22 +56,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onToggleSidebar }) => {
 
       {/* Right: PDPA Status, Broker Switcher & Actions */}
       <div className="flex items-center gap-2.5 shrink-0">
-        {/* PDPA Masking Status Pill */}
-        <div
-          className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors ${
-            hasPiiUnmaskScope
-              ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
-              : "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
-          }`}
-        >
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              hasPiiUnmaskScope ? "bg-amber-400 animate-pulse" : "bg-emerald-400"
-            }`}
-          />
-          {hasPiiUnmaskScope ? "PII Unmask Authorized" : "PDPA Masked Mode"}
-        </div>
-
         {/* Active Context / Broker Switcher */}
         <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1">
           <span className={`w-2 h-2 rounded-full shrink-0 ${isGlobalView ? "bg-indigo-400" : "bg-emerald-400"}`} />

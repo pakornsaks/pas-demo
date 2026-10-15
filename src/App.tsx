@@ -165,7 +165,7 @@ export default function App() {
               <Route path="/sales/brokers" element={<BrokerDirectoryPage />} />
               <Route path="/sales/agents" element={<AgentSalesForceDirectoryPage />} />
               <Route path="/sales/channels" element={<PartnerChannelHierarchyPage />} />
-              <Route path="/sales/comission-tier" element={<CommisionTierPage />} />
+              <Route path="/sales/commission-tier" element={<CommisionTierPage />} />
 
               {/* =================================================================
                   Compliance & Governance
