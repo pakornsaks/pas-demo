@@ -5,7 +5,6 @@ import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
 import { OperationalSettingsPage } from "./features/admin/pages/OperationalSettingsPage";
 import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
 import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
-import { RequireBrokerContextGuard } from "./features/auth/components/RequireBrokerContextGuard";
 import { PasAuthProvider, usePasAuth } from "./features/auth/context/PasAuthContext";
 import BrokerSelectionPage from "./features/auth/pages/BrokerSelectionPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
@@ -117,92 +116,90 @@ export default function App() {
           {/* =====================================================================
               Protected Application Routes (Requires Bound Broker Context)
           ===================================================================== */}
-          <Route element={<RequireBrokerContextGuard />}>
-            <Route path="/" element={<AdminLayout />}>
-              <Route index element={<Navigate to="/dashboards/telesales" replace />} />
+          <Route path="/" element={<AdminLayout />}>
+            <Route index element={<Navigate to="/dashboards/telesales" replace />} />
 
-              {/* =================================================================
+            {/* =================================================================
                   Operations & Execution
               ================================================================= */}
-              {/* Dashboards */}
-              <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
-              <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
-              <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
+            {/* Dashboards */}
+            <Route path="/dashboards/telesales" element={<TelesalesCockpitPage />} />
+            <Route path="/dashboards/underwriter" element={<UnderwriterWorkbenchPage />} />
+            <Route path="/dashboards/collections" element={<CollectionInstallmentsPage />} />
 
-              {/* Policy Lifecycle */}
-              <Route path="/policies/quotations" element={<QuotationSearchPage />} />
-              <Route path="/policies/applications" element={<ApplicationSearchPage />} />
-              <Route path="/policies/directory" element={<PolicyDirectoryPage />} />
-              <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
-              <Route path="/policies/renewals" element={<RenewalsManagementPage />} />
-              <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
+            {/* Policy Lifecycle */}
+            <Route path="/policies/quotations" element={<QuotationSearchPage />} />
+            <Route path="/policies/applications" element={<ApplicationSearchPage />} />
+            <Route path="/policies/directory" element={<PolicyDirectoryPage />} />
+            <Route path="/policies/endorsements" element={<PolicyEndorsementPage />} />
+            <Route path="/policies/renewals" element={<RenewalsManagementPage />} />
+            <Route path="/policies/cancellations" element={<CancellationsRefundsPage />} />
 
-              {/* Product Factory & Rules */}
-              <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
-              <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
-              <Route path="/products/rules" element={<PricingUWRulesPage />} />
-              <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
-              <Route path="/products/promos" element={<CampaignPromoCodesPage />} />
-              <Route path="/products/versioning" element={<VersioningPublishingPage />} />
+            {/* Product Factory & Rules */}
+            <Route path="/products/catalog" element={<ProductPlanConfigPage />} />
+            <Route path="/products/plans" element={<PlanTierConfigurationPage />} />
+            <Route path="/products/rules" element={<PricingUWRulesPage />} />
+            <Route path="/products/schemas" element={<DynamicSchemaBuilderPage />} />
+            <Route path="/products/promos" element={<CampaignPromoCodesPage />} />
+            <Route path="/products/versioning" element={<VersioningPublishingPage />} />
 
-              {/* =================================================================
+            {/* =================================================================
                   Finance & Accounting
               ================================================================= */}
-              {/* Financial Ledger */}
-              <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
-              <Route path="/finance/insurer-settlements" element={<InsurerSettlementsPage />} />
-              <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
-              <Route path="/finance/agent-commission" element={<AgentWalletsPayoutsPage />} />
-              <Route path="/finance/reconciliation" element={<SuspenseReconciliationPage />} />
-              <Route path="/finance/tax-documents" element={<TaxDocumentCenterPage />} />
-              <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />
+            {/* Financial Ledger */}
+            <Route path="/finance/ledger" element={<TransactionsLedgerPage />} />
+            <Route path="/finance/insurer-settlements" element={<InsurerSettlementsPage />} />
+            <Route path="/finance/commission-receivables" element={<CommissionReceivablesPage />} />
+            <Route path="/finance/agent-commission" element={<AgentWalletsPayoutsPage />} />
+            <Route path="/finance/reconciliation" element={<SuspenseReconciliationPage />} />
+            <Route path="/finance/tax-documents" element={<TaxDocumentCenterPage />} />
+            <Route path="/finance/period-close" element={<LedgerPeriodManagementPage />} />
 
-              {/* CRM & Sales Hierarchy */}
-              <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
-              <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
+            {/* CRM & Sales Hierarchy */}
+            <Route path="/crm/customers" element={<CustomerDirectoryPage />} />
+            <Route path="/crm/pdpa" element={<DataPrivacyCenterPage />} />
 
-              {/* Sales Hierarchy */}
-              <Route path="/sales/brokers" element={<BrokerDirectoryPage />} />
-              <Route path="/sales/agents" element={<AgentSalesForceDirectoryPage />} />
-              <Route path="/sales/channels" element={<PartnerChannelHierarchyPage />} />
-              <Route path="/sales/commission-tier" element={<CommisionTierPage />} />
+            {/* Sales Hierarchy */}
+            <Route path="/sales/brokers" element={<BrokerDirectoryPage />} />
+            <Route path="/sales/agents" element={<AgentSalesForceDirectoryPage />} />
+            <Route path="/sales/channels" element={<PartnerChannelHierarchyPage />} />
+            <Route path="/sales/commission-tier" element={<CommisionTierPage />} />
 
-              {/* =================================================================
+            {/* =================================================================
                   Compliance & Governance
               ================================================================= */}
-              {/* Governance & Approvals */}
-              <Route path="/governance/approvals" element={<ApprovalInboxPage />} />
-              <Route path="/governance/diff-viewer" element={<DiffViewerPage />} />
-              <Route path="/governance/audit-trail" element={<AuditTrailPage />} />
+            {/* Governance & Approvals */}
+            <Route path="/governance/approvals" element={<ApprovalInboxPage />} />
+            <Route path="/governance/diff-viewer" element={<DiffViewerPage />} />
+            <Route path="/governance/audit-trail" element={<AuditTrailPage />} />
 
-              {/* Reports & Compliance */}
-              <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
-              <Route path="/reports/tax" element={<TaxRemittanceReportsPage />} />
-              <Route path="/reports/accounting" element={<OperationalAccountingReportPage />} />
-              <Route path="/reports/analytics" element={<AnalyticsPerformancePage />} />
+            {/* Reports & Compliance */}
+            <Route path="/reports/oic" element={<OICRegulatoryReportsPage />} />
+            <Route path="/reports/tax" element={<TaxRemittanceReportsPage />} />
+            <Route path="/reports/accounting" element={<OperationalAccountingReportPage />} />
+            <Route path="/reports/analytics" element={<AnalyticsPerformancePage />} />
 
-              {/* =================================================================
+            {/* =================================================================
                   Platform & Foundation
               ================================================================= */}
-              {/* Workflow & Administration */}
-              <Route path="/admin/workflows" element={<WorkflowVisualizerPage />} />
-              <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
-              <Route path="/admin/rbac" element={<AccessControlPage />} />
-              <Route path="/admin/settings" element={<OperationalSettingsPage />} />
-              <Route path="/admin/integrations" element={<IntegrationHubPage />} />
-              <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
+            {/* Workflow & Administration */}
+            <Route path="/admin/workflows" element={<WorkflowVisualizerPage />} />
+            <Route path="/admin/transition-rules" element={<TransitionRulesConfiguratorPage />} />
+            <Route path="/admin/rbac" element={<AccessControlPage />} />
+            <Route path="/admin/settings" element={<OperationalSettingsPage />} />
+            <Route path="/admin/integrations" element={<IntegrationHubPage />} />
+            <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
 
-              {/* Master Data Management */}
-              <Route path="/master-data/insurers" element={<InsurerCarrierDirectoryPage />} />
-              <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
-              <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
-              <Route path="/master-data/geography" element={<GeographyPage />} />
-              <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
-              <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
+            {/* Master Data Management */}
+            <Route path="/master-data/insurers" element={<InsurerCarrierDirectoryPage />} />
+            <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
+            <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
+            <Route path="/master-data/geography" element={<GeographyPage />} />
+            <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
+            <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
 
-              {/* Fallback inside authenticated layout */}
-              <Route path="*" element={<Navigate to="/dashboards/telesales" replace />} />
-            </Route>
+            {/* Fallback inside authenticated layout */}
+            <Route path="*" element={<Navigate to="/dashboards/telesales" replace />} />
           </Route>
         </Routes>
       </BrowserRouter>
