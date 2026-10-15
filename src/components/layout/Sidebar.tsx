@@ -294,7 +294,6 @@ export interface SidebarProps {
   /** Optional callback to toggle collapse state from inside the sidebar */
   onToggleCollapse?: () => void;
 }
-
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggleCollapse }) => {
   const { activeContext, clearBrokerContextForSwitch } = usePasAuth();
   const location = useLocation();
@@ -420,10 +419,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggleC
   }
 
   // ===========================================================================
-  // EXPANDED FULL SIDEBAR MODE
+  // EXPANDED FULL SIDEBAR MODE (Changed w-72 to w-60; all paddings preserved)
   // ===========================================================================
   return (
-    <aside className="w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 select-none sticky top-16">
+    <aside className="w-60 bg-white border-r border-slate-200 flex flex-col shrink-0 select-none sticky top-16">
       {/* 1. Quick Menu Filter Search Box */}
       <div className="px-3 pt-3 pb-2">
         <div className="relative">
