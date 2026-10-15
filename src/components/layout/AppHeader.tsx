@@ -13,8 +13,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onToggleSidebar }) => {
   const isGlobalView = Boolean(activeContext?.is_global_view);
   const brokerDisplayName = activeContext?.broker_name_en || activeContext?.broker_code || "Select Broker";
 
-  const hasPiiUnmaskScope = activeContext?.scopes?.includes("pii:unmask") ?? false;
-
   const handleSwitchBroker = () => {
     clearBrokerContextForSwitch();
     navigate("/select-broker", { replace: true });
