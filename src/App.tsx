@@ -3,15 +3,13 @@ import AccessControlPage from "./features/admin/pages/AccessControlPage";
 import DocumentTemplateRegistryPage from "./features/admin/pages/DocumentTemplateRegistryPage";
 import IntegrationHubPage from "./features/admin/pages/IntegrationHubPage";
 import { OperationalSettingsPage } from "./features/admin/pages/OperationalSettingsPage";
+import ProductInsurerTermsPage from "./features/admin/pages/ProductInsurerTermsPage";
 import TransitionRulesConfiguratorPage from "./features/admin/pages/TransitionRulesConfiguratorPage";
 import WorkflowVisualizerPage from "./features/admin/pages/WorkflowVisualizerPage";
 import { PasAuthProvider } from "./features/auth/context/PasAuthContext";
 import BrokerSelectionPage from "./features/auth/pages/BrokerSelectionPage";
-import CommisionTierPage from "./features/crm/pages/AgentCommissionTierPage";
 import AgentSalesForceDirectoryPage from "./features/crm/pages/AgentDirectoryPage";
-import BrokerDirectoryPage from "./features/crm/pages/BrokerDirectoryPage";
 import CustomerDirectoryPage from "./features/crm/pages/CustomerDirectoryPage";
-import DataPrivacyCenterPage from "./features/crm/pages/DataPrivacyCenterPage";
 import PartnerChannelHierarchyPage from "./features/crm/pages/PartnerChannelHierarchyPage";
 import CollectionInstallmentsPage from "./features/dashboards/pages/CollectionInstallmentsPage";
 import HomePage from "./features/dashboards/pages/HomePage";
@@ -49,6 +47,9 @@ import AnalyticsPerformancePage from "./features/reports/pages/AnalyticsPerforma
 import OICRegulatoryReportsPage from "./features/reports/pages/OICRegulatoryReportsPage";
 import OperationalAccountingReportPage from "./features/reports/pages/OperationalAccountingReportPage";
 import TaxRemittanceReportsPage from "./features/reports/pages/TaxRemittanceReportsPage";
+import CommisionTierPage from "./features/sales/pages/AgentCommissionTierPage";
+import BrokerDirectoryPage from "./features/sales/pages/BrokerDirectoryPage";
+import DataPrivacyCenterPage from "./features/sales/pages/DataPrivacyCenterPage";
 import { AdminLayout } from "./layouts/AdminLayout";
 
 export default function App() {
@@ -139,12 +140,13 @@ export default function App() {
             <Route path="/admin/templates" element={<DocumentTemplateRegistryPage />} />
 
             {/* Master Data Management */}
-            <Route path="/master-data/insurers" element={<InsurerCarrierDirectoryPage />} />
-            <Route path="/master-data/broker-settings" element={<BrokerSettingsPage />} />
-            <Route path="/master-data/vehicles" element={<VehicleHierarchyPage />} />
-            <Route path="/master-data/geography" element={<GeographyPage />} />
-            <Route path="/master-data/occupations" element={<OccupancyUWClassesPage />} />
-            <Route path="/master-data/network-providers" element={<NetworkProvidersDirectoryPage />} />
+            <Route path="/master/insurers" element={<InsurerCarrierDirectoryPage />} />
+            <Route path="/master/commission-terms" element={<ProductInsurerTermsPage />} />
+            <Route path="/master/broker-settings" element={<BrokerSettingsPage />} />
+            <Route path="/master/vehicles" element={<VehicleHierarchyPage />} />
+            <Route path="/master/geography" element={<GeographyPage />} />
+            <Route path="/master/occupations" element={<OccupancyUWClassesPage />} />
+            <Route path="/master/network-providers" element={<NetworkProvidersDirectoryPage />} />
 
             {/* Fallback inside authenticated layout */}
             <Route path="*" element={<Navigate to="/" replace />} />

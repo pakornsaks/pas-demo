@@ -433,7 +433,7 @@ export const LedgerPeriodManagementPage: React.FC = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-zinc-900">Ledger Period Management</h1>
+            <h1 className="text-xl font-bold tracking-tight text-zinc-900">Ledger Period Close</h1>
             <span className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-600 font-mono">
               sys_financial_periods
             </span>

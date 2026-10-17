@@ -1,11 +1,7 @@
 import React from "react";
 import type { SelectBrokerResponse } from "../../types/brokerContext";
 
-interface BrokerContextSwitcherProps {
-  onSwitchRequest: () => void;
-}
-
-export const BrokerContextSwitcher: React.FC<BrokerContextSwitcherProps> = ({ onSwitchRequest }) => {
+export const BrokerContextSwitcher: React.FC = () => {
   const rawContext = sessionStorage.getItem("pas_active_broker_context");
   const activeContext: SelectBrokerResponse["active_context"] | null = rawContext ? JSON.parse(rawContext) : null;
 
@@ -24,14 +20,6 @@ export const BrokerContextSwitcher: React.FC<BrokerContextSwitcherProps> = ({ on
           </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        onClick={onSwitchRequest}
-        className="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-white border border-slate-200 hover:border-blue-300 px-2.5 py-1 rounded shadow-2xs transition-colors"
-      >
-        Switch Broker
-      </button>
     </div>
   );
 };

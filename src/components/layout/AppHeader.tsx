@@ -1,7 +1,7 @@
-import { User } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { usePasAuth } from "../../features/auth/context/PasAuthContext";
+import ProfileMenu from "../common/ProfileMenu";
 
 export interface AppHeaderProps {
   onToggleSidebar?: () => void;
@@ -80,14 +80,20 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onToggleSidebar }) => {
         </div>
 
         {/* Sign Out Action */}
-        <button
+        {/* <button
           title="User Account"
           className="flex items-center space-x-2 p-1.5 rounded-full text-slate-700 hover:bg-gray-100 transition"
         >
           <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
             <User className="w-5 h-5" />
           </div>
-        </button>
+        </button> */}
+        <ProfileMenu
+          userName="Pakornsak Supamongkonchaikul"
+          onLanguageClick={() => console.log("Language selector triggered")}
+          onSwitchBrokerClick={handleSignOut}
+          onSignOutClick={handleSignOut}
+        />
       </div>
     </header>
   );
